@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="catchmain.cpp" />
+    <ClCompile Include="HashMap.hpp" />
     <ClCompile Include="test_ExpandableArrayList.cpp" />
     <ClCompile Include="test_DbLinkedList.cpp" />
   </ItemGroup>
