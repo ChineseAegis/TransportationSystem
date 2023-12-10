@@ -10,7 +10,7 @@ private:
     int _bucket_size;//桶数
     int _size;//装载记录的规模大小
     double _max_load_factor;//装载因子的最大值
-    int hash(K* key)const {
+    int hash(K key)const {
         if (key == NULL) {
             return 0;
         }
@@ -114,10 +114,10 @@ public:
         _bucket_size = new_bucket_size;
     }
     bool Insert(const E& e) {
-        int bucket = hash(E.key);
-        DbLinkedList<E>& bucketLink = _buckets[bucket];
+        int bucket = hash(e.key);
+        DbLinkedList<E>& bucketLink = *_buckets[bucket];
         if (findPos(e.key, bucket)) {//先删除再插入
-            bucketLink.Remove(E);
+            bucketLink.Remove(e);
         }
         bucketLink.Insert(e);
         _size++;
@@ -143,7 +143,7 @@ public:
     }
     void Clear() {
         for (int i = 0; i < _size; i++) {
-            DbLinkedList<E> &bucketlink = _buckets[i];
+            DbLinkedList<E> &bucketlink = *_buckets[i];
             bucketlink.Clear();
         }
         _size = 0;
