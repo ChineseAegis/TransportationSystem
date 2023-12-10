@@ -11,3 +11,7 @@ TEST_CASE("test02", "[0]")
 {
 	std::cout << "1289";
 }
+void add()
+{
+
+}
