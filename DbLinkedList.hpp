@@ -20,10 +20,10 @@ protected:
 	void Inserthelper(V& x) {
 		if (Search(x))return;
 		DbListNode<V>* newNode = new DbListNode<V>(x);  
-		newNode->llink = head->rlink;
+		newNode->llink = head->llink;
 		newNode->rlink = head;
-		head->rlink->rlink = newNode;
-		head->rlink = newNode;
+		head->llink->rlink = newNode;
+		head->llink = newNode;
 		size++;
 	}
 	bool Removehelper(V x) {
