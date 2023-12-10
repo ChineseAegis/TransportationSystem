@@ -6,6 +6,6 @@ public:
 	DbListNode<V>* llink;
 	DbListNode<V>*rlink;
 	DbListNode() { llink = nullptr; rlink = nullptr; }
-	DbListNode(V& x) { llink = nullptr; rlink = nullptr; data = x; }
-	~DbLinkedList(){}
+	DbListNode(const V& x) { llink = nullptr; rlink = nullptr; data = x; }
+	~DbListNode(){}
 };
