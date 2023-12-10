@@ -131,6 +131,9 @@
     <ClInclude Include="DbLinkedList.hpp" />
     <ClInclude Include="DbListNode.hpp" />
     <ClInclude Include="ExpandableArrayList.hpp" />
+    <ClInclude Include="ExpandableLinkedHashTable.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="memory_leak.h" />
   </ItemGroup>
   <ItemGroup>

@@ -52,19 +52,19 @@ protected:
 public:
 	DbListNode<V>* head;
 	int size;
-
-	bool isEmpty()const {
-		if (head->rlink == head && head->llink == head && size == 0)
-			return true;
-		else
-			return false;
-	}
 	DbLinkedList() {
 		head = new DbListNode<V>(V());
 		head->rlink = head;
 		head->llink = head;
 		size = 0;
 	}
+	bool isEmpty()const {
+		if (head->rlink == head && head->llink == head && size == 0)
+			return true;
+		else
+			return false;
+	}
+	
 	 DbListNode<V>* Search(V x){
 		return Searchhelper(x);
 	}
