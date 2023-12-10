@@ -43,10 +43,16 @@
     <ClCompile Include="catchmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ExpandableArrayList.cpp">
+    <ClCompile Include="test_DbLinkedList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="test_DbLinkedList.cpp">
+    <ClCompile Include="HashMap.hpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_ExpandableArrayList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_HashTable.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
