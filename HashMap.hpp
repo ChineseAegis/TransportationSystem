@@ -1,4 +1,4 @@
-//#include"ExpandableLinkedHashTable.hpp"
+#include"ExpandableLinkedHashTable.hpp"
 #include"DbListNode.hpp"
 #include"DbLinkedList.hpp"
 #include<set>
@@ -71,7 +71,7 @@ class HashMap
 	void Insert(std::pair<K, V> k_v)
 	{
 		Element e;
-		e.key = k_v.first
+		e.key = k_v.first;
 		e.vale = k_v.second;
 		table->Insert(e);
 		s.insert(e.key);
@@ -102,7 +102,7 @@ class HashMap
 		table->Clear();
 		s.clear();
 	}
-	int getSize();
+	int getSize()
 	{
 		return getCapcity();
 	}
