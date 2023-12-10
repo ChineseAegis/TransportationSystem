@@ -133,7 +133,7 @@ public:
 
         if (node != nullptr) {
             e = node->value;
-            DbLinkedList<E>& linkedList = buckets[bucket];
+            DbLinkedList<E>& linkedList = _buckets[bucket];
             linkedList.Remove(key);
             _size--;
             return 1;
