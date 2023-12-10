@@ -1,3 +1,4 @@
+#pragma once
 #include"ExpandableLinkedHashTable.hpp"
 #include"DbListNode.hpp"
 #include"DbLinkedList.hpp"
@@ -6,6 +7,7 @@
 template<typename K,typename V>
 class HashMap
 {
+public:
 	int BucketSize;
 	int MaxLoadFactor;
 	int Default_BucketSize=16;
@@ -45,7 +47,8 @@ class HashMap
 	V& getValue(const K& key)
 	{
 		int bucket;
-		DbListNode<int>* node = table->findPos(key, bucket);
+		V v;
+		DbListNode<Element>* node = table->findPos(key, bucket);
 		if (bucket != -1)
 		{
 			while (node != nullptr)
@@ -55,9 +58,9 @@ class HashMap
 					return node->data.value;
 				}
 			}
-			return V();
+			return v;
 		}
-		return V();
+		return v;
 	}
 	std::set<K> keySet()
 	{
@@ -78,24 +81,24 @@ class HashMap
 	}
 	V& Remove(const K& key)
 	{
-		V v;
-		if (table->Remove(key, v) != 0)
+		Element e;
+		if (table->Remove(key, e) != 0)
 		{
 			s.erase(key);
-			return v;
+			return e.value;
 		}
-		return V();
+		return e.value;
 	}
 	V& Remove(const K& key, const V& val)
 	{
-		V v;
+		Element e;
 		if (val==getValue(key))
 		{
-			table->Remove(key, v);
+			table->Remove(key, e);
 			s.erase(key);
-			return v;
+			return e.value;
 		}
-		return V();
+		return e.value;
 	}
 	void Clear()
 	{
