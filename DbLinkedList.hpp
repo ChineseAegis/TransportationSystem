@@ -1,28 +1,85 @@
 #pragma once
 #include"DbListNode.hpp"
+//DbListNode* Search(V& x)
+//void Insert(V& x) 
+//bool Remove(V& x)
+//void Clear() 
 template<typename V>
 class DbLinkedList {
 protected:
-	DbListNode<V>*head;
-	int size;
-	DbLinkedList() {
-		head = new DbListNode<V>(V());   
-		head->rlink = head;        
-		head->llink = head;
+	
+	DbListNode* Searchhelper(V& x) {
+		for (DbListNode<V>* i = head->rlink; i !=head;) {
+			if (i->data == x) {
+				return i;
+			}
+			i = i->rlink;
+		}
+		return nullptr;
+	}
+	void Inserthelper(V& x) {
+		if (Search(x))return;
+		DbListNode<V>* newNode = new DbListNode<V>(x);  
+		newNode->lLink = head->rlink;
+		newNode->rLink = head;
+		head->rLink->rLink = newNode;
+		head->rLink = newNode;
+		size++;
+	}
+	bool Removehelper(V& x) {
+		if (isEmpty())return false;
+		DbListNode<V>* delnode = Search(x);
+		if (delnode) {
+			delnode->llink->rlink = delnode->rlink;
+			delnode->rlink->llink = delnode->llink;
+			delete delnode;
+			size--;
+			return true;
+		}
+		return false;
+	}
+	void Clearhelper() {
+		DbListNode<V>* remnode = head->rlink;
+		while(remnode != head) {
+			remnode->llink->rlink = remnode->rlink;
+			remnode->rlink->llink = remnode->llink;
+			delete remnode;
+			remnode = head->rlink;
+		}
 		size = 0;
 	}
+	
+public:
+	DbListNode<V>* head;
+	int size;
+
 	bool isEmpty()const {
 		if (head->rlink == head && head->llink == head && size == 0)
 			return true;
 		else
 			return false;
 	}
-	DbListNode* Search(V& x) {
-		for (DbListNode<V>* i = head; i < size;) {
-			if()
-		}
+	DbLinkedList() {
+		head = new DbListNode<V>(V());
+		head->rlink = head;
+		head->llink = head;
+		size = 0;
 	}
-	~DbLinkedList(){
-
+	 DbListNode* Search(V& x)const{
+		return Searchhelper(x);
+	}
+	void Insert(V& x) {
+		Insert(x);
+	}
+	bool Remove(V& x) {
+		return Removehelper(x);
+	}
+	void Clear() {
+		Clearhelper();
+	}
+	~DbLinkedList() {
+		Clear();
+		delete head;
+		head = nullptr;
 	}
 };

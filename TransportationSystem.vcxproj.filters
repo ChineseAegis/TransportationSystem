@@ -24,6 +24,12 @@
     <ClInclude Include="ExpandableArrayList.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DbLinkedList.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DbListNode.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings">
@@ -35,6 +41,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ExpandableArrayList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_DbLinkedList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

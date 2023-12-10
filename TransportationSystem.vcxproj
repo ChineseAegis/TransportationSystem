@@ -128,6 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="catch.hpp" />
+    <ClInclude Include="DbLinkedList.hpp" />
+    <ClInclude Include="DbListNode.hpp" />
     <ClInclude Include="ExpandableArrayList.hpp" />
     <ClInclude Include="memory_leak.h" />
   </ItemGroup>
@@ -137,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="catchmain.cpp" />
     <ClCompile Include="ExpandableArrayList.cpp" />
+    <ClCompile Include="test_DbLinkedList.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
