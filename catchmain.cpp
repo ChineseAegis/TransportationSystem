@@ -8,5 +8,5 @@
 LeakDetector::Detector detector;
 TEST_CASE("test02", "[0]")
 {
-	std::cout << "12256";
+	std::cout << "1223356";
 }
