@@ -2,7 +2,7 @@
 #include"DbLinkedList.hpp"
 #include"ExpandableArrayList.hpp"
 #include <cmath>
-template <class K, class E,class V>
+template <class K, class E>
 class ExpandableLinkedHashTable {
 private:
 
