@@ -143,7 +143,7 @@ public:
     }
     void Clear() {
         for (int i = 0; i < _size; i++) {
-            DbLinkedList<E> bucketlink = _buckets[i];
+            DbLinkedList<E> &bucketlink = _buckets[i];
             bucketlink.Clear();
         }
         _size = 0;

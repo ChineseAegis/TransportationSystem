@@ -71,7 +71,7 @@ class HashMap
 	void Insert(std::pair<K, V> k_v)
 	{
 		Element e;
-		e.key = k_v.first
+		e.key = k_v.first;
 		e.value = k_v.second;
 		table->Insert(e);
 		s.insert(e.key);
@@ -104,7 +104,7 @@ class HashMap
 	}
 	int getSize()
 	{
-		return getCapcity();
+		return table->getCapcity();
 	}
 	void resizeTable()
 	{
