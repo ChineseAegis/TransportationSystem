@@ -6,14 +6,7 @@
 #include "catch.hpp"
 #include "memory_leak.h"
 LeakDetector::Detector detector;
-void add2()
-{
-	std::cout<<"add2";
-}
-void add()
-{
-	std::cout << "add";
-}
+
 TEST_CASE("test02", "[0]")
 {
 	std::cout << "12";
