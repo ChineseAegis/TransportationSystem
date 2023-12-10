@@ -1476,9 +1476,9 @@ namespace Catch {
 
         virtual Detail::EnumInfo const& registerEnum( StringRef enumName, StringRef allEnums, std::vector<int> const& values ) = 0;
 
-        template<typename E>
-        Detail::EnumInfo const& registerEnum( StringRef enumName, StringRef allEnums, std::initializer_list<E> values ) {
-            static_assert(sizeof(int) >= sizeof(E), "Cannot serialize enum to int");
+        template<typename V>
+        Detail::EnumInfo const& registerEnum( StringRef enumName, StringRef allEnums, std::initializer_list<V> values ) {
+            static_assert(sizeof(int) >= sizeof(V), "Cannot serialize enum to int");
             std::vector<int> intValues;
             intValues.reserve( values.size() );
             for( auto enumValue : values )
@@ -1571,8 +1571,8 @@ namespace Catch {
             static const bool value = decltype(test<std::ostream, const T&>(0))::value;
         };
 
-        template<typename E>
-        std::string convertUnknownEnumToString( E e );
+        template<typename V>
+        std::string convertUnknownEnumToString( V e );
 
         template<typename T>
         typename std::enable_if<
@@ -1643,9 +1643,9 @@ namespace Catch {
             return ::Catch::StringMaker<typename std::remove_cv<typename std::remove_reference<T>::type>::type>::convert(e);
         }
 
-        template<typename E>
-        std::string convertUnknownEnumToString( E e ) {
-            return ::Catch::Detail::stringify(static_cast<typename std::underlying_type<E>::type>(e));
+        template<typename V>
+        std::string convertUnknownEnumToString( V e ) {
+            return ::Catch::Detail::stringify(static_cast<typename std::underlying_type<V>::type>(e));
         }
 
 #if defined(_MANAGED)
