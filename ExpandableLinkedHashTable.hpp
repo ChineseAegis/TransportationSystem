@@ -59,7 +59,7 @@ public:
         _size = 0;
         _bucket_size = 16;
         _max_load_factor = 0.7;
-        _buckets = new ExpandableArrayList<DbLinkedList<E>>[_bucket_size];
+        _buckets = new ExpandableArrayList<DbLinkedList<E>>(_bucket_size);
     }
     /** 。桶数是initial_bucket_size，最大装载因子是0.7。*/
     ExpandableLinkedHashTable(int initialSize) {
@@ -67,7 +67,7 @@ public:
         _size = 0;
         _bucket_size = initialSize;
         _max_load_factor = 0.7;
-        _buckets = new ExpandableArrayList<DbLinkedList<E>>[_bucket_size];
+        _buckets = new ExpandableArrayList<DbLinkedList<E>>(_bucket_size);
     }
     /** 桶数是initial_bucket_size，最大装载因子是maxLoadFactor。*/
     ExpandableLinkedHashTable(int initialSize, double maxLoadFactor) {
@@ -75,7 +75,7 @@ public:
         _size = 0;
         _bucket_size = initialSize;
         _max_load_factor = maxLoadFactor;
-        _buckets = new ExpandableArrayList<DbLinkedList<E>>[_bucket_size];
+        _buckets = new ExpandableArrayList<DbLinkedList<E>>(_bucket_size);
     }
 
     DbListNode<E>* findPos(const K& key, int& bucket) const {
@@ -96,7 +96,7 @@ public:
     // 用new_bucket_size个桶重建hash表
     void  resizeTable() {
         int new_bucket_size =findClosestPrime( _bucket_size * 2);
-        ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>[new_bucket_size];
+        ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>(new_bucket_size);
 
         for (int i = 0; i < _bucket_size; i++) {//遍历每个桶
             DbLinkedList<E>& linkedList = _buckets[i];
