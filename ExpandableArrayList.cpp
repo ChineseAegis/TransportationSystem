@@ -42,3 +42,59 @@ TEST_CASE("ExpandableArrayList functionality", "[ExpandableArrayList]") {
         REQUIRE_THROWS_AS(list[1], std::out_of_range);
     }
 }
+TEST_CASE("ExpandableArrayList tests") {
+    SECTION("Test empty list") {
+        ExpandableArrayList<int> list;
+
+        REQUIRE(list.size() == 0);
+        REQUIRE(list.getCapacity() == 10);
+
+        SECTION("Test accessing elements") {
+            REQUIRE_THROWS_AS(list[0], std::out_of_range);
+        }
+
+        SECTION("Test adding elements") {
+            list.add(1);
+            list.add(2);
+
+            REQUIRE(list.size() == 2);
+            REQUIRE(list[0] == 1);
+            REQUIRE(list[1] == 2);
+        }
+
+        SECTION("Test clearing the list") {
+            list.add(1);
+            list.add(2);
+
+            list.Clear();
+
+            REQUIRE(list.size() == 0);
+            REQUIRE(list.getCapacity() == 10);
+        }
+    }
+
+    SECTION("Test list with initial capacity") {
+        ExpandableArrayList<int> list(5);
+
+        REQUIRE(list.size() == 0);
+        REQUIRE(list.getCapacity() == 5);
+
+        SECTION("Test adding elements") {
+            for (int i = 0; i < 5; ++i) {
+                list.add(i);
+            }
+
+            REQUIRE(list.size() == 5);
+            REQUIRE(list.getCapacity() == 5);
+
+            list.add(5);
+
+            REQUIRE(list.size() == 6);
+            REQUIRE(list.getCapacity() == 10);
+        }
+
+        // 其他测试...
+    }
+
+    // 其他测试...
+}

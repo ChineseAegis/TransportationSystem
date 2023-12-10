@@ -9,10 +9,11 @@ private:
     int count;         // 数组中元素的实际数量
 
 public:
+    //公共接口
     //E& operator[](int i);
     //void resizeList();
     //void Clear();
-    //下面是实现
+    
 
     ExpandableArrayList(int initialCapacity = 10) : capacity(initialCapacity), count(0) {
         array = new E[capacity];
