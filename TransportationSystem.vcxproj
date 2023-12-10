@@ -144,6 +144,7 @@
     <ClCompile Include="HashMap.hpp" />
     <ClCompile Include="test_ExpandableArrayList.cpp" />
     <ClCompile Include="test_DbLinkedList.cpp" />
+    <ClCompile Include="test_HashMap.cpp" />
     <ClCompile Include="test_HashTable.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
