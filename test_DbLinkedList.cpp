@@ -50,3 +50,53 @@ TEST_CASE("DbLinkedList Test", "[DbLinkedList]") {
         REQUIRE(dbList.Search(2) == nullptr);
     }
 }
+TEST_CASE("DbLinkedList Tests", "[DbLinkedList]") {
+    SECTION("Constructor and isEmpty") {
+        DbLinkedList<int> list;
+        REQUIRE(list.isEmpty() == true);
+    }
+
+    SECTION("Insert and Search") {
+        DbLinkedList<int> list;
+        list.Insert(1);
+        REQUIRE(list.Search(1) != nullptr);
+        REQUIRE(list.Search(2) == nullptr);
+    }
+
+    SECTION("Remove") {
+        DbLinkedList<int> list;
+        list.Insert(1);
+        REQUIRE(list.Remove(1) == true);
+        REQUIRE(list.Search(1) == nullptr);
+        REQUIRE(list.Remove(1) == false);
+    }
+
+    SECTION("Multiple Inserts and Removes") {
+        DbLinkedList<int> list;
+        list.Insert(1);
+        list.Insert(2);
+        list.Insert(3);
+        REQUIRE(list.Remove(2) == true);
+        REQUIRE(list.Search(2) == nullptr);
+        REQUIRE(list.Search(1) != nullptr);
+        REQUIRE(list.Search(3) != nullptr);
+    }
+
+    SECTION("Clear") {
+        DbLinkedList<int> list;
+        list.Insert(1);
+        list.Insert(2);
+        list.Clear();
+        REQUIRE(list.isEmpty() == true);
+        REQUIRE(list.Search(1) == nullptr);
+        REQUIRE(list.Search(2) == nullptr);
+    }
+
+    SECTION("Destructor") {
+        DbLinkedList<int>* list = new DbLinkedList<int>();
+        list->Insert(1);
+        delete list;
+        // 由于析构函数没有返回值，这里只能确保程序没有崩溃
+        // 在实际应用中，可以使用更复杂的方法来测试析构函数
+    }
+}
