@@ -99,7 +99,7 @@ public:
         ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>[new_bucket_size];
 
         for (int i = 0; i < _bucket_size; i++) {//遍历每个桶
-            DbLinkedList<E>& linkedList = buckets[i];
+            DbLinkedList<E>& linkedList = _buckets[i];
             DbListNode<E>* current = linkedList.head->rlink;//每个链表的首结点
 
             while (current != linkedList.head) {
@@ -135,7 +135,7 @@ public:
             e = node->value;
             DbLinkedList<E>& linkedList = buckets[bucket];
             linkedList.Remove(key);
-            size--;
+            _size--;
             return 1;
         }
 
