@@ -1,12 +1,12 @@
-/*ä½¿catch.hppå’Œmemory_leak.hè¿›è¡Œç¼–è¯‘ã€‚
- æ–‡ä»¶ï¼šcatchmain.cpp
- ä½œè€…ï¼šéƒ­è‰³ï¼ˆguoyan49@cug.edu.cnï¼‰
+/*Ê¹catch.hppºÍmemory_leak.h½øÐÐ±àÒë¡£
+ ÎÄ¼þ£ºcatchmain.cpp
+ ×÷Õß£º¹ùÑÞ£¨guoyan49@cug.edu.cn£©
  */
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "memory_leak.h"
 LeakDetector::Detector detector;
-TEST_CASE("test01","[0]")
+TEST_CASE("test02", "[0]")
 {
-    std::cout<<"test01"<<std::endl;
+
 }
