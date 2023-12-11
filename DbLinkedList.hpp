@@ -64,7 +64,17 @@ public:
 		else
 			return false;
 	}
-	
+	DbLinkedList& operator=(const DbLinkedList& other)
+	{
+		
+		for (DbListNode<V>*  i = other.head->rlink; i !=other.head; )
+		{
+			this->Insert( i->data);
+			i = i->rlink;
+
+		}
+		return *this;
+	}
 	 DbListNode<V>* Search(V x){
 		return Searchhelper(x);
 	}
