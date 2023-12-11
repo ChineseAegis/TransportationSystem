@@ -1,6 +1,6 @@
 //#define CATCH_CONFIG_MAIN  // 让 Catch 提供 main()
 #include "catch.hpp"
-#include "ExpandableArrayList.hpp"  // 包含您的 ExpandableArrayList 类的头文件
+#include "ExpandableArrayList.hpp"  
 #include "memory_leak.h"
 
 TEST_CASE("ExpandableArrayList functionality", "[ExpandableArrayList]") {
@@ -93,10 +93,10 @@ TEST_CASE("ExpandableArrayList tests") {
             REQUIRE(list.getCapacity() == 10);
         }
 
-        // 其他测试...
+        
     }
 
-    // 其他测试...
+   
 }
 TEST_CASE("ExpandableArrayList Operations1", "[ExpandableArrayList1]") {
     ExpandableArrayList<int> list;
