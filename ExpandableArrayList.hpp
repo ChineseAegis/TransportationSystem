@@ -33,7 +33,7 @@ public:
         array = new E[capacity];
         for (int i = 0; i < count; i++)
         {
-            array[0] = other.array[0];
+            array[i ] = other.array[i];
         }
         return *this;
     }

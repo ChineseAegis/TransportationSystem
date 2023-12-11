@@ -13,9 +13,9 @@ private:
     double _max_load_factor;//装载因子的最大值
     int hash(K key)const {
         
-        std::hash<K> hash_function; // 创建一个哈希函数对象
-        int hash_value = hash_function(key); // 生成哈希值
-        int id_bucket = hash_value % _bucket_size; // 计算桶的索引
+        std::hash<K> h;
+        size_t hashCode = h(key);
+        int id_bucket = (0x7fffffff & hashCode) % _bucket_size;
         return id_bucket;
 
     }
@@ -124,7 +124,7 @@ public:
         bucketLink.Insert(e);
         _size++;
         double loadFactor = _size / _bucket_size;//判断是否扩容
-        if (loadFactor > _max_load_factor) {
+        if (loadFactor >= _max_load_factor) {
             resizeTable();
         }
         return true;
