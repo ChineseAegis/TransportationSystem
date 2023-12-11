@@ -98,8 +98,9 @@ public:
         int new_bucket_size =findClosestPrime( _bucket_size * 2);
         //ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>(new_bucket_size);
         ExpandableArrayList<DbLinkedList<E>> newBuckets(new_bucket_size, new_bucket_size);
-        
-        for (int i = 0; i < _bucket_size; i++) {//遍历每个桶
+        int old_bucket_size = _bucket_size;
+        _bucket_size = new_bucket_size;
+        for (int i = 0; i < old_bucket_size; i++) {//遍历每个桶
             DbLinkedList<E>& linkedList = _buckets[i];
             DbListNode<E>* current = linkedList.head->rlink;//每个链表的首结点
 
@@ -113,7 +114,7 @@ public:
         _buckets = newBuckets;
         //delete[] _buckets;
         //_buckets = newBuckets;
-        _bucket_size = new_bucket_size;
+        
     }
     bool Insert(const E& e) {
         int bucket = hash(e.key);
