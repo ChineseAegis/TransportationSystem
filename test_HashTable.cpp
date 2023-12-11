@@ -78,54 +78,54 @@ TEST_CASE("Large and Complex Test") {
     ExpandableLinkedHashTable<int, TestStruct> hashTable(2, 0.75);
 
     SECTION("Insertion and Search for a Large Dataset") {
-        //const int dataSize = 10000;
-        for (int i = 0; i < 3; ++i) {
+        const int dataSize = 10000;
+        for (int i = 0; i < dataSize; ++i) {
             TestStruct ts = { i, "value" + std::to_string(i) };
             hashTable.Insert(ts);
         }
 
-       // REQUIRE(hashTable.getCapcity() == dataSize);
+        REQUIRE(hashTable.getCapcity() == dataSize);
 
-        //for (int i = 0; i < dataSize; ++i) {
+        for (int i = 0; i < dataSize; ++i) {
             REQUIRE(hashTable.Search(2)==true);
-       // }
+        }
 
-       // REQUIRE_FALSE(hashTable.Search(dataSize));
+        REQUIRE_FALSE(hashTable.Search(dataSize));
     }
 
-    //SECTION("Remove operation for a Large Dataset") {
-    //    const int dataSize = 10000;
-    //    for (int i = 0; i < dataSize; ++i) {
-    //        TestStruct ts = { i, "value" + std::to_string(i) };
-    //        REQUIRE(hashTable.Insert(ts));
-    //    }
+    SECTION("Remove operation for a Large Dataset") {
+        const int dataSize = 100000;
+        for (int i = 0; i < dataSize; ++i) {
+            TestStruct ts = { i, "value" + std::to_string(i) };
+            REQUIRE(hashTable.Insert(ts));
+        }
 
-    //    REQUIRE(hashTable.getCapcity() == dataSize);
+        REQUIRE(hashTable.getCapcity() == dataSize);
 
-    //    for (int i = 0; i < dataSize; ++i) {
-    //        TestStruct removed;
-    //        REQUIRE(hashTable.Remove(i, removed));
-    //        REQUIRE(removed.key == i);
-    //    }
+        for (int i = 0; i < dataSize; ++i) {
+            TestStruct removed;
+            REQUIRE(hashTable.Remove(i, removed));
+            REQUIRE(removed.key == i);
+        }
 
-    //    REQUIRE(hashTable.getSize() == 0);
-    //}
+        REQUIRE(hashTable.getCapcity() == 0);
+    }
 
-    //SECTION("Stress Test: Insertion, Resizing, and Collision Handling") {
-    //    const int dataSize = 100000;
-    //    for (int i = 0; i < dataSize; ++i) {
-    //        TestStruct ts = { i, "value" + std::to_string(i) };
-    //        REQUIRE(hashTable.Insert(ts));
-    //    }
+    SECTION("Stress Test: Insertion, Resizing, and Collision Handling") {
+        const int dataSize = 100000;
+        for (int i = 0; i < dataSize; ++i) {
+            TestStruct ts = { i, "value" + std::to_string(i) };
+            REQUIRE(hashTable.Insert(ts));
+        }
 
-    //    REQUIRE(hashTable.getCapcity() == dataSize);
+        REQUIRE(hashTable.getCapcity() == dataSize);
 
-    //    for (int i = 0; i < dataSize; ++i) {
-    //        REQUIRE(hashTable.Search(i));
-    //    }
+        for (int i = 0; i < dataSize; ++i) {
+            REQUIRE(hashTable.Search(i));
+        }
 
-    //    REQUIRE_FALSE(hashTable.Search(dataSize));
+        REQUIRE_FALSE(hashTable.Search(dataSize));
 
-    //    // At this point, the hash table should have resized multiple times.
-    //}
+        // At this point, the hash table should have resized multiple times.
+    }
 }
