@@ -56,18 +56,18 @@ private:
     }
 public:
     /** 桶数是16，最大装载因子是0.7。*/
-    ExpandableLinkedHashTable():_bucket_size(16),_buckets(16) {
+    ExpandableLinkedHashTable():_bucket_size(16),_buckets(16,16) {
         _size = 0;
         _max_load_factor = 0.7;
     }
     /** 。桶数是initial_bucket_size，最大装载因子是0.7。*/
-    ExpandableLinkedHashTable(int initialSize):_bucket_size(initialSize), _buckets(initialSize) {
+    ExpandableLinkedHashTable(int initialSize):_bucket_size(initialSize), _buckets(initialSize, initialSize) {
 
         _size = 0;
         _max_load_factor = 0.7;
     }
     /** 桶数是initial_bucket_size，最大装载因子是maxLoadFactor。*/
-    ExpandableLinkedHashTable(int initialSize, double maxLoadFactor):_bucket_size(initialSize), _buckets(initialSize) {
+    ExpandableLinkedHashTable(int initialSize, double maxLoadFactor):_bucket_size(initialSize), _buckets(initialSize, initialSize) {
  
         _size = 0;
         _max_load_factor = maxLoadFactor;
@@ -97,7 +97,7 @@ public:
     void  resizeTable() {
         int new_bucket_size =findClosestPrime( _bucket_size * 2);
         //ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>(new_bucket_size);
-        ExpandableArrayList<DbLinkedList<E>> newBuckets(new_bucket_size);
+        ExpandableArrayList<DbLinkedList<E>> newBuckets(new_bucket_size, new_bucket_size);
         
         for (int i = 0; i < _bucket_size; i++) {//遍历每个桶
             DbLinkedList<E>& linkedList = _buckets[i];
@@ -136,16 +136,17 @@ public:
         if (node != nullptr) {
             e = node->data;
             DbLinkedList<E>& linkedList = _buckets[bucket];
-            for (DbListNode<E>* i = linkedList.head->rlink; i != linkedList.head; )
-            {
-                if (key == i->data.key) {
-                    i->llink->rlink = i->rlink;
-                    i->rlink->llink = i->llink;
-                    delete i;
+            //for (DbListNode<E>* i = linkedList.head->rlink; i != linkedList.head; )
+            //{
+
+                    node->llink->rlink = node->rlink;
+                    node->rlink->llink = node->llink;
+                    delete node;
                     linkedList.size--;
-                }
-                i = i->rlink;
-            }
+ 
+            //    }
+            //    i = i->rlink;
+            //}
             _size--;
             return 1;
         }

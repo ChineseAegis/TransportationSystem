@@ -20,7 +20,9 @@ public:
     ExpandableArrayList(int initialCapacity = 10) : capacity(initialCapacity), count(0) {
         array = new E[capacity];
     }
-
+    ExpandableArrayList(int initialCapacity,int initialCount) : capacity(initialCapacity), count(initialCount) {
+        array = new E[capacity];
+    }
     ~ExpandableArrayList() {
         delete[] array;
     }
