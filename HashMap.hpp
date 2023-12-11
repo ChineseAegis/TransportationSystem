@@ -39,7 +39,7 @@ public:
 	{
 	/*	BucketSize = initialSize;
 		this->MaxLoadFactor = MaxLoadFactor;*/
-		table = new ExpandableLinkedHashTable<K, Element>(initialSize,this->MaxLoadFactor);
+		table = new ExpandableLinkedHashTable<K, Element>(initialSize,MaxLoadFactor);
 	}
 	~HashMap()
 	{
