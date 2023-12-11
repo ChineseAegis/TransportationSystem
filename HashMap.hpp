@@ -8,10 +8,10 @@ template<typename K,typename V>
 class HashMap
 {
 public:
-	int BucketSize;
-	int MaxLoadFactor;
-	int Default_BucketSize=16;
-	int Default_MaxLoadFactor=0.7;
+	//int BucketSize;
+	//int MaxLoadFactor;
+	//int Default_BucketSize=16;
+	//int Default_MaxLoadFactor=0.7;
 	std::set<K> s;
 	struct Element
 	{
@@ -25,20 +25,20 @@ public:
 	ExpandableLinkedHashTable<K, Element>* table = nullptr;
 	HashMap()
 	{
-		BucketSize = Default_BucketSize;
-		MaxLoadFactor = Default_MaxLoadFactor;
+		/*BucketSize = Default_BucketSize;
+		MaxLoadFactor = Default_MaxLoadFactor;*/
 		table = new ExpandableLinkedHashTable<K, Element>();
 	}
 	HashMap(int initialSize)
 	{
-		BucketSize = initialSize;
-		MaxLoadFactor = Default_MaxLoadFactor;
+		/*BucketSize = initialSize;
+		MaxLoadFactor = Default_MaxLoadFactor;*/
 		table = new ExpandableLinkedHashTable<K, Element>(initialSize);
 	}
 	HashMap(int initialSize, double MaxLoadFactor)
 	{
-		BucketSize = initialSize;
-		this->MaxLoadFactor = MaxLoadFactor;
+	/*	BucketSize = initialSize;
+		this->MaxLoadFactor = MaxLoadFactor;*/
 		table = new ExpandableLinkedHashTable<K, Element>(initialSize,this->MaxLoadFactor);
 	}
 	~HashMap()
