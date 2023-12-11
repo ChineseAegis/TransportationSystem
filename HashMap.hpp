@@ -17,6 +17,10 @@ public:
 	{
 		K key;
 		V value;
+		bool operator==(const Element &other)const
+		{
+			return(key == other.key) && (value == other.value);
+		}
 	};
 	ExpandableLinkedHashTable<K, Element>* table = nullptr;
 	HashMap()

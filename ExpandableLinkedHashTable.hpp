@@ -56,18 +56,18 @@ private:
     }
 public:
     /** 桶数是16，最大装载因子是0.7。*/
-    ExpandableLinkedHashTable():_bucket_size(16),_buckets(_bucket_size) {
+    ExpandableLinkedHashTable():_bucket_size(16),_buckets(16) {
         _size = 0;
         _max_load_factor = 0.7;
     }
     /** 。桶数是initial_bucket_size，最大装载因子是0.7。*/
-    ExpandableLinkedHashTable(int initialSize):_bucket_size(initialSize), _buckets(_bucket_size) {
+    ExpandableLinkedHashTable(int initialSize):_bucket_size(initialSize), _buckets(initialSize) {
 
         _size = 0;
         _max_load_factor = 0.7;
     }
     /** 桶数是initial_bucket_size，最大装载因子是maxLoadFactor。*/
-    ExpandableLinkedHashTable(int initialSize, double maxLoadFactor):_bucket_size(initialSize), _buckets(_bucket_size) {
+    ExpandableLinkedHashTable(int initialSize, double maxLoadFactor):_bucket_size(initialSize), _buckets(initialSize) {
  
         _size = 0;
         _max_load_factor = maxLoadFactor;
