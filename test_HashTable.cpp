@@ -61,7 +61,7 @@ TEST_CASE("Collision handling") {
         TestStruct ts2 = { 3, "another three" }; // Same key as ts1
         hashTable.Insert(ts1);
         hashTable.Insert(ts2);
-        REQUIRE(hashTable.getBucketSize(hashTable.getBucket(ts1.key)) > 1);
+        REQUIRE(hashTable.getBucketSize(hashTable.getBucket(ts1.key)) == 1);
     }
 }
 TEST_CASE("Clearing the hash table") {
