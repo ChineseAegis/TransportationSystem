@@ -119,9 +119,10 @@ public:
     bool Insert(const E& e) {
         int bucket = hash(e.key);
         DbLinkedList<E>& bucketLink = _buckets[bucket];
-        if (findPos(e.key, bucket)) {//先删除再插入
-            bucketLink.Remove(e);
-        }
+       //先删除再插入
+         E x;
+         Remove(e.key,x);
+        
         bucketLink.Insert(e);
         _size++;
         double loadFactor = _size / _bucket_size;//判断是否扩容
