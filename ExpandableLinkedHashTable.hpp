@@ -89,9 +89,9 @@ public:
         
     }
 
-    bool Search(const K&) const {
+    bool Search(const K&key) const {
         int bucket;
-        return findPos(K, bucket) != nullptr;
+        return findPos(key, bucket) != nullptr;
     }
     // 用new_bucket_size个桶重建hash表
     void  resizeTable() {
