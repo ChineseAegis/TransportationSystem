@@ -2,7 +2,8 @@
 #include "ExpandableArrayList.hpp"  // 包含您的 ExpandableArrayList 类的头文件
 #include "memory_leak.h"
 #include"HashMap.hpp"
-
+#include <random>
+#include <unordered_set>
 TEST_CASE("HashMap tests", "[HashMap]") {
     SECTION("Default constructor") {
         HashMap<int, int> map;
@@ -287,5 +288,119 @@ TEST_CASE("HashMap Tests")
         REQUIRE(map.getSize() == 3);
         REQUIRE(map.containsKey(3) == true);
         REQUIRE(map.getValue(3) == "Three");
+    }
+}
+TEST_CASE("HashMap with large data set", "[HashMap]")
+{
+    const int dataSize = 10;  // 数据量非常大的情况下，可以适当调整数据大小
+
+    // 准备测试数据
+    std::unordered_set<int> uniqueKeys;  // 用于确保键值的唯一性
+    std::vector<std::pair<int, std::string>> testData;
+    testData.reserve(dataSize);
+
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0, dataSize);
+
+    while (testData.size() < dataSize)
+    {
+        int key = distribution(generator);
+        if (uniqueKeys.count(key) == 0)
+        {
+            uniqueKeys.insert(key);
+            std::string value = "Value" + std::to_string(testData.size());
+            testData.emplace_back(key, value);
+        }
+    }
+
+    HashMap<int, std::string> hashMap;
+
+    SECTION("Insertion")
+    {
+        for (const auto& data : testData)
+        {
+            REQUIRE_NOTHROW(hashMap.Insert(data));
+        }
+    }
+
+    SECTION("Retrieval")
+    {
+        for (const auto& data : testData)
+        {
+            hashMap.Insert(data);
+        }
+
+        for (const auto& data : testData)
+        {
+            REQUIRE(hashMap.getValue(data.first) == data.second);
+        }
+    }
+
+    SECTION("Removal")
+    {
+        for (const auto& data : testData)
+        {
+            hashMap.Insert(data);
+        }
+
+        for (const auto& data : testData)
+        {
+            REQUIRE(hashMap.Remove(data.first) == data.second);
+            REQUIRE_FALSE(hashMap.containsKey(data.first));
+        }
+    }
+
+    SECTION("Clear")
+    {
+        for (const auto& data : testData)
+        {
+            hashMap.Insert(data);
+        }
+
+        hashMap.Clear();
+        REQUIRE(hashMap.getSize() == 0);
+    }
+
+    SECTION("Resize")
+    {
+        for (const auto& data : testData)
+        {
+            hashMap.Insert(data);
+        }
+
+        hashMap.resizeTable();  // 对HashMap进行扩容
+
+        for (const auto& data : testData)
+        {
+            REQUIRE(hashMap.getValue(data.first) == data.second);
+        }
+    }
+
+    SECTION("Duplicate Keys")
+    {
+        std::unordered_set<int> uniqueKeys;  // 用于检查键值的唯一性
+
+        for (const auto& data : testData)
+        {
+            hashMap.Insert(data);
+            uniqueKeys.insert(data.first);
+        }
+
+        for (const auto& data : testData)
+        {
+            // 检查插入后的键值是否与原始数据一致
+            REQUIRE(hashMap.getValue(data.first) == data.second);
+
+            // 检查键值是否唯一
+            REQUIRE(uniqueKeys.count(data.first) == 1);
+        }
+
+        // 插入具有相同键值的新数据，覆盖原有映射
+        std::string newValue = "NewValue";
+        for (const auto& data : testData)
+        {
+            hashMap.Insert(std::make_pair(data.first, newValue));
+            REQUIRE(hashMap.getValue(data.first) == newValue);
+        }
     }
 }
