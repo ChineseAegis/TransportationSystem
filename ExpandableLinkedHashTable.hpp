@@ -6,7 +6,7 @@ template <class K, class E>
 class ExpandableLinkedHashTable {
 private:
 
-    ExpandableArrayList<DbLinkedList<E>>* _buckets;//桶的数组
+    ExpandableArrayList<DbLinkedList<E>> _buckets;//桶的数组
     int _bucket_size;//桶数
     int _size;//装载记录的规模大小
     double _max_load_factor;//装载因子的最大值
@@ -55,33 +55,27 @@ private:
     }
 public:
     /** 桶数是16，最大装载因子是0.7。*/
-    ExpandableLinkedHashTable() {
+    ExpandableLinkedHashTable():_bucket_size(16),_buckets(_bucket_size) {
         _size = 0;
-        _bucket_size = 16;
         _max_load_factor = 0.7;
-        _buckets = new ExpandableArrayList<DbLinkedList<E>>(_bucket_size);
     }
     /** 。桶数是initial_bucket_size，最大装载因子是0.7。*/
-    ExpandableLinkedHashTable(int initialSize) {
+    ExpandableLinkedHashTable(int initialSize):_bucket_size(initialSize), _buckets(_bucket_size) {
 
         _size = 0;
-        _bucket_size = initialSize;
         _max_load_factor = 0.7;
-        _buckets = new ExpandableArrayList<DbLinkedList<E>>(_bucket_size);
     }
     /** 桶数是initial_bucket_size，最大装载因子是maxLoadFactor。*/
-    ExpandableLinkedHashTable(int initialSize, double maxLoadFactor) {
+    ExpandableLinkedHashTable(int initialSize, double maxLoadFactor):_bucket_size(initialSize), _buckets(_bucket_size) {
  
         _size = 0;
-        _bucket_size = initialSize;
         _max_load_factor = maxLoadFactor;
-        _buckets = new ExpandableArrayList<DbLinkedList<E>>(_bucket_size);
     }
 
     DbListNode<E>* findPos(const K& key, int& bucket) const {
         bucket = hash(key);
         DbLinkedList<E>& bucketList = _buckets[bucket];//找到对应链表行
-        DbListNode<E> node = bucketList.Search(key);
+        DbListNode<E>* node = bucketList.Search(key);
         if (!node) {
             bucket = -1;
             return 0;
@@ -96,8 +90,9 @@ public:
     // 用new_bucket_size个桶重建hash表
     void  resizeTable() {
         int new_bucket_size =findClosestPrime( _bucket_size * 2);
-        ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>(new_bucket_size);
-
+        //ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>(new_bucket_size);
+        ExpandableArrayList<DbLinkedList<E>> newBuckets(new_bucket_size);
+        
         for (int i = 0; i < _bucket_size; i++) {//遍历每个桶
             DbLinkedList<E>& linkedList = _buckets[i];
             DbListNode<E>* current = linkedList.head->rlink;//每个链表的首结点
@@ -109,13 +104,14 @@ public:
                 current = current->rlink;
             }
         }
-        delete[] _buckets;
         _buckets = newBuckets;
+        //delete[] _buckets;
+        //_buckets = newBuckets;
         _bucket_size = new_bucket_size;
     }
     bool Insert(const E& e) {
         int bucket = hash(e.key);
-        DbLinkedList<E>& bucketLink = *_buckets[bucket];
+        DbLinkedList<E>& bucketLink = _buckets[bucket];
         if (findPos(e.key, bucket)) {//先删除再插入
             bucketLink.Remove(e);
         }
@@ -143,7 +139,7 @@ public:
     }
     void Clear() {
         for (int i = 0; i < _size; i++) {
-            DbLinkedList<E> &bucketlink = *_buckets[i];
+            DbLinkedList<E> &bucketlink = _buckets[i];
             bucketlink.Clear();
         }
         _size = 0;
@@ -163,9 +159,9 @@ public:
     }
     ~ExpandableLinkedHashTable() {
         Clear();
-        if (_buckets != nullptr) {
-            delete[]_buckets;
-            _buckets = nullptr;
-        }
+        //if (_buckets != nullptr) {
+        //    delete[]_buckets;
+        //    _buckets = nullptr;
+        //}
     }
 };
