@@ -2,6 +2,7 @@
 #include"DbLinkedList.hpp"
 #include"ExpandableArrayList.hpp"
 #include <cmath>
+#include <functional> 
 template <class K, class E>
 class ExpandableLinkedHashTable {
 private:
@@ -11,12 +12,12 @@ private:
     int _size;//装载记录的规模大小
     double _max_load_factor;//装载因子的最大值
     int hash(K key)const {
-        if (key == NULL) {
-            return 0;
-        }
-        int id_bucket = key % _bucket_size;
-
+        
+        std::hash<K> hash_function; // 创建一个哈希函数对象
+        int hash_value = hash_function(key); // 生成哈希值
+        int id_bucket = hash_value % _bucket_size; // 计算桶的索引
         return id_bucket;
+
     }
 
     bool isPrime(int n) {//判断是否是素数
@@ -75,12 +76,17 @@ public:
     DbListNode<E>* findPos(const K& key, int& bucket) const {
         bucket = hash(key);
         DbLinkedList<E>& bucketList = _buckets[bucket];//找到对应链表行
-        DbListNode<E>* node = bucketList.Search(key);
-        if (!node) {
-            bucket = -1;
-            return 0;
+        for (DbListNode<E> *i = bucketList.head->rlink; i !=bucketList.head; )
+        {
+            if (key == i->data.key) {
+                return i;
+            }
+            i = i->rlink;
         }
-        return node;
+        
+         bucket = -1;
+         return 0;
+        
     }
 
     bool Search(const K&) const {
@@ -128,9 +134,18 @@ public:
         DbListNode<E>* node = findPos(key, bucket);
 
         if (node != nullptr) {
-            e = node->value;
+            e = node->data;
             DbLinkedList<E>& linkedList = _buckets[bucket];
-            linkedList.Remove(key);
+            for (DbListNode<E>* i = linkedList.head->rlink; i != linkedList.head; )
+            {
+                if (key == i->data.key) {
+                    i->llink->rlink = i->rlink;
+                    i->rlink->llink = i->llink;
+                    delete i;
+                    linkedList.size--;
+                }
+                i = i->rlink;
+            }
             _size--;
             return 1;
         }
