@@ -28,12 +28,17 @@ public:
     }
     ExpandableArrayList& operator=(const ExpandableArrayList& other)
     {
+        if (array != nullptr)
+        {
+            delete[]array;
+            array = nullptr;
+        }
         count = other.count;
         capacity = other.capacity;
         array = new E[capacity];
         for (int i = 0; i < count; i++)
         {
-            array[i ] = other.array[i];
+            array[0] = other.array[0];
         }
         return *this;
     }
