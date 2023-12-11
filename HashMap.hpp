@@ -48,7 +48,7 @@ public:
 		table = nullptr;
 	}
 
-	V& getValue(const K& key)
+	V getValue(const K& key)
 	{
 		int bucket;
 		V v;
@@ -62,9 +62,9 @@ public:
 					return node->data.value;
 				}
 			}
-			return v;
+			return V();
 		}
-		return v;
+		return V();
 	}
 	std::set<K> keySet()
 	{
@@ -83,7 +83,7 @@ public:
 		table->Insert(e);
 		s.insert(e.key);
 	}
-	V& Remove(const K& key)
+	V Remove(const K& key)
 	{
 		Element e;
 		if (table->Remove(key, e) != 0)
@@ -91,9 +91,9 @@ public:
 			s.erase(key);
 			return e.value;
 		}
-		return e.value;
+		return V();
 	}
-	V& Remove(const K& key, const V& val)
+	V Remove(const K& key, const V& val)
 	{
 		Element e;
 		if (val==getValue(key))
@@ -102,7 +102,7 @@ public:
 			s.erase(key);
 			return e.value;
 		}
-		return e.value;
+		return V();
 	}
 	void Clear()
 	{
@@ -116,5 +116,6 @@ public:
 	void resizeTable()
 	{
 		table->resizeTable();
+
 	}
 };
