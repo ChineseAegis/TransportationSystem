@@ -100,3 +100,57 @@ TEST_CASE("DbLinkedList Tests", "[DbLinkedList]") {
         // 在实际应用中，可以使用更复杂的方法来测试析构函数
     }
 }
+
+TEST_CASE("DbLinkedList Operations", "[DbLinkedList]") {
+    DbLinkedList<int> list;
+
+    SECTION("Empty List") {
+        REQUIRE(list.isEmpty());
+        REQUIRE(list.size == 0);
+    }
+
+    SECTION("Insert and Search") {
+        list.Insert(10);
+        REQUIRE_FALSE(list.isEmpty());
+        REQUIRE(list.Search(10) != nullptr);
+        REQUIRE(list.Search(5) == nullptr);
+    }
+
+    SECTION("Remove") {
+        list.Insert(20);
+        REQUIRE(list.Remove(20));
+        REQUIRE_FALSE(list.Remove(30));
+        REQUIRE(list.isEmpty());
+    }
+
+    SECTION("Size and isEmpty") {
+        list.Insert(1);
+        list.Insert(2);
+        REQUIRE(list.size == 2);
+        list.Remove(1);
+        REQUIRE(list.size == 1);
+    }
+
+    SECTION("Clear") {
+        list.Insert(1);
+        list.Insert(2);
+        list.Clear();
+        REQUIRE(list.isEmpty());
+    }
+
+    SECTION("Boundary Tests") {
+        for (int i = 0; i < 1000; ++i) {
+            list.Insert(i);
+        }
+        REQUIRE(list.size == 1000);
+        for (int i = 0; i < 1000; ++i) {
+            REQUIRE(list.Search(i) != nullptr);
+        }
+        for (int i = 0; i < 500; ++i) {
+            REQUIRE(list.Remove(i));
+        }
+        REQUIRE(list.size == 500);
+    }
+
+    // Additional tests for stress testing and memory management
+}

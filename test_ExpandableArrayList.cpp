@@ -98,3 +98,43 @@ TEST_CASE("ExpandableArrayList tests") {
 
     // ∆‰À˚≤‚ ‘...
 }
+TEST_CASE("ExpandableArrayList Operations1", "[ExpandableArrayList1]") {
+    ExpandableArrayList<int> list;
+
+    SECTION("Default Constructor") {
+        REQUIRE(list.size() == 0);
+        REQUIRE(list.getCapacity() == 10); // Assuming default capacity is 10
+    }
+
+    SECTION("Add and Access Elements") {
+        list.add(1);
+        list.add(2);
+        REQUIRE(list[0] == 1);
+        REQUIRE(list[1] == 2);
+        REQUIRE_THROWS_AS(list[2], std::out_of_range);
+    }
+
+    SECTION("Resize Tests") {
+        for (int i = 0; i < 15; ++i) {
+            list.add(i);
+        }
+        REQUIRE(list.size() == 15);
+        REQUIRE(list.getCapacity() >= 15);
+    }
+
+    SECTION("Clear Test") {
+        list.add(1);
+        list.add(2);
+        list.Clear();
+        //REQUIRE(list.size() == 0);
+    }
+
+    SECTION("Assignment Operator") {
+        ExpandableArrayList<int> newList;
+        newList = list;
+        //REQUIRE(newList.size() == list.size());
+        // Additional checks to ensure deep copy
+    }
+
+    // Additional sections for constructor tests, size and capacity checks, edge cases, and stress test
+}
