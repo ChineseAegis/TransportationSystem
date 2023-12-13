@@ -130,11 +130,16 @@
     <ClInclude Include="catch.hpp" />
     <ClInclude Include="DbLinkedList.hpp" />
     <ClInclude Include="DbListNode.hpp" />
+    <ClInclude Include="Deque.hpp" />
     <ClInclude Include="ExpandableArrayList.hpp" />
     <ClInclude Include="ExpandableLinkedHashTable.hpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="memory_leak.h" />
+    <ClInclude Include="MinHeap.hpp" />
+    <ClInclude Include="MinIndexHeap.hpp" />
+    <ClInclude Include="Tree.hpp" />
+    <ClInclude Include="WQUPCUFSet.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings" />
@@ -142,10 +147,14 @@
   <ItemGroup>
     <ClCompile Include="catchmain.cpp" />
     <ClCompile Include="HashMap.hpp" />
+    <ClCompile Include="teat_WQUPCUFSet.cpp" />
     <ClCompile Include="test_ExpandableArrayList.cpp" />
     <ClCompile Include="test_DbLinkedList.cpp" />
     <ClCompile Include="test_HashMap.cpp" />
     <ClCompile Include="test_HashTable.cpp" />
+    <ClCompile Include="test_MinHeap.cpp" />
+    <ClCompile Include="test_MinindexHeap.cpp" />
+    <ClCompile Include="WUSGraphClient.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

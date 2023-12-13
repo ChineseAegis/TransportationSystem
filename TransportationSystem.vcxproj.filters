@@ -33,6 +33,21 @@
     <ClInclude Include="ExpandableLinkedHashTable.hpp">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="MinHeap.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WQUPCUFSet.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Deque.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MinIndexHeap.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings">
@@ -53,6 +68,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test_HashTable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_HashMap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_MinHeap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="teat_WQUPCUFSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WUSGraphClient.hpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_MinindexHeap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
