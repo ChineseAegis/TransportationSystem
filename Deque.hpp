@@ -57,7 +57,7 @@ public:
 		return true;
 	}
 	void pop() {
-		if (isEmpty())return false;
+		if (isEmpty())return;
 		head = (head + 1) % maxsize;
 		if (maxsize >= 16) {
 			if (this->Length() < (maxsize / 2)) {

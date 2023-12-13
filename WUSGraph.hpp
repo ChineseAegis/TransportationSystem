@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include<queue>
 #include"Neighbors.hpp"
-
+#include"Deque.hpp"
 template<typename Object,typename Weight>
 class WUSGraph
 {
@@ -94,7 +94,7 @@ private:
 	HashMap<Object, DbListNode<Vertex>*> toVertexMap;
 	HashMap<std::pair<Object, Object>, DbListNode<Edge>*> toEdgeMap;
 	HashMap<int,Object > toObjectMap;
-	std::queue<int> intQueue;
+	ADeque<int> intQueue;
 public:
 	WUSGraph()
 	{
@@ -126,7 +126,7 @@ public:
 		mypair.first = object;
 
 		int num;
-		if (intQueue.empty())
+		if (intQueue.isEmpty())
 		{
 			num = VertexCount + 1;
 		}
@@ -151,7 +151,7 @@ public:
 		}
 		DbListNode<Vertex>* node=toVertexMap.getValue(object);
 		int degree = node->data.degree;
-		intQueue.push(node->data.data);
+		intQueue.pushback(node->data.data);
 		toObjectMap.Remove(node->data.data);
 		DbListNode<Edge>* enode = node->data.edges->begin();
 		while (enode != node->data.edges->begin()->llink)
