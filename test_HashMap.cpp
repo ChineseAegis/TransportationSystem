@@ -51,15 +51,15 @@ TEST_CASE("HashMap tests", "[HashMap]") {
         REQUIRE(map.getSize() == 0);
     }
 
-    SECTION("Key Set") {
-        HashMap<int, std::string> map;
-        map.Insert({ 1, "one" });
-        map.Insert({ 2, "two" });
-        auto keySet = map.keySet();
-        REQUIRE(keySet.size() == 2);
-        REQUIRE(keySet.find(1) != keySet.end());
-        REQUIRE(keySet.find(2) != keySet.end());
-    }
+    //SECTION("Key Set") {
+    //    HashMap<int, std::string> map;
+    //    map.Insert({ 1, "one" });
+    //    map.Insert({ 2, "two" });
+    //    auto keySet = map.keySet();
+    //    REQUIRE(keySet.size() == 2);
+    //    REQUIRE(keySet.find(1) != keySet.end());
+    //    REQUIRE(keySet.find(2) != keySet.end());
+    //}
 
     // Additional tests can be added here as necessary
 }
@@ -175,20 +175,20 @@ TEST_CASE("HashMap Operations")
     //    REQUIRE(map.containsKey(2) == true);
     //}
 
-    SECTION("Key Set")
-    {
-        HashMap<int, std::string> map;
-        map.Insert(std::make_pair(1, "One"));
-        map.Insert(std::make_pair(2, "Two"));
-        map.Insert(std::make_pair(3, "Three"));
+    //SECTION("Key Set")
+    //{
+    //    HashMap<int, std::string> map;
+    //    map.Insert(std::make_pair(1, "One"));
+    //    map.Insert(std::make_pair(2, "Two"));
+    //    map.Insert(std::make_pair(3, "Three"));
 
-        std::set<int> keys = map.keySet();
+    //    std::set<int> keys = map.keySet();
 
-        REQUIRE(keys.size() == 3);
-        REQUIRE(keys.find(1) != keys.end());
-        REQUIRE(keys.find(2) != keys.end());
-        REQUIRE(keys.find(3) != keys.end());
-    }
+    //    REQUIRE(keys.size() == 3);
+    //    REQUIRE(keys.find(1) != keys.end());
+    //    REQUIRE(keys.find(2) != keys.end());
+    //    REQUIRE(keys.find(3) != keys.end());
+    //}
 }
 TEST_CASE("HashMap Tests")
 {
@@ -197,7 +197,7 @@ TEST_CASE("HashMap Tests")
         HashMap<int, std::string> map;
 
         REQUIRE(map.getSize() == 0);
-        REQUIRE(map.keySet().empty());
+        //REQUIRE(map.keySet().empty());
         REQUIRE(map.containsKey(1) == false);
         REQUIRE(map.getValue(1) == "");
         REQUIRE(map.Remove(1) == "");

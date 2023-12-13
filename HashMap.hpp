@@ -4,7 +4,7 @@
 #include"DbLinkedList.hpp"
 #include<set>
 #include <utility>
-
+#include<unordered_set>
 template<typename K,typename V>
 class HashMap
 {
@@ -13,7 +13,7 @@ public:
 	//int MaxLoadFactor;
 	//int Default_BucketSize=16;
 	//int Default_MaxLoadFactor=0.7;
-	std::set<K> s;
+	std::unordered_set<K> s;
 	struct Element
 	{
 		K key;
@@ -56,25 +56,18 @@ public:
 		DbListNode<Element>* node = table->findPos(key, bucket);
 		if (bucket != -1)
 		{
-			while (node != nullptr)
-			{
-				if (node->data.key == key)
-				{
-					return node->data.value;
-				}
-			}
-			return V();
+		   return node->data.value;
 		}
 		return V();
 	}
-	std::set<K> keySet()
-	{
-		
-		return s;
-	}
+	//std::set<K> keySet()
+	//{
+	//	
+	//	
+	//}
 	bool containsKey(const K& key)
 	{
-		return s.find(key)!=s.end();
+		return table->Search(key);
 	}
 	void Insert(std::pair<K, V> k_v)
 	{
@@ -82,14 +75,12 @@ public:
 		e.key = k_v.first;
 		e.value = k_v.second;
 		table->Insert(e);
-		s.insert(e.key);
 	}
 	V Remove(const K& key)
 	{
 		Element e;
 		if (table->Remove(key, e) != 0)
 		{
-			s.erase(key);
 			return e.value;
 		}
 		return V();
@@ -100,7 +91,6 @@ public:
 		if (val==getValue(key))
 		{
 			table->Remove(key, e);
-			s.erase(key);
 			return e.value;
 		}
 		return V();
@@ -108,7 +98,6 @@ public:
 	void Clear()
 	{
 		table->Clear();
-		s.clear();
 	}
 	int getSize()
 	{
