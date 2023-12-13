@@ -250,7 +250,7 @@ TEST_CASE("getNeighbors After Removing Vertices2", "[WUSGraph]") {
     g.addEdge("A", "B", 1);
 
     g.removeVertex("B");
-
+  
     Neighbors<std::string, int> neighbors = g.getNeighbors("A");
     REQUIRE(neighbors.size == 0);
 }

@@ -142,12 +142,36 @@ public:
 		VertexCount++;
 		toObjectMap.Insert(std::make_pair(num, object));
 	}
+	Neighbors<Object, Weight> getNeighbors(Object object)
+	{
+		if (!toVertexMap.containsKey(object))
+		{
+			throw std::runtime_error("不存在的点");
+		}
+		DbListNode<Vertex>* node = toVertexMap.getValue(object);
+		Neighbors<Object, Weight> n(node->data.degree);
+		DbListNode<Edge>* enode = node->data.edges->begin();
+		for (int i = 0; enode != node->data.edges->Head(); i++)
+		{
+			Object oj = toObjectMap.getValue(enode->data.edge.second);
+			n.object[i] = oj;
+			n.weight[i] = enode->data.weight;
+			enode = enode->rlink;
+		}
+		return n;
+	}
 	void removeVertex(Object object)
 	{
 		if (!toVertexMap.containsKey(object))
 		{
 			throw std::runtime_error("删除不存在的点");
 			return;
+		}
+		Neighbors<Object,Weight> nei = getNeighbors(object);
+		for (int i = 0; i < nei.size; i++)
+		{
+			toEdgeMap.Remove(std::make_pair(object, nei.object[i]));
+			toEdgeMap.Remove(std::make_pair(nei.object[i], object));
 		}
 		DbListNode<Vertex>* node=toVertexMap.getValue(object);
 		int degree = node->data.degree;
@@ -156,6 +180,7 @@ public:
 		DbListNode<Edge>* enode = node->data.edges->begin();
 		while (enode != node->data.edges->begin()->llink)
 		{
+
 			enode->data.clear();
 			enode = enode->rlink;
 		}
@@ -233,24 +258,7 @@ public:
 		}
 		return array;
 	}
-	Neighbors<Object,Weight> getNeighbors(Object object)
-	{
-		if (!toVertexMap.containsKey(object))
-		{
-			throw std::runtime_error("不存在的点");
-		}
-		DbListNode<Vertex>* node = toVertexMap.getValue(object);
-		Neighbors<Object,Weight> n=(node->data.degree);
-		DbListNode<Edge>* enode = node->data.edges->begin();
-		for (int i=0; enode != node->data.edges->Head();i++)
-		{
-			Object oj = toObjectMap.getValue(enode->data.edge.second);
-			n.object[i] = oj;
-			n.weight[i] = enode->data.weight;
-			enode = enode->rlink;
-		}
-		return n;
-	}
+	
 	int Degree(Object object)
 	{
 		DbListNode<Vertex>* node = toVertexMap.getValue(object);
@@ -258,6 +266,10 @@ public:
 	}
 	Weight getWeight(Object object1, Object object2)
 	{
+		if (!toVertexMap.containsKey(object1) || !toVertexMap.containsKey(object2))
+		{
+			throw std::runtime_error("有不存在的顶点");
+		}
 		DbListNode<Edge>* node = toEdgeMap.getValue(std::make_pair(object1, object2));
 		return node->data.weight;
 	}
