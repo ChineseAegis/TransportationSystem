@@ -15,23 +15,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="memory_leak.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="catch.hpp">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="ExpandableArrayList.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="catch.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="DbLinkedList.hpp">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DbListNode.hpp">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ExpandableLinkedHashTable.hpp">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="memory_leak.h">
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MinHeap.hpp">
       <Filter>源文件</Filter>
@@ -68,21 +68,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test_HashTable.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="test_HashMap.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="test_MinHeap.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="teat_WQUPCUFSet.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="WUSGraphClient.hpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="test_MinindexHeap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
