@@ -1,5 +1,6 @@
 #pragma once
 #include"DbListNode.hpp"
+#include <stdexcept>
 //DbListNode* Search(V& x)
 //void Insert(V& x) 
 //bool Remove(V& x)
@@ -17,8 +18,8 @@ protected:
 		}
 		return nullptr;
 	}
-	void Inserthelper(V& x) {
-		if (Search(x))return;
+	void Inserthelper(V x) {
+		//if (Search(x))return;
 		DbListNode<V>* newNode = new DbListNode<V>(x);  
 		newNode->llink = head->llink;
 		newNode->rlink = head;
@@ -84,8 +85,31 @@ public:
 	bool Remove(V x) {
 		return Removehelper(x);
 	}
+	bool Remove(DbListNode<V>* delnode) {
+		if (delnode == nullptr|| delnode->llink==nullptr|| delnode->rlink==nullptr||delnode==this->head)
+		{
+			return false;
+		}
+		delnode->llink->rlink = delnode->rlink;
+		delnode->rlink->llink = delnode->llink;
+		delete delnode;
+		size--;
+		return true;
+	}
 	void Clear() {
 		Clearhelper();
+	}
+	DbListNode<V>* Head()
+	{
+		return head;
+	}
+	DbListNode<V>* begin()
+	{
+		return head->rlink;
+	}
+	DbListNode<V>* end()
+	{
+		return head->llink;
 	}
 	~DbLinkedList() {
 		Clear();

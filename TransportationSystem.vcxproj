@@ -135,6 +135,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="memory_leak.h" />
+    <ClInclude Include="Neighbors.hpp" />
+    <ClInclude Include="WUSGraph.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings" />
@@ -146,6 +148,8 @@
     <ClCompile Include="test_DbLinkedList.cpp" />
     <ClCompile Include="test_HashMap.cpp" />
     <ClCompile Include="test_HashTable.cpp" />
+    <ClCompile Include="test_WUSGraph.cpp" />
+    <ClCompile Include="test_WUSGraph2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

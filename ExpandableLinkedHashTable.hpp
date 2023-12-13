@@ -3,6 +3,29 @@
 #include"ExpandableArrayList.hpp"
 #include <cmath>
 #include <functional> 
+
+
+//struct PairHash {
+//    size_t operator()(const std::pair<T1, T2>& p) const {
+//        std::hash<T1> hash1;
+//        std::hash<T2> hash2;
+//        return hash1(p.first) ^ (hash2(p.second) << 1);  // Combine the hash values
+//    }
+//};
+namespace std {
+    template <class T1, class T2>
+    struct hash<std::pair<T1, T2>> {
+        size_t operator()(const std::pair<T1, T2>& p) const {
+            std::hash<T1> hash1;
+            std::hash<T2> hash2;
+            return hash1(p.first) ^ (hash2(p.second) << 1);  // Combine the hash values
+        }
+    };
+}
+
+
+
+
 template <class K, class E>
 class ExpandableLinkedHashTable {
 private:
@@ -11,6 +34,14 @@ private:
     int _bucket_size;//桶数
     int _size;//装载记录的规模大小
     double _max_load_factor;//装载因子的最大值
+
+    //template <class T1, class T2>
+    //int hash(const std::pair<K, K>& key) const {
+    //    OrderedPairHash<K, K> h;
+    //    size_t hashCode = h(key);
+    //    int id_bucket = (0x7fffffff & hashCode) % _bucket_size;
+    //    return id_bucket;
+    //}
     int hash(K key)const {
         
         std::hash<K> h;
@@ -19,6 +50,7 @@ private:
         return id_bucket;
 
     }
+
 
     bool isPrime(int n) {//判断是否是素数
         if (n <= 1) {
