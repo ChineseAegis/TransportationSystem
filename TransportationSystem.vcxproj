@@ -136,8 +136,13 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="memory_leak.h" />
+    <ClInclude Include="MinHeap.hpp" />
+    <ClInclude Include="MinIndexHeap.hpp" />
     <ClInclude Include="Neighbors.hpp" />
+    <ClInclude Include="Tree.hpp" />
+    <ClInclude Include="WQUPCUFSet.hpp" />
     <ClInclude Include="WUSGraph.hpp" />
+    <ClInclude Include="WUSGraphClient.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings" />
@@ -150,6 +155,8 @@
     <ClCompile Include="test_DbLinkedList.cpp" />
     <ClCompile Include="test_HashMap.cpp" />
     <ClCompile Include="test_HashTable.cpp" />
+    <ClCompile Include="test_MinHeap.cpp" />
+    <ClCompile Include="test_MinindexHeap.cpp" />
     <ClCompile Include="test_WUSGraph.cpp" />
     <ClCompile Include="test_WUSGraph2.cpp" />
   </ItemGroup>
