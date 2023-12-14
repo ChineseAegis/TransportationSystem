@@ -9,7 +9,7 @@ template<typename V>
 class DbLinkedList {
 protected:
 	
-	DbListNode<V>* Searchhelper(V x) {
+	DbListNode<V>* Searchhelper(const V& x) {
 		for (DbListNode<V>* i = head->rlink; i !=head;) {
 			if (i->data == x) {
 				return i;
@@ -18,7 +18,7 @@ protected:
 		}
 		return nullptr;
 	}
-	void Inserthelper(V x) {
+	void Inserthelper(const V& x) {
 		//if (Search(x))return;
 		DbListNode<V>* newNode = new DbListNode<V>(x);  
 		newNode->llink = head->llink;
@@ -27,9 +27,9 @@ protected:
 		head->llink = newNode;
 		size++;
 	}
-	bool Removehelper(V x) {
+	bool Removehelper(const V& x) {
 		if (isEmpty())return false;
-		DbListNode<V>* delnode = Search(x);
+		DbListNode<V>* delnode = Searchhelper(x);
 		if (delnode) {
 			delnode->llink->rlink = delnode->rlink;
 			delnode->rlink->llink = delnode->llink;
@@ -76,13 +76,13 @@ public:
 		}
 		return *this;
 	}
-	 DbListNode<V>* Search(V x){
+	 DbListNode<V>* Search(const V& x){
 		return Searchhelper(x);
 	}
-	void Insert(V x) {
+	void Insert(const V& x) {
 		Inserthelper(x);
 	}
-	bool Remove(V x) {
+	bool Remove(const V& x) {
 		return Removehelper(x);
 	}
 	bool Remove(DbListNode<V>* delnode) {

@@ -42,7 +42,7 @@ private:
     //    int id_bucket = (0x7fffffff & hashCode) % _bucket_size;
     //    return id_bucket;
     //}
-    int hash(K key)const {
+    int hash(const K& key)const {
         
         std::hash<K> h;
         size_t hashCode = h(key);
@@ -110,7 +110,7 @@ public:
         DbLinkedList<E>& bucketList = _buckets[bucket];//找到对应链表行
         for (DbListNode<E> *i = bucketList.head->rlink; i !=bucketList.head; )
         {
-            if (key == i->data.key) {
+            if (key == i->data.first) {
                 return i;
             }
             i = i->rlink;
@@ -138,22 +138,22 @@ public:
 
             while (current != linkedList.head) {
                 int newBucket;
-                newBucket = hash(current->data.key);//重新散列
+                newBucket = hash(current->data.first);//重新散列
                 newBuckets[newBucket].Insert(current->data);
                 current = current->rlink;
             }
         }
-        _buckets = newBuckets;
+        _buckets = std::move(newBuckets);
         //delete[] _buckets;
         //_buckets = newBuckets;
         
     }
     bool Insert(const E& e) {
-        int bucket = hash(e.key);
+        int bucket = hash(e.first);
         DbLinkedList<E>& bucketLink = _buckets[bucket];
        //先删除再插入
          E x;
-         Remove(e.key,x);
+         Remove(e.first,x);
         
         bucketLink.Insert(e);
         _size++;

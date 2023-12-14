@@ -1,27 +1,24 @@
-
 #include "catch.hpp"
 #include "ExpandableLinkedHashTable.hpp"
 #include "memory_leak.h"
-struct TestStruct {
-    int key;
-    std::string value;
+#include <utility>
+#include <string>
 
-    bool operator==(const TestStruct& other) const {
-        return key == other.key && value == other.value;
-    }
-};
+// 使用 std::pair<int, std::string> 而不是 TestStruct
+typedef std::pair<int, std::string> KeyValuePair;
 
-// Define a hash specialization for TestStruct
-namespace std {
-    template <>
-    struct hash<TestStruct> {
-        size_t operator()(const TestStruct& t) const {
-            return hash<int>()(t.key);
-        }
-    };
-};
+// Define a hash specialization for KeyValuePair (std::pair<int, std::string>)
+//namespace std {
+//    template <>
+//    struct hash<KeyValuePair> {
+//        size_t operator()(const KeyValuePair& p) const {
+//            return hash<int>()(p.first);
+//        }
+//    };
+//};
+
 TEST_CASE("Constructor and basic operations") {
-    ExpandableLinkedHashTable<int, TestStruct> hashTable;
+    ExpandableLinkedHashTable<int, KeyValuePair> hashTable;
 
     SECTION("Initial size and capacity") {
         REQUIRE(hashTable.getSize() == 16);
@@ -29,22 +26,23 @@ TEST_CASE("Constructor and basic operations") {
     }
 
     SECTION("Insert and Search operations") {
-        TestStruct ts = { 1, "one" };
-        REQUIRE(hashTable.Insert(ts));
-        REQUIRE(hashTable.Search(ts.key));
+        KeyValuePair kv = { 1, "one" };
+        REQUIRE(hashTable.Insert(kv));
+        REQUIRE(hashTable.Search(kv.first));
     }
 
     SECTION("Remove operation") {
-        TestStruct ts = { 2, "two" };
-        hashTable.Insert(ts);
-        TestStruct removed;
-        REQUIRE(hashTable.Remove(ts.key, removed));
-        REQUIRE(removed == ts);
-        REQUIRE_FALSE(hashTable.Search(ts.key));
+        KeyValuePair kv = { 2, "two" };
+        hashTable.Insert(kv);
+        KeyValuePair removed;
+        REQUIRE(hashTable.Remove(kv.first, removed));
+        REQUIRE(removed == kv);
+        REQUIRE_FALSE(hashTable.Search(kv.first));
     }
 }
+
 TEST_CASE("Resizing of hash table") {
-    ExpandableLinkedHashTable<int, TestStruct> hashTable(2, 1.0); // Smaller size for testing
+    ExpandableLinkedHashTable<int, KeyValuePair> hashTable(2, 1.0); // Smaller size for testing
 
     SECTION("Table resizes correctly") {
         for (int i = 0; i < 3; ++i) {
@@ -53,19 +51,21 @@ TEST_CASE("Resizing of hash table") {
         REQUIRE(hashTable.getSize() > 2); // Table should have resized
     }
 }
+
 TEST_CASE("Collision handling") {
-    ExpandableLinkedHashTable<int, TestStruct> hashTable;
+    ExpandableLinkedHashTable<int, KeyValuePair> hashTable;
 
     SECTION("Handling collisions") {
-        TestStruct ts1 = { 3, "three" };
-        TestStruct ts2 = { 3, "another three" }; // Same key as ts1
-        hashTable.Insert(ts1);
-        hashTable.Insert(ts2);
-        REQUIRE(hashTable.getBucketSize(hashTable.getBucket(ts1.key)) == 1);
+        KeyValuePair kv1 = { 3, "three" };
+        KeyValuePair kv2 = { 3, "another three" }; // Same key as kv1
+        hashTable.Insert(kv1);
+        hashTable.Insert(kv2);
+        REQUIRE(hashTable.getBucketSize(hashTable.getBucket(kv1.first)) == 1);
     }
 }
+
 TEST_CASE("Clearing the hash table") {
-    ExpandableLinkedHashTable<int, TestStruct> hashTable;
+    ExpandableLinkedHashTable<int, KeyValuePair> hashTable;
 
     SECTION("Clear operation") {
         hashTable.Insert({ 4, "four" });
@@ -74,20 +74,21 @@ TEST_CASE("Clearing the hash table") {
         REQUIRE(hashTable.getCapcity() == 0);
     }
 }
+
 TEST_CASE("Large and Complex Test") {
-    ExpandableLinkedHashTable<int, TestStruct> hashTable(2, 0.75);
+    ExpandableLinkedHashTable<int, KeyValuePair> hashTable(2, 0.75);
 
     SECTION("Insertion and Search for a Large Dataset") {
         const int dataSize = 10000;
         for (int i = 0; i < dataSize; ++i) {
-            TestStruct ts = { i, "value" + std::to_string(i) };
-            hashTable.Insert(ts);
+            KeyValuePair kv = { i, "value" + std::to_string(i) };
+            hashTable.Insert(kv);
         }
 
         REQUIRE(hashTable.getCapcity() == dataSize);
 
         for (int i = 0; i < dataSize; ++i) {
-            REQUIRE(hashTable.Search(2)==true);
+            REQUIRE(hashTable.Search(2) == true);
         }
 
         REQUIRE_FALSE(hashTable.Search(dataSize));
@@ -96,16 +97,16 @@ TEST_CASE("Large and Complex Test") {
     SECTION("Remove operation for a Large Dataset") {
         const int dataSize = 10000;
         for (int i = 0; i < dataSize; ++i) {
-            TestStruct ts = { i, "value" + std::to_string(i) };
-            REQUIRE(hashTable.Insert(ts));
+            KeyValuePair kv = { i, "value" + std::to_string(i) };
+            REQUIRE(hashTable.Insert(kv));
         }
 
         REQUIRE(hashTable.getCapcity() == dataSize);
 
         for (int i = 0; i < dataSize; ++i) {
-            TestStruct removed;
+            KeyValuePair removed;
             REQUIRE(hashTable.Remove(i, removed));
-            REQUIRE(removed.key == i);
+            REQUIRE(removed.first == i);
         }
 
         REQUIRE(hashTable.getCapcity() == 0);
@@ -114,8 +115,8 @@ TEST_CASE("Large and Complex Test") {
     SECTION("Stress Test: Insertion, Resizing, and Collision Handling") {
         const int dataSize = 100000;
         for (int i = 0; i < dataSize; ++i) {
-            TestStruct ts = { i, "value" + std::to_string(i) };
-            REQUIRE(hashTable.Insert(ts));
+            KeyValuePair kv = { i, "value" + std::to_string(i) };
+            REQUIRE(hashTable.Insert(kv));
         }
 
         REQUIRE(hashTable.getCapcity() == dataSize);

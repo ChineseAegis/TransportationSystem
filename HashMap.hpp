@@ -13,34 +13,33 @@ public:
 	//int MaxLoadFactor;
 	//int Default_BucketSize=16;
 	//int Default_MaxLoadFactor=0.7;
-	std::unordered_set<K> s;
-	struct Element
-	{
-		K key;
-		V value;
-		bool operator==(const Element &other)const
-		{
-			return(key == other.key) && (value == other.value);
-		}
-	};
-	ExpandableLinkedHashTable<K, Element>* table = nullptr;
+	//struct Element
+	//{
+	//	K key;
+	//	V value;
+	//	bool operator==(const Element &other)const
+	//	{
+	//		return(key == other.key) && (value == other.value);
+	//	}
+	//};
+	ExpandableLinkedHashTable<K, std::pair<K,V>>* table = nullptr;
 	HashMap()
 	{
 		/*BucketSize = Default_BucketSize;
 		MaxLoadFactor = Default_MaxLoadFactor;*/
-		table = new ExpandableLinkedHashTable<K, Element>();
+		table = new ExpandableLinkedHashTable<K, std::pair<K, V>>();
 	}
 	HashMap(int initialSize)
 	{
 		/*BucketSize = initialSize;
 		MaxLoadFactor = Default_MaxLoadFactor;*/
-		table = new ExpandableLinkedHashTable<K, Element>(initialSize);
+		table = new ExpandableLinkedHashTable<K, std::pair<K, V>>(initialSize);
 	}
 	HashMap(int initialSize, double MaxLoadFactor)
 	{
 	/*	BucketSize = initialSize;
 		this->MaxLoadFactor = MaxLoadFactor;*/
-		table = new ExpandableLinkedHashTable<K, Element>(initialSize,MaxLoadFactor);
+		table = new ExpandableLinkedHashTable<K, std::pair<K, V>>(initialSize,MaxLoadFactor);
 	}
 	~HashMap()
 	{
@@ -53,10 +52,10 @@ public:
 	{
 		int bucket;
 		V v;
-		DbListNode<Element>* node = table->findPos(key, bucket);
+		DbListNode<std::pair<K,V>>* node = table->findPos(key, bucket);
 		if (bucket != -1)
 		{
-		   return node->data.value;
+		   return node->data.second;
 		}
 		return V();
 	}
@@ -69,29 +68,26 @@ public:
 	{
 		return table->Search(key);
 	}
-	void Insert(std::pair<K, V> k_v)
-	{
-		Element e;
-		e.key = k_v.first;
-		e.value = k_v.second;
-		table->Insert(e);
+	void Insert(const std::pair<K, V> &k_v)
+	{	
+		table->Insert(k_v);
 	}
 	V Remove(const K& key)
 	{
-		Element e;
+		std::pair<K, V> e;
 		if (table->Remove(key, e) != 0)
 		{
-			return e.value;
+			return e.second;
 		}
 		return V();
 	}
 	V Remove(const K& key, const V& val)
 	{
-		Element e;
+		std::pair<K,V> e;
 		if (val==getValue(key))
 		{
 			table->Remove(key, e);
-			return e.value;
+			return e.second;
 		}
 		return V();
 	}
