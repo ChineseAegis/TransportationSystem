@@ -57,6 +57,9 @@
     <ClInclude Include="WUSGraphClient.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Forest.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings">
@@ -101,6 +104,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test_tree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_Forest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

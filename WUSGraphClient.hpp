@@ -4,12 +4,13 @@
 template<typename Object,typename Weight>
 class WUSGraphClient {
 public:
-	WUSGraph<Object,Weight> g;
+	
+	//WUSGraph<Object,Weight> G;
 	int MaxDegree(const WUSGraph& g) {
 		int maxdegree;
 		int n=g.vertexCount();
 		for (int i = 0; i < n; i++) {
-			int degree1 = Degree(i), degree2 = Degree(i + 1);
+			int degree1 = g.Degree(g.toObjectMap.getValue(i)), degree2 = (g.toObjectMap.getValue(i+1));
 			if (degree1 <degree2 ) {
 				maxdegree = degree2;
 			}
@@ -49,7 +50,7 @@ public:
 		for (int i = 0; i < n; i++)visited[i] = false;
 		Object* vertexs = g.getVertices();
 		for (int j = 0; j < n; j++) {
-			if (s == vertexs[i]) {
+			if (s == vertexs[j]) {
 				loc = j;
 				break;
 			}

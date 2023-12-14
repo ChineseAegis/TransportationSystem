@@ -9,9 +9,10 @@ TEST_CASE("Tree functionality", "[Tree]") {
         REQUIRE(myTree.insert("Root"));
         REQUIRE(myTree.insert("Child", "Root"));
         REQUIRE(myTree.insert("Child2", "Root"));
-        REQUIRE(myTree.insert("Child3", "Child2"));
-
-        REQUIRE(myTree.getcount() == 4);
+        REQUIRE(myTree.insert("Child3", "Child"));
+        REQUIRE(myTree.insert("Child4", "Child"));
+        REQUIRE(myTree.insert("Child5", "Root"));
+        REQUIRE(myTree.getcount() == 6);
     
 
    
