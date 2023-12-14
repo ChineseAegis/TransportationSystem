@@ -5,7 +5,7 @@
 #include <chrono>
 #include <iostream>
 #include<string>
-
+#include <random>
 TEST_CASE("Performance Tests", "[performance]") {
     const int NUM_ELEMENTS = 1000000;  // 测试元素数量
 
@@ -14,10 +14,9 @@ TEST_CASE("Performance Tests", "[performance]") {
     for (int i = 0; i < NUM_ELEMENTS; ++i) {
         testData.push_back({ i, i });
     }
+    HashMap<int, int> hashMap;
+    std::unordered_map<int, int> unorderedMap;
 
-    SECTION("Insertion Test") {
-        HashMap<int, int> hashMap;
-        std::unordered_map<int, int> unorderedMap;
 
         // Insertion for HashMap
         auto start = std::chrono::high_resolution_clock::now();
@@ -38,24 +37,19 @@ TEST_CASE("Performance Tests", "[performance]") {
         std::cout << "std::unordered_map insertion time: " << unorderedMapInsertionDuration << " ms\n";
 
         //REQUIRE(hashMapInsertionDuration < unorderedMapInsertionDuration * 2);  // 假设性能差距不超过2倍
-    }
+    //}
 
-    SECTION("Lookup Test") {
-        HashMap<int, int> hashMap;
-        std::unordered_map<int, int> unorderedMap;
 
-        // Pre-insertion
-        for (auto& kv : testData) {
-            hashMap.Insert(kv);
-            unorderedMap.insert(kv);
-        }
+
+    //SECTION("Lookup Test") {
+
 
         // Lookup for HashMap
-        auto start = std::chrono::high_resolution_clock::now();
+         start = std::chrono::high_resolution_clock::now();
         for (auto& kv : testData) {
             hashMap.getValue(kv.first);
         }
-        auto end = std::chrono::high_resolution_clock::now();
+         end = std::chrono::high_resolution_clock::now();
         auto hashMapLookupDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << "HashMap lookup time: " << hashMapLookupDuration << " ms\n";
 
@@ -68,25 +62,17 @@ TEST_CASE("Performance Tests", "[performance]") {
         auto unorderedMapLookupDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << "std::unordered_map lookup time: " << unorderedMapLookupDuration << " ms\n";
 
+
         //REQUIRE(hashMapLookupDuration < unorderedMapLookupDuration * 2);  // 假设性能差距不超过2倍
-    }
+   // }
 
-    SECTION("Deletion Test") {
-        HashMap<int, int> hashMap;
-        std::unordered_map<int, int> unorderedMap;
-
-        // Pre-insertion
-        for (auto& kv : testData) {
-            hashMap.Insert(kv);
-            unorderedMap.insert(kv);
-        }
 
         // Deletion for HashMap
-        auto start = std::chrono::high_resolution_clock::now();
+        start = std::chrono::high_resolution_clock::now();
         for (auto& kv : testData) {
             hashMap.Remove(kv.first);
         }
-        auto end = std::chrono::high_resolution_clock::now();
+        end = std::chrono::high_resolution_clock::now();
         auto hashMapDeletionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << "HashMap deletion time: " << hashMapDeletionDuration << " ms\n";
 
@@ -100,7 +86,7 @@ TEST_CASE("Performance Tests", "[performance]") {
         std::cout << "std::unordered_map deletion time: " << unorderedMapDeletionDuration << " ms\n";
 
         //REQUIRE(hashMapDeletionDuration < unorderedMapDeletionDuration * 2);  // 假设性能差距不超过2倍
-    }
+    
 }
 
 TEST_CASE("Performance Tests with int and std::string keys", "[performance]") {
@@ -118,18 +104,11 @@ TEST_CASE("Performance Tests with int and std::string keys", "[performance]") {
         testDataString.push_back({ "Key" + std::to_string(i), i });
     }
 
-    // 测试整数键
-    SECTION("Integer Key Tests") {
-        // 与之前的测试代码相同，测试整数键的插入、查找和删除
-    }
 
-    // 测试字符串键
-    SECTION("String Key Tests") {
         HashMap<std::string, int> hashMapString;
         std::unordered_map<std::string, int> unorderedMapString;
 
         // 插入测试
-        SECTION("Insertion Test") {
             // Insertion for HashMap with string keys
             auto start = std::chrono::high_resolution_clock::now();
             for (auto& kv : testDataString) {
@@ -147,16 +126,114 @@ TEST_CASE("Performance Tests with int and std::string keys", "[performance]") {
             end = std::chrono::high_resolution_clock::now();
             auto unorderedMapInsertionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
             std::cout << "std::unordered_map (string keys) insertion time: " << unorderedMapInsertionDuration << " ms\n";
-        }
+       
 
         // 查找测试
-        SECTION("Lookup Test") {
             // 类似地，对字符串键进行查找测试
-        }
+            start = std::chrono::high_resolution_clock::now();
+            for (auto& kv : testDataString) {
+                hashMapString.getValue(kv.first);
+            }
+            end = std::chrono::high_resolution_clock::now();
+            auto hashMapLookupDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+            std::cout << "HashMap (string keys) find time: " << hashMapLookupDuration << " ms\n";
+
+            // Insertion for unordered_map with string keys
+            start = std::chrono::high_resolution_clock::now();
+            for (auto& kv : testDataString) {
+                unorderedMapString.find(kv.first);
+            }
+            end = std::chrono::high_resolution_clock::now();
+            auto unorderedMapLookupDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+            std::cout << "std::unordered_map (string keys) find time: " << unorderedMapLookupDuration << " ms\n";
+        
 
         // 删除测试
-        SECTION("Deletion Test") {
-            // 类似地，对字符串键进行删除测试
-        }
+
+    
+}
+TEST_CASE("Random Performance Tests", "[performance]") {
+    const int NUM_ELEMENTS = 1000000;  // 测试元素数量
+
+    // 准备测试数据
+    std::vector<std::pair<int, int>> testData;
+    std::random_device rd;  // Random device
+    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distrib(1, 1000000); // Range of random numbers
+
+    for (int i = 0; i < NUM_ELEMENTS; ++i) {
+        int randomKey = distrib(gen);   // Generate a random integer
+        int randomValue = distrib(gen); // Generate another random integer
+        testData.push_back({ randomKey, randomValue });
     }
+    HashMap<int, int> hashMap;
+    std::unordered_map<int, int> unorderedMap;
+
+
+    // Insertion for HashMap
+    auto start = std::chrono::high_resolution_clock::now();
+    for (auto& kv : testData) {
+        hashMap.Insert(kv);
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto hashMapInsertionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "HashMap insertion time: " << hashMapInsertionDuration << " ms\n";
+
+    // Insertion for unordered_map
+    start = std::chrono::high_resolution_clock::now();
+    for (auto& kv : testData) {
+        unorderedMap.insert(kv);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    auto unorderedMapInsertionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "std::unordered_map insertion time: " << unorderedMapInsertionDuration << " ms\n";
+
+    //REQUIRE(hashMapInsertionDuration < unorderedMapInsertionDuration * 2);  // 假设性能差距不超过2倍
+//}
+
+
+
+//SECTION("Lookup Test") {
+
+
+    // Lookup for HashMap
+    start = std::chrono::high_resolution_clock::now();
+    for (auto& kv : testData) {
+        hashMap.getValue(kv.first);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    auto hashMapLookupDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "HashMap lookup time: " << hashMapLookupDuration << " ms\n";
+
+    // Lookup for unordered_map
+    start = std::chrono::high_resolution_clock::now();
+    for (auto& kv : testData) {
+        unorderedMap.find(kv.first);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    auto unorderedMapLookupDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "std::unordered_map lookup time: " << unorderedMapLookupDuration << " ms\n";
+
+
+    //REQUIRE(hashMapLookupDuration < unorderedMapLookupDuration * 2);  // 假设性能差距不超过2倍
+// }
+
+
+     // Deletion for HashMap
+    start = std::chrono::high_resolution_clock::now();
+    for (auto& kv : testData) {
+        hashMap.Remove(kv.first);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    auto hashMapDeletionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "HashMap deletion time: " << hashMapDeletionDuration << " ms\n";
+
+    // Deletion for unordered_map
+    start = std::chrono::high_resolution_clock::now();
+    for (auto& kv : testData) {
+        unorderedMap.erase(kv.first);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    auto unorderedMapDeletionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "std::unordered_map deletion time: " << unorderedMapDeletionDuration << " ms\n";
 }

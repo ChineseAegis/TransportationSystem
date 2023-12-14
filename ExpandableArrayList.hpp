@@ -42,6 +42,21 @@ public:
         }
         return *this;
     }
+    ExpandableArrayList& operator=(ExpandableArrayList&& other)
+    {
+        count = other.count;
+        capacity = other.capacity;
+        other.capacity = 0;
+        other.count = 0;
+        if (array != nullptr)
+        {
+            delete[]array;
+            array = nullptr;
+        }
+        array = other.array;
+        other.array = nullptr;
+        return *this;
+    }
     E& operator[](int i) {
         if (i < 0 || i >= count) {
             throw std::out_of_range("Index out of range");
