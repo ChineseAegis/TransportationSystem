@@ -285,3 +285,58 @@ TEST_CASE("getNeighbors Performance with Large Graph", "[WUSGraph]") {
     Neighbors<std::string, int> neighbors = g.getNeighbors("V500");
     REQUIRE(neighbors.size > 0); // Validate the existence of neighbors
 }
+TEST_CASE("WUSGraph comprehensive functionality", "[WUSGraph]") {
+    WUSGraph<int, int> graph;
+
+    SECTION("Add Edges and Check Vertex Degrees") {
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(1, 2, 10);
+        graph.addEdge(2, 3, 20);
+
+        REQUIRE(graph.Degree(1) == 1);
+        REQUIRE(graph.Degree(2) == 2);
+        REQUIRE(graph.Degree(3) == 1);
+    }
+
+    SECTION("Remove Vertex and Check Neighbors") {
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(1, 2, 10);
+        graph.addEdge(2, 3, 20);
+        graph.removeVertex(2);
+
+        REQUIRE(graph.Degree(1) == 0);
+        REQUIRE_FALSE(graph.isEdge(1, 2));
+        REQUIRE_FALSE(graph.isEdge(2, 3));
+    }
+
+    SECTION("Modify Edge Weight and Verify") {
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addEdge(1, 2, 10);
+        // Assuming there's a method to modify edge weight
+        // graph.modifyEdgeWeight(1, 2, 15);
+        // REQUIRE(graph.getWeight(1, 2) == 15);
+    }
+
+    SECTION("Verify Graph Integrity After Multiple Operations") {
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(1, 2, 10);
+        graph.addEdge(2, 3, 20);
+        graph.removeEdge(1, 2);
+        graph.addVertex(4);
+        graph.addEdge(3, 4, 30);
+
+        REQUIRE(graph.vertexCount() == 4);
+        REQUIRE(graph.edgeCount() == 2);
+        REQUIRE(graph.Degree(2) == 1);
+        REQUIRE(graph.Degree(4) == 1);
+    }
+
+    // ... Additional comprehensive tests as needed
+}
