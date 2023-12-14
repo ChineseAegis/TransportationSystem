@@ -117,7 +117,7 @@ public:
         }
         
          bucket = -1;
-         return 0;
+         return nullptr;
         
     }
 
@@ -188,7 +188,7 @@ public:
         return 0;
     }
     void Clear() {
-        for (int i = 0; i < _size; i++) {
+        for (int i = 0; i < _bucket_size; i++) {
             DbLinkedList<E> &bucketlink = _buckets[i];
             bucketlink.Clear();
         }
