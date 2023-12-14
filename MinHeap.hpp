@@ -1,10 +1,11 @@
 #pragma once
+#include"ExpandableArrayList.hpp"
 const int defaultSize = 1000;
 template<class V>
 class MinHeap
 {
 protected:
-    V* heap;
+    ExpandableArrayList<V> heap;
     int maxSize;
     int currentSize;
     void SiftDown(int start, int m) {
@@ -43,7 +44,7 @@ protected:
         }
         heap[child] = temp;
     }
-    void Resize(int newSize) {
+    /*void Resize(int newSize) {
         if (newSize <= maxSize) return;
 
         V* newHeap = new V[newSize];
@@ -54,17 +55,17 @@ protected:
         delete[] heap;
         heap = newHeap;
         maxSize = newSize;
-    }
+    }*/
 
 public:
-    MinHeap(int sz = defaultSize) {
+    MinHeap(int sz = defaultSize) :heap(sz) {
         maxSize = sz;
-        heap = new V[maxSize];
+        //heap = new V[maxSize];
         currentSize = 0;
     }
-    MinHeap(V arr[], int n) {  //从已知数组构建最小堆
+    MinHeap(V arr[], int n):heap((defaultSize < n) ? n : defaultSize, n) {  //从已知数组构建最小堆
         maxSize = (defaultSize<n)?n:defaultSize;
-        heap = new V[maxSize];
+        //heap = new V[maxSize];
         for (int i = 0; i < n; i++)
             heap[i] = arr[i];
         currentSize = n;
@@ -75,11 +76,12 @@ public:
             currentPos--;
         }
     }
-    ~MinHeap() { delete[] heap; currentSize = maxSize = 0; }
+    ~MinHeap() {heap.Clear(); currentSize = maxSize = 0; }
     bool Insert(const V& v) {
-        if (IsFull())
+        /*if (IsFull())
             Resize(2 * maxSize);
-        heap[currentSize] = v;
+        heap[currentSize] = v;*/
+        heap.add(v);
         SiftUp(currentSize);
         currentSize++;
         return true;

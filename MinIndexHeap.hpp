@@ -1,11 +1,12 @@
 #pragma once
+#include"ExpandableArrayList.hpp"
 const int defaultSize = 1000;
 template<class E>
 class MinIndexHeap {
 private:
-    E* data;        // 存放数据的数组
-    int* indexes;   // 堆位置处的元素在数组中的实际位置
-    int* reverse;   // 数组中元素在堆或者indexes中的位置
+    ExpandableArrayList<E> data;        // 存放数据的数组
+    ExpandableArrayList<int> indexes;   // 堆位置处的元素在数组中的实际位置
+    ExpandableArrayList<int> reverse;   // 数组中元素在堆或者indexes中的位置
     int capacity;   // 堆的容量
     int size;       // 堆的当前大小
 
@@ -36,7 +37,7 @@ private:
             k = j;
         }
     }
-    void resize(int newCapacity) {
+    /*void resize(int newCapacity) {
         E* newData = new E[newCapacity];
         int* newIndexes = new int[newCapacity];
         int* newReverse = new int[newCapacity];
@@ -55,17 +56,17 @@ private:
         indexes = newIndexes;
         reverse = newReverse;
         capacity = newCapacity;
-    }
+    }*/
 public:
-    MinIndexHeap(E arr[], int n) : capacity(n), size(n) {
-        data = new E[n];
+    MinIndexHeap(E arr[], int n) : capacity(n), size(n),data(n),indexes(n),reverse(n) {
+       /* data = new E[n];
         indexes = new int[n];
-        reverse = new int[n];
+        reverse = new int[n];*/
 
         for (int i = 0; i < n; i++) {
-            data[i] = arr[i];
-            indexes[i] = i;
-            reverse[i] = i;
+            data.add (arr[i]);
+            indexes.add(i);
+            reverse.add( i);
         }
 
         // 从最后一个非叶子节点开始向下进行堆化
@@ -73,22 +74,25 @@ public:
             shiftDown(i);
         }
     }
-    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0) {
-        data = new E[capacity ];
+    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0), data(capacity), indexes(capacity), reverse(capacity) {
+        /*data = new E[capacity ];
         indexes = new int[capacity ];
-        reverse = new int[capacity ];
+        reverse = new int[capacity ];*/
 
         for (int i = 0; i < capacity; i++) {
-            reverse[i] = -1;
+            reverse.add(-1);
         }
     }
 
     bool Insert(const E& x) {
-        if (size >= capacity) resize(2 * capacity);
-
-        data[size++] = x;
+        //if (size >= capacity) resize(2 * capacity);
+        data.add(x);
+        indexes.add(size);
+        reverse.add(size);
+        size++;
+        /*data[size++] = x;
         indexes[size-1] = size-1;
-        reverse[size-1] = size-1;
+        reverse[size-1] = size-1;*/
         shiftUp(size-1);
         return true;
     }
@@ -116,8 +120,11 @@ public:
     }
 
     ~MinIndexHeap() {
-        delete[] data;
+        /*delete[] data;
         delete[] indexes;
-        delete[] reverse;
+        delete[] reverse;*/
+        data.Clear();
+        indexes.Clear();
+        reverse.Clear();
     }
 };

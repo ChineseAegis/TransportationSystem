@@ -39,6 +39,24 @@
     <ClInclude Include="Neighbors.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Deque.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHeap.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MinIndexHeap.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WQUPCUFSet.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WUSGraphClient.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings">
@@ -68,6 +86,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test_WUSGraph2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="teat_WQUPCUFSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_MinHeap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_MinindexHeap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_performance_HashMap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_tree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
