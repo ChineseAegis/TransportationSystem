@@ -1,10 +1,10 @@
 #pragma once
 #include"ExpandableArrayList.hpp"
 const int defaultSize = 1000;
-template<class E>
+template<class Object>
 class MinIndexHeap {
 private:
-    ExpandableArrayList<E> data;        // 存放数据的数组
+    ExpandableArrayList<Object> data;        // 存放数据的数组
     ExpandableArrayList<int> indexes;   // 堆位置处的元素在数组中的实际位置
     ExpandableArrayList<int> reverse;   // 数组中元素在堆或者indexes中的位置
     int capacity;   // 堆的容量
@@ -58,15 +58,15 @@ private:
         capacity = newCapacity;
     }*/
 public:
-    MinIndexHeap(E arr[], int n) : capacity(n), size(n),data(n),indexes(n),reverse(n) {
+    MinIndexHeap(Object arr[], int n) : capacity(n), size(n),data(n),indexes(n),reverse(n) {
        /* data = new E[n];
         indexes = new int[n];
         reverse = new int[n];*/
 
         for (int i = 0; i < n; i++) {
-            data.add (arr[i]);
-            indexes.add(i);
-            reverse.add( i);
+            data[i]=arr[i];
+            indexes[i]=arr[i];
+            reverse[i]=arr[ i];
         }
 
         // 从最后一个非叶子节点开始向下进行堆化
@@ -80,36 +80,33 @@ public:
         reverse = new int[capacity ];*/
 
         for (int i = 0; i < capacity; i++) {
-            reverse.add(-1);
+            reverse[i]=-1;
         }
     }
 
-    bool Insert(const E& x) {
+    bool Insert(const Object& x) {
         //if (size >= capacity) resize(2 * capacity);
-        data.add(x);
-        indexes.add(size);
-        reverse.add(size);
-        size++;
-        /*data[size++] = x;
+        data[size++] = x;
         indexes[size-1] = size-1;
-        reverse[size-1] = size-1;*/
-        shiftUp(size-1);
+        reverse[size-1] = size-1;
+        shiftUp(size-1); 
         return true;
     }
 
-    bool removeMin(E& x) {
+    bool removeMin(Object& x) {
         if (size == 0) return false;
 
         x = data[indexes[0]];
-        std::swap(indexes[0], indexes[size-1]);
+        swap(indexes[0], indexes[size-1]);
         reverse[indexes[0]] = 0;
         reverse[indexes[size-1]] = -1;
         size--;
+        
         shiftDown(0);
         return true;
     }
 
-    bool Modify(int i, const E& x) {
+    bool Modify(int i, const Object& x) {
         if (i < 0 || i >= size) return false;
 
         data[i] = x;
@@ -118,7 +115,6 @@ public:
         shiftDown(j);
         return true;
     }
-
     ~MinIndexHeap() {
         /*delete[] data;
         delete[] indexes;
