@@ -1,18 +1,20 @@
 #pragma once
 #include"WUSGraph.hpp"
 #include"Deque.hpp"
+#include"Neighbors.hpp"
+#include<iostream>
 template<typename Object,typename Weight>
 class WUSGraphClient {
 public:
 	
 	//WUSGraph<Object,Weight> G;
 	int MaxDegree(const WUSGraph& g) {
-		int maxdegree;
+		int maxdegree= Degree(vertexs[i]);
 		int n=g.vertexCount();
+		Object* vertexs = g.getVertices();
 		for (int i = 0; i < n; i++) {
-			int degree1 = g.Degree(g.toObjectMap.getValue(i)), degree2 = (g.toObjectMap.getValue(i+1));
-			if (degree1 <degree2 ) {
-				maxdegree = degree2;
+			if ( maxdegree < Degree(vertexs[i+1])) {
+				maxdegree = Degree(vertexs[i + 1]);
 			}
 		}
 	}
@@ -44,7 +46,7 @@ public:
 			}
 		}
 	}
-	void BFS(Graph& g, void(*visit), const Object& s) {
+	void BFS(WUSGraph& g, void(*visit), const Object& s) {
 		int n = g.vertexCount();
 		bool* visited = new bool[n];
 		for (int i = 0; i < n; i++)visited[i] = false;
@@ -76,5 +78,19 @@ public:
 			}
 		}
 		delete[]visited;
+	}
+	void Print(const WUSGraph& g) {
+		Object* vertexs = g.getVertices();
+		int n = g.vertexCount();
+		for (int i = 0; i < n; i++) {
+			std::cout << vertexs[i] << " ->";
+			Neighbors<Object, Weight>* neighbors = g.getNeighbors(vertexs[i]);
+			int degree = g.Degree(vertexs[i]);
+			for (int j = 0; j < degree; j++) {
+				std::cout << neighbors->object[j];
+			}
+			std::cout << std::endl;
+		}
+
 	}
 };
