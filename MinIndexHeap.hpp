@@ -58,15 +58,15 @@ private:
         capacity = newCapacity;
     }*/
 public:
-    MinIndexHeap(Object arr[], int n) : capacity(n), size(n),data(n),indexes(n),reverse(n) {
+    MinIndexHeap(Object arr[], int n) : capacity(n), size(n),data(n,n),indexes(n,n),reverse(n,n) {
        /* data = new E[n];
         indexes = new int[n];
         reverse = new int[n];*/
 
         for (int i = 0; i < n; i++) {
             data[i]=arr[i];
-            indexes[i]=arr[i];
-            reverse[i]=arr[ i];
+            indexes[i]=i;
+            reverse[i]=i;
         }
 
         // 从最后一个非叶子节点开始向下进行堆化
@@ -74,18 +74,18 @@ public:
             shiftDown(i);
         }
     }
-    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0), data(capacity), indexes(capacity), reverse(capacity) {
+    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0), data(capacity, capacity), indexes(capacity, capacity), reverse(capacity, capacity) {
         /*data = new E[capacity ];
         indexes = new int[capacity ];
         reverse = new int[capacity ];*/
 
         for (int i = 0; i < capacity; i++) {
-            reverse[i]=-1;
+            reverse.add(-1);
         }
     }
 
     bool Insert(const Object& x) {
-        //if (size >= capacity) resize(2 * capacity);
+        if (size >= capacity) { data.resize(2*size); indexes.resize(2 * size); reverse.resize(2 * size); }
         data[size++] = x;
         indexes[size-1] = size-1;
         reverse[size-1] = size-1;

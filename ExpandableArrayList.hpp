@@ -2,13 +2,13 @@
 #include <iostream>
 #include <stdexcept>
 
-template <typename E>
+template <typename Object>
 class ExpandableArrayList {
 private:
               // 指向动态分配数组的指针
     int capacity;      // 数组的容量
     int count;         // 数组中元素的实际数量
-    E* array;
+    Object* array;
 public:
 
     //公共接口
@@ -18,10 +18,10 @@ public:
     
 
     ExpandableArrayList(int initialCapacity = 10) : capacity(initialCapacity), count(0) {
-        array = new E[capacity];
+        array = new Object[capacity];
     }
     ExpandableArrayList(int initialCapacity,int initialCount) : capacity(initialCapacity), count(initialCount) {
-        array = new E[capacity];
+        array = new Object[capacity];
     }
     ~ExpandableArrayList() {
         delete[] array;
@@ -35,7 +35,7 @@ public:
         }
         count = other.count;
         capacity = other.capacity;
-        array = new E[capacity];
+        array = new Object[capacity];
         for (int i = 0; i < count; i++)
         {
             array[i] = other.array[i];
@@ -57,22 +57,25 @@ public:
         other.array = nullptr;
         return *this;
     }
-    E& operator[](int i) {
+    Object& operator[](int i) {
         if (i < 0 || i >= count) {
             throw std::out_of_range("Index out of range");
         }
         return array[i];
     }
-    E& operator[](int i) const {
+    Object& operator[](int i) const {
         if (i < 0 || i >= count) {
             throw std::out_of_range("Index out of range");
         }
         return array[i];
     }
-
+    void resize(int count) {
+        while (count > this->capacity)resizeList();
+        this->count = count;
+    }
     void resizeList() {
         int newCapacity = capacity * 2;
-        E* newArray = new E[newCapacity];
+        Object* newArray = new Object[newCapacity];
         for (int i = 0; i < count; ++i) {
             newArray[i] = array[i];
         }
@@ -81,7 +84,7 @@ public:
         capacity = newCapacity;
     }
     void resizeList(int newCapacity) {
-        E* newArray = new E[newCapacity];
+        Object* newArray = new Object[newCapacity];
         for (int i = 0; i < count; ++i) {
             newArray[i] = array[i];
         }
@@ -94,7 +97,7 @@ public:
         count = 0;
     }
 
-    void add(const E& element) {
+    void add(const Object& element) {
         if (count == capacity) {
             resizeList();
         }
