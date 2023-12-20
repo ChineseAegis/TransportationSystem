@@ -74,34 +74,35 @@ public:
             shiftDown(i);
         }
     }
-    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0), data(capacity, capacity), indexes(capacity, capacity), reverse(capacity, capacity) {
+    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0), data(capacity), indexes(capacity, capacity), reverse(capacity, capacity) {
         /*data = new E[capacity ];
         indexes = new int[capacity ];
         reverse = new int[capacity ];*/
 
         for (int i = 0; i < capacity; i++) {
-            reverse.add(-1);
+            reverse[i]= -1;
         }
     }
 
     bool Insert(const Object& x) {
-        if (size >= capacity) { data.resize(2*size); indexes.resize(2 * size); reverse.resize(2 * size); }
-        data[size++] = x;
-        indexes[size-1] = size-1;
-        reverse[size-1] = size-1;
+        if (size >= capacity) {  indexes.resize(2 * size); reverse.resize(2 * size); }
+        
+        data.add(x);
+        indexes[size] = data.size()-1;
+        reverse[data.size() - 1] = size;
+        size++;
         shiftUp(size-1); 
         return true;
     }
 
     bool removeMin(Object& x) {
         if (size == 0) return false;
-
         x = data[indexes[0]];
+        //data[indexes[0]] = data[indexes[size - 1]];
         swap(indexes[0], indexes[size-1]);
         reverse[indexes[0]] = 0;
         reverse[indexes[size-1]] = -1;
         size--;
-        
         shiftDown(0);
         return true;
     }

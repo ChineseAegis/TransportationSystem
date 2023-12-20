@@ -1,5 +1,6 @@
 #pragma once
 #include"ExpandableArrayList.hpp"
+#include"Forest.hpp"
 const int defaultSize = 1000;
 template<class V>
 class MinHeap
@@ -56,9 +57,9 @@ protected:
         heap = newHeap;
         maxSize = newSize;
     }*/
-
+    
 public:
-    MinHeap(int sz = defaultSize) :heap(sz) {
+    MinHeap(int sz = defaultSize) :heap(sz,sz) {
         maxSize = sz;
         //heap = new V[maxSize];
         currentSize = 0;
@@ -78,10 +79,10 @@ public:
     }
     ~MinHeap() {heap.Clear(); currentSize = maxSize = 0; }
     bool Insert(const V& v) {
-        /*if (IsFull())
-            Resize(2 * maxSize);
-        heap[currentSize] = v;*/
-        heap.add(v);
+        if (IsFull())
+            heap.resize(2*currentSize);
+        heap[currentSize] = v;
+        //heap.add(v);
         SiftUp(currentSize);
         currentSize++;
         return true;
