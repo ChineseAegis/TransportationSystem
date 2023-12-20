@@ -80,7 +80,7 @@ public:
         reverse = new int[capacity ];*/
 
         for (int i = 0; i < capacity; i++) {
-            reverse.add(-1);
+            reverse[i]=-1;
         }
     }
 
@@ -97,7 +97,8 @@ public:
         if (size == 0) return false;
 
         x = data[indexes[0]];
-        swap(indexes[0], indexes[size-1]);
+        data[indexes[0]] = data[indexes[size - 1]];
+        //swap(indexes[0], indexes[size-1]);
         reverse[indexes[0]] = 0;
         reverse[indexes[size-1]] = -1;
         size--;

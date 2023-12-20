@@ -1,6 +1,6 @@
 #pragma once
 #include"ExpandableArrayList.hpp"
-const int defaultSize = 1000;
+#define defaultSize 1000
 template<class V>
 class MinHeap
 {
