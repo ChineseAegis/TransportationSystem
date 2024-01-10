@@ -10,6 +10,9 @@
 #include<iostream>
 #include"MinIndexHeap.hpp"
 #include"MinHeap.hpp"
+#include<fstream>
+#include <sstream>
+#include <vector>
 
 template<typename Object,typename Weight>
 class WUSGraphClient {
@@ -160,7 +163,7 @@ public:
 			}
 		}
 	}
-	void DFS(WUSGraph<Object, Weight>& g, void(*visit), const Object& s) {
+	/*void DFS(WUSGraph<Object, Weight>& g, void(*visit), const Object& s) {
 		Object* vertexs = g.getVertices();
 		int n = g.vertexCount();
 		for (int i = 0; i < n; i++)tovisitMap.Insert(std::make_pair(vertexs[i], 0));
@@ -200,7 +203,7 @@ public:
 				}
 			}
 		}
-	}
+	}*/
 	void Print(const WUSGraph<Object, Weight>& g) {
 		Object* vertexs = g.getVertices();
 		int n = g.vertexCount();
@@ -261,6 +264,77 @@ public:
 		}
 
 		delete[] vertices;
+	}
+	void CreateGraphFromFile(std::string filepath, WUSGraph<Object,Weight>& g)
+	{
+		int vertexNum = 0;
+		int edgeNum = 0;
+		std::ifstream file(filepath, std::ios::binary);
+		if (!file) {
+			std::cerr << "无法打开文件" << std::endl;
+			
+		}
+
+		const size_t blockSize = 1024;
+		char buffer[blockSize];
+		std::string lastPartialWord;
+		std::vector<std::string> words;
+		while (file.read(buffer, sizeof(buffer)) || file.gcount()) {
+			//std::cout << lastPartialWord << std::endl;
+			std::stringstream stream(std::string(lastPartialWord) + std::string(buffer, file.gcount()));
+			std::string word;
+			std::string line;
+			while (std::getline(stream, line, '\n'))
+			{
+				if (stream.tellg() < 0 && !file.eof())
+				{
+					lastPartialWord = line;
+					break;
+				}
+				std::stringstream lineStream(line);
+				while (lineStream >> word) {
+					words.push_back(word);
+				}
+			}
+			// 保存最后一个可能不完整的单词，用于与下一个块拼接
+			//stream.clear();
+			//stream.seekg(0, std::ios::end); // 移动到流的末尾
+			//size_t endPos = stream.tellg(); // 获取当前位置（末尾）
+			//lastPartialWord = std::string(buffer + endPos, file.gcount() - endPos);
+		}
+
+		file.close();
+		int beginNum = 2;
+		vertexNum = std::stoi(words[0]);
+		edgeNum = std::stoi(words[1]);
+		//std::cout << vertexNum << " " << edgeNum << std::endl;
+		HashMap<std::string, std::pair<int, int>> h;
+		for (int i = 0; i < vertexNum; i++)
+		{
+			std::string vertexName = words[i * 3 + beginNum];
+			//std::cout << vertexName << " " << words[i * 3 + beginNum + 1]<< " "<<words[i * 3 + beginNum + 2]<< std::endl;
+			g.addVertex(vertexName);
+			int x= std::stoi(words[i * 3 + beginNum+1]);
+			int y= std::stoi(words[i * 3 + beginNum+2]);
+			h.Insert(std::make_pair(vertexName,std::make_pair(x,y)));
+		}
+		for (int i = 0; i < edgeNum; i++)
+		{
+			std::string v1 = words[i * 2 + vertexNum * 3 + beginNum];
+			std::string v2 = words[i * 2 + vertexNum * 3 + beginNum + 1];
+			//std::cout << words[i * 2 + vertexNum * 3 + beginNum] << " " << words[i * 2 + vertexNum * 3 + beginNum + 1] << std::endl;
+			std::pair<int, int> p1 = h.getValue(v1);
+			std::pair<int, int> p2 = h.getValue(v2);
+			int distance = std::sqrt(std::abs(p1.first - p2.first) * std::abs(p1.first - p2.first) + std::abs(p1.second - p2.second) * std::abs(p1.second - p2.second));
+			g.addEdge(v1, v2, distance);
+		}
+		std::cout <<g.vertexCount() << " " << g.edgeCount() << std::endl;
+		//// 输出读取的单词
+		//for (const auto& w : words) {
+		//	std::cout << w << std::endl;
+		//}
+
+
 	}
 };
 

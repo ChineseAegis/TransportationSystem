@@ -120,7 +120,7 @@ public:
 	{
 		if (toVertexMap.containsKey(object))
 		{
-			throw std::runtime_error("重复的顶点");
+			throw std::runtime_error("重复的顶点"+object);
 		}
 		std::pair<Object,DbListNode<Vertex>*> mypair;
 		mypair.first = object;
@@ -197,6 +197,8 @@ public:
 	{
 		if (toEdgeMap.containsKey(std::make_pair(object1, object2)))
 		{
+			std::cout << "重复的边" + object1<< std::endl;
+			std::cout << "重复的边" + object2 << std::endl;
 			throw std::runtime_error("重复的边");
 		}
 		if (!toVertexMap.containsKey(object1)||!toVertexMap.containsKey(object2))
