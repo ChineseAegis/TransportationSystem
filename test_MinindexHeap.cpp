@@ -53,4 +53,44 @@ TEST_CASE("MinIndexHeap functionality", "[MinIndexHeap]") {
         REQUIRE(heap.removeMin(min));
         REQUIRE(min == 1); // 确认自动扩容后元素正确
     }
+    SECTION("1") {
+        MinIndexHeap<int> heap; int mov;
+        heap.Insert(0);
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.Insert(10);
+        heap.Insert(20);
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.Insert(15);
+        heap.Insert(15);
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+    }
+    SECTION("2") {
+        MinIndexHeap<int> heap; int mov;
+        heap.Insert(0);
+        heap.Insert(10000);
+        heap.Insert(10000);
+        heap.Insert(10000);
+        heap.Insert(10000);
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.Insert(10);
+        heap.Insert(20);
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.Insert(15);
+        heap.Insert(15);
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+        heap.removeMin(mov);
+        std::cout << mov << std::endl;
+    }
 }

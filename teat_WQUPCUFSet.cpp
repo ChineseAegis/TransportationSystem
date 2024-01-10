@@ -6,7 +6,7 @@ TEST_CASE("Test WQUPCUFSet functionality", "[WQUPCUFSet]") {
     WQUPCUFSet ufSet;
 
     SECTION("Initially all elements should be disconnected") {
-        for (int i = 0; i < defaultWQUPCUFSetsize - 1; i++) {
+        for (int i = 0; i < 999; i++) {
             REQUIRE_FALSE(ufSet.isConnected(i, i + 1));
         }
     }
@@ -31,10 +31,10 @@ TEST_CASE("Test WQUPCUFSet functionality", "[WQUPCUFSet]") {
     }
 
     SECTION("Union elements in a large set") {
-        for (int i = 0; i < defaultWQUPCUFSetsize - 1; i++) {
+        for (int i = 0; i < 999; i++) {
             ufSet.Union(i, i + 1);
         }
-        REQUIRE(ufSet.isConnected(0, defaultWQUPCUFSetsize - 1) == true);
+        REQUIRE(ufSet.isConnected(0, 999) == true);
     }
 
     // 添加更多测试用例，以全面测试 WQUPCUFSet 的功能

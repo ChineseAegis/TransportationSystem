@@ -1,11 +1,11 @@
 #pragma once
-int defaultWQUPCUFSetsize = 1000;
+
 class WQUPCUFSet {
 private:
 	int* parent;
 	int size;
 public:
-	WQUPCUFSet(int sz = defaultWQUPCUFSetsize) {
+	WQUPCUFSet(int sz = 1000) {
 		size = sz;
 		parent = new int[size];
 		for (int i = 0; i < size; i++) {
