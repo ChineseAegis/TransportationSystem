@@ -5,6 +5,7 @@
 #include"HashMap.hpp"
 #include"Neighbors.hpp"
 #include"Tree.hpp"
+#include"Forest.hpp"
 #include <string>
 #include<iostream>
 template<class Object,class Weight>
@@ -61,9 +62,11 @@ public:
     void createGraphFromFile(std::string filepath) {
         // 任务 3.3 从文件读数据建立城市交通库
     }
+    //城市数
     void printcitynum(WUSGraph<Object, Weight>& g) {
         std::cout << g.vertexCount() << std::endl;
     }
+    //输出所有城市
     void printcity(WUSGraph<Object, Weight>& g) {
         Object* vertexs = g.getVertices();
         for (auto u : vertexs) {
@@ -71,6 +74,7 @@ public:
         }
         std::cout << std::endl;
     }
+    //输出所有道路
     void printedge(WUSGraph<Object, Weight>& g) {
         DbLinkedList<Object>* visited;
         Object* vertexs = g.getVertices();
@@ -86,6 +90,7 @@ public:
             std::cout << std::endl;
         }
     }
+    //稀疏程度
    int Sparseness(WUSGraph<Object, Weight>& g) {
         Object* vertexs = g.getVertices();
         int degreesum, vertexnum = g.vertexCount();
@@ -103,6 +108,7 @@ public:
            }
        }
    }
+   //连通分量个数
     int countConnected(WUSGraph<Object, Weight>& g) {
         int componentCount = 0;
         Object* vertices = g.getVertices();
@@ -123,12 +129,15 @@ public:
    bool isEdge(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
        return g.isEdge(city1, city2);
    }
+   ///输出某城市相邻 的城市数
    void neighbornum(WUSGraph<Object, Weight>& g,Object city){
        std::cout << g.Degree(city) << std::endl;
    }
+   //求某条道路的距离值
    void citysdistance(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
        std::cout << g.getWeight(city1, city2) << std::endl;
    }
+   //输出某城市的所有邻接城市
    void printneighbors(WUSGraph<Object, Weight>& g, Object city) {
        Object* neighbors = g.getNeighbors(city).object;
        for (auto u : neighbors) {
@@ -136,6 +145,7 @@ public:
        }
        std::cout << std::endl;
    }
+   //相邻的城市数最多的城市
    void Maxneighborcity(WUSGraph<Object, Weight>& g) {
        Object* vertexs = g.getVertices();
        Object goal = vertexs[0];
@@ -151,19 +161,66 @@ public:
    void* visit(Object x) {
        std::cout << x << " ";
    }
+   //输出从给定顶点出发可以到达的所有顶点
    void getcitys(WUSGraph<Object, Weight>& g,Object city) {
        DFS(g, visit, city);
    }
+   //任意两城市最短路径
    int getmsf(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
        Tree<Object, Weight>msf; int mdis;
        Dijkstra(g, city1, msf);
        mdis=msf.findmdistance(city2);
        return mdis;
    }
+   //任意两城市最长路径
    int getlpt(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
        Tree<Object, Weight>lpt; int mdis;
        LongestPath(g, city1, msf);
        mdis = lpt.findmdistance(city2);
        return mdis;
+   }
+   //从给定城市 s 出发， 以与 s 的距离最小的城市为优先
+   void disfirst(WUSGraph<Object, Weight>& g, Object city) {
+       Tree<Object, Weight>msf; 
+       Dijkstra(g, city1, msf);
+       Object* vertexs = g.getVertices();
+       int count = g.vertexCount();
+       std::cout << city << "->";
+       int dis; int total;
+       for (int i = 1; i < count; i++) {
+           std::cout << msf[i];
+           dis = msf.findmdistance(msf[i]);
+           total += dis;
+           std::cout << "(" << dis << ")->";
+       }
+       std::cout << "总距离：" << total << std::endl;
+   }
+   //最短的道路为优先
+   void edgefirst(WUSGraph<Object, Weight>& g) {
+       Forest<Object, Weight>msf;
+       Kruskal(g, msf);
+       int count = g.vertexCount();
+       std::cout << msf[0]; int dis, total;
+       for (int i = 1; i < count; i++) {
+           std::cout << msf[i];
+           dis = g.getWeight(msf[i - 1], msf[i]);
+           total += dis;
+           std::cout<< "(" << dis << ")->";
+       }
+       std::cout << "总距离：" << total << std::endl;
+   }
+   //用户一键知晓周围所有城市
+   void cityfromR(WUSGraph<Object, Weight>& g, Object city,int R) {
+       Tree<Object, Weight>msf;
+       Dijkstra(g, city1, msf);
+       Object* vertexs = g.getVertices();
+       int count = g.vertexCount();
+       int dis; int total=0;
+       for (int i = 1; i < count; i++) {
+           dis = msf.findmdistance(city);
+           if (dis <= R)std::cout << msf[i] << " ";
+           total++;
+       }
+       std::cout << "R内城市数：" << total << std::endl;
    }
 };

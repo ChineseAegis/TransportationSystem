@@ -124,5 +124,10 @@ public:
     void clear() {
         n = 0;
     }
-    
+    Object& operator[](int i) {
+        if (i < 0 || i >= n) {
+            throw std::out_of_range("Index out of range");
+        }
+        return toObjectMap.getValue( nodes[i]);
+    }
 };
