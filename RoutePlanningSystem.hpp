@@ -6,6 +6,7 @@
 #include"Neighbors.hpp"
 #include"Tree.hpp"
 #include"Forest.hpp"
+#include"ExpandableArrayList.hpp"
 #include <string>
 #include<iostream>
 template<class Object,class Weight>
@@ -222,5 +223,41 @@ public:
            total++;
        }
        std::cout << "R内城市数：" << total << std::endl;
+   }
+   //连接用户感兴趣的一组无重复的城市
+   void intestcity(WUSGraph<Object, Weight>& g) {
+       std::cout << "请输入城市数：" << std::endl;
+       int n; std::cin >> n;
+       ExpandableArrayList<Object>citys(n);
+       int i = 0;
+       std::cout << "请输入城市：" << std::endl;
+       WUSGraph<Object, Weight>G;
+       while (n--) {
+           std::cin >> citys[i];
+           G.addVertex(citys[i]);
+           i++;
+       }
+       for (i = 0; i < n; i++) {
+           Neighbors<Object, Weight>neighbors = g.getNeighbors(citys[i]).object;
+           
+           for (int j = i+1; j < n; j++) {
+               for (auto u : neighbors) {
+                   if (citys[j] == u) {
+                       G.addEdge(citys[i], citys[j], g.getWeight(citys[i], citys[j]));
+                   }
+               }
+           }
+       }
+       Forest<Object, Weight>msf;
+       Kruskal(G, msf);
+       std::cout << msf[0]; int dis, total;
+       for (int i = 1; i < n; i++) {
+           std::cout << msf[i];
+           dis = g.getWeight(msf[i - 1], msf[i]);
+           total += dis;
+           std::cout << "(" << dis << ")->";
+       }
+       std::cout << "总距离：" << total << std::endl;
+
    }
 };
