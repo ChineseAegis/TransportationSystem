@@ -152,6 +152,7 @@
     <ClCompile Include="catchmain.cpp" />
     <ClCompile Include="HashMap.hpp" />
     <ClCompile Include="teat_WQUPCUFSet.cpp" />
+    <ClCompile Include="test_Dijkstra.cpp" />
     <ClCompile Include="test_ExpandableArrayList.cpp" />
     <ClCompile Include="test_DbLinkedList.cpp" />
     <ClCompile Include="test_Forest.cpp" />

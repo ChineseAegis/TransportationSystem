@@ -85,7 +85,7 @@ public:
     }
 
     bool Insert(const Object& x) {
-        if (size >= capacity) {  indexes.resize(2 * size); reverse.resize(2 * size); }
+        if (data.size() >= capacity) { indexes.resize(2 * size); reverse.resize(2 * size); }
         
         data.add(x);
         indexes[size] = data.size()-1;
@@ -108,7 +108,7 @@ public:
     }
 
     bool Modify(int i, const Object& x) {
-        if (i < 0 || i >= size) return false;
+        if (i < 0 || i >= data.size()) return false;
 
         data[i] = x;
         int j = reverse[i];
