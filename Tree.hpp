@@ -101,7 +101,7 @@ public:
         int cityvalue = tointMap.getValue(city);
         int thisvalue = nodes[0];
         int mdis = 0;
-        for (int i = 0; node[i]!=city; i++) {
+        for (int i = 0; nodes[i]!=city; i++) {
             std::cout << toObjectMap.getValue(nodes[i]) << "->";
             mdis += nodes[i+1].weight;
         }

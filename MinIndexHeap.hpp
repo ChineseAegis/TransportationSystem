@@ -1,6 +1,6 @@
 #pragma once
 #include"ExpandableArrayList.hpp"
-const int defaultSize = 1000;
+#define defaultSize 1000
 template<class Object>
 class MinIndexHeap {
 private:
@@ -74,7 +74,7 @@ public:
             shiftDown(i);
         }
     }
-    MinIndexHeap(int capacity= defaultSize) : capacity(capacity), size(0), data(capacity), indexes(capacity, capacity), reverse(capacity, capacity) {
+    MinIndexHeap(int capacity= defaultSize):capacity(capacity), size(0), data(capacity), indexes(capacity, capacity), reverse(capacity, capacity) {
         /*data = new E[capacity ];
         indexes = new int[capacity ];
         reverse = new int[capacity ];*/
