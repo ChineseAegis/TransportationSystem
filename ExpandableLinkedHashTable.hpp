@@ -26,11 +26,11 @@ namespace std {
 
 
 
-template <class K, class E>
+template <class K, class Object>
 class ExpandableLinkedHashTable {
 private:
 
-    ExpandableArrayList<DbLinkedList<E>> _buckets;//桶的数组
+    ExpandableArrayList<DbLinkedList<Object>> _buckets;//桶的数组
     int _bucket_size;//桶数
     int _size;//装载记录的规模大小
     double _max_load_factor;//装载因子的最大值
@@ -105,10 +105,10 @@ public:
         _max_load_factor = maxLoadFactor;
     }
 
-    DbListNode<E>* findPos(const K& key, int& bucket) const {
+    DbListNode<Object>* findPos(const K& key, int& bucket) const {
         bucket = hash(key);
-        DbLinkedList<E>& bucketList = _buckets[bucket];//找到对应链表行
-        for (DbListNode<E> *i = bucketList.head->rlink; i !=bucketList.head; )
+        DbLinkedList<Object>& bucketList = _buckets[bucket];//找到对应链表行
+        for (DbListNode<Object> *i = bucketList.head->rlink; i !=bucketList.head; )
         {
             if (key == i->data.first) {
                 return i;
@@ -129,12 +129,12 @@ public:
     void  resizeTable() {
         int new_bucket_size =findClosestPrime( _bucket_size * 2);
         //ExpandableArrayList<DbLinkedList<E>>* newBuckets = new ExpandableArrayList<DbLinkedList<E>>(new_bucket_size);
-        ExpandableArrayList<DbLinkedList<E>> newBuckets(new_bucket_size, new_bucket_size);
+        ExpandableArrayList<DbLinkedList<Object>> newBuckets(new_bucket_size, new_bucket_size);
         int old_bucket_size = _bucket_size;
         _bucket_size = new_bucket_size;
         for (int i = 0; i < old_bucket_size; i++) {//遍历每个桶
-            DbLinkedList<E>& linkedList = _buckets[i];
-            DbListNode<E>* current = linkedList.head->rlink;//每个链表的首结点
+            DbLinkedList<Object>& linkedList = _buckets[i];
+            DbListNode<Object>* current = linkedList.head->rlink;//每个链表的首结点
 
             while (current != linkedList.head) {
                 int newBucket;
@@ -148,11 +148,11 @@ public:
         //_buckets = newBuckets;
         
     }
-    bool Insert(const E& e) {
+    bool Insert(const Object& e) {
         int bucket = hash(e.first);
-        DbLinkedList<E>& bucketLink = _buckets[bucket];
+        DbLinkedList<Object>& bucketLink = _buckets[bucket];
        //先删除再插入
-         E x;
+         Object x;
          Remove(e.first,x);
         
         bucketLink.Insert(e);
@@ -163,13 +163,13 @@ public:
         }
         return true;
     }
-    int Remove(const K&key, E& e) {
+    int Remove(const K&key, Object& e) {
         int bucket;
-        DbListNode<E>* node = findPos(key, bucket);
+        DbListNode<Object>* node = findPos(key, bucket);
 
         if (node != nullptr) {
             e = node->data;
-            DbLinkedList<E>& linkedList = _buckets[bucket];
+            DbLinkedList<Object>& linkedList = _buckets[bucket];
             //for (DbListNode<E>* i = linkedList.head->rlink; i != linkedList.head; )
             //{
 
@@ -189,7 +189,7 @@ public:
     }
     void Clear() {
         for (int i = 0; i < _bucket_size; i++) {
-            DbLinkedList<E> &bucketlink = _buckets[i];
+            DbLinkedList<Object> &bucketlink = _buckets[i];
             bucketlink.Clear();
         }
         _size = 0;

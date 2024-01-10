@@ -3,48 +3,66 @@
 #include "ExpandableArrayList.hpp"
 #include <stdexcept>
 #include <iostream>
+template<class Weight>
 struct ForestNode {
     int key;           // 节点的值
     int parent;      // 父节点的索引，如果是根节点则为 -1 或自身的索引
-    ForestNode(int key, int parent) : key(key), parent(parent) {}
-    ForestNode() : key(int()), parent(-1) {}
+    Weight weight;//与父结点的权重
+    ForestNode(int key, int parent,int weight) : key(key), parent(parent),weight(weight) {}
+    ForestNode() : key(int()), parent(-1) ,weight(std::numeric_limits<Weight>::max()) {}
+    bool operator<( const ForestNode& y) {
+        return this->weight < y.weight;
+    }
+    bool operator>( const ForestNode& y) {
+        return this->weight > y.weight;
+    }
 };
-template<class E>
+template<class Object,class Weight>
 class Forest {
 protected:
-    ExpandableArrayList<ForestNode> nodes;
+    ExpandableArrayList<ForestNode<Weight>> nodes;
     int n;  // 当前节点个数
     int maxSize;
-    HashMap<E, int> tointMap;
-    HashMap<int, E> toObjectMap;
+    HashMap<Object, int> tointMap;
+    HashMap<int, Object> toObjectMap;
 
 public:
     Forest(int Size = 1000) : n(0), maxSize(Size), nodes(Size) {}
 
-    bool insert(E value, E parent) {
+    bool insert(Object value, Object parent, Weight weight) {
         if (n >= maxSize) return false;
-        if (!tointMap.containsKey(parent)) {
+     /*   if (!tointMap.containsKey(parent)) {
             throw std::runtime_error("父结点不存在");
-        }
-        if (tointMap.containsKey(value)) {
+        }*/
+        /*if (tointMap.containsKey(value)) {
             throw std::runtime_error("结点已存在");
+        }*/
+        int parenttoint=0; int n0; int num=0 ;
+        if (tointMap.containsKey(parent)) {
+            parenttoint = tointMap.getValue(parent);
+            num = n; n++;
         }
-        int parenttoint = tointMap.getValue(parent);
-        int num = n;
-        nodes.add(ForestNode(num, parenttoint));
+        else if(!tointMap.containsKey(parent)&& !tointMap.containsKey(value)) {
+            parenttoint = n;
+            num = n + 1; n += 2;
+        }
+        
+        nodes.add(ForestNode<Weight>(num, parenttoint,weight));
         tointMap.Insert(std::make_pair(value, num));
+        tointMap.Insert(std::make_pair(parent, parenttoint));
         toObjectMap.Insert(std::make_pair(num, value));
-        n++;
+        toObjectMap.Insert(std::make_pair(parenttoint, parent));
+        //n++;
         return true;
     }
 
-    bool insert(E value) {
+    bool insert(Object value) {
         if (n >= maxSize) return false;
         if (tointMap.containsKey(value)) {
             throw std::runtime_error("结点已存在");
         }
         int num = n;
-        nodes.add(ForestNode(num, -1)); // -1 表示这是一个树根
+        nodes.add(ForestNode<Weight>(num, -1, std::numeric_limits<Weight>::max())); // -1 表示这是一个树根
         tointMap.Insert(std::make_pair(value, num));
         toObjectMap.Insert(std::make_pair(num, value));
         n++;
@@ -58,8 +76,16 @@ public:
         for (int i = 0; i < level; ++i) {
             std::cout << "  ";
         }
-        E value = toObjectMap.getValue(nodes[nodeIndex].key);
-        std::cout << value << std::endl;
+        Object value = toObjectMap.getValue(nodes[nodeIndex].key);
+        if (nodes[nodeIndex].parent >= 0) {
+            Object parentValue = toObjectMap.getValue(nodes[nodeIndex].parent);
+            Weight weight = nodes[nodeIndex].weight;
+            std::cout << value << " (Parent: " << parentValue << ", Weight: " << weight << ")" << std::endl;
+        }
+        else {
+            std::cout << value << " (Root)" << std::endl;
+        }
+
         for (int i = 0; i < n; ++i) {
             if (nodes[i].parent == nodeIndex) {
                 printTreeFromRoot(i, level + 1);
@@ -91,4 +117,5 @@ public:
     void clear() {
         n = 0;
     }
+
 };

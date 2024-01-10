@@ -139,7 +139,9 @@
     <ClInclude Include="memory_leak.h" />
     <ClInclude Include="MinHeap.hpp" />
     <ClInclude Include="MinIndexHeap.hpp" />
+    <ClInclude Include="MinSpanForest.hpp" />
     <ClInclude Include="Neighbors.hpp" />
+    <ClInclude Include="RoutePlanningSystem.hpp" />
     <ClInclude Include="Tree.hpp" />
     <ClInclude Include="WQUPCUFSet.hpp" />
     <ClInclude Include="WUSGraph.hpp" />
@@ -157,6 +159,7 @@
     <ClCompile Include="test_Forest.cpp" />
     <ClCompile Include="test_HashMap.cpp" />
     <ClCompile Include="test_HashTable.cpp" />
+    <ClCompile Include="test_Kruskal.cpp" />
     <ClCompile Include="test_MinHeap.cpp" />
     <ClCompile Include="test_MinindexHeap.cpp" />
     <ClCompile Include="test_performance_HashMap.cpp" />

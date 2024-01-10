@@ -2,29 +2,31 @@
 #include"HashMap.hpp"
 //#include"Deque.hpp"
 #include"ExpandableArrayList.hpp"
-struct ForestNode {
+template<class Weight>
+struct TreeNode {
 	int key;           // 节点的值
 	int parent;      // 父节点的索引，如果是根节点则为 -1 或自身的索引
-    ForestNode(int key, int parent) : key(key), parent(parent) {}
-	ForestNode() : key(int()), parent(-1) {}
+    Weight weight;
+    TreeNode(int key, int parent,Weight weight) : key(key), parent(parent),weight(weight) {}
+    TreeNode() : key(int()), parent(-1),weight(std::numeric_limits<Weight>::max()) {}
 };
 
-template<class E>
+template<class Object,class Weight>
 class Tree {
 protected:
-    ExpandableArrayList<ForestNode> nodes;
+    ExpandableArrayList<TreeNode<Weight>> nodes;
     int n;  // 当前节点个数
     int maxSize;
     //ExpandableArrayList<int> index; // 节点在数组中的索引
-    HashMap<E, int> tointMap;
-    HashMap<int, E> toObjectMap;
+    HashMap<Object, int> tointMap;
+    HashMap<int, Object> toObjectMap;
 
 public:
     Tree(int Size = 1000) : n(0),maxSize(Size), nodes(Size){
         //for (int i = 0; i < sz; i++)index.add(-1);
     }
 
-    bool insert( E value, E parent) {
+    bool insert( Object value, Object parent, Weight weight) {
         if (n >= maxSize) return false;
         if (!tointMap.containsKey(parent)) {
             throw std::runtime_error("父结点不存在");
@@ -44,14 +46,14 @@ public:
             num = intQueue.front();
             intQueue.pop();
         }*/
-        nodes.add(ForestNode(num, parenttoint));
+        nodes.add(TreeNode<Weight>(num, parenttoint,weight));
         //index.add(n);
         tointMap.Insert(std::make_pair(value, num));
         toObjectMap.Insert(std::make_pair(num, value));
         n++;
         return true;
     }
-    bool insert(E value) {
+    bool insert(Object value) {
         if (n >= maxSize) return false;
         if (tointMap.containsKey(value)) {
             throw std::runtime_error("结点已存在");
@@ -66,7 +68,7 @@ public:
             num = intQueue.front();
             intQueue.pop();
         }*/
-        nodes.add(ForestNode(num, -1));
+        nodes.add(TreeNode<Weight>(num, -1, std::numeric_limits<Weight>::max()));
        // index.add(n);
         tointMap.Insert(std::make_pair(value, num));
         toObjectMap.Insert(std::make_pair(num, value));
@@ -81,7 +83,7 @@ public:
         for (int i = 0; i < level; ++i) {
             std::cout << "  ";  // 缩进表示层级
         }
-        E value = toObjectMap.getValue(nodes[nodeIndex].key);
+        Object value = toObjectMap.getValue(nodes[nodeIndex].key);
         std::cout << value << std::endl;
 
         for (int i = 0; i < n; ++i) {
@@ -94,7 +96,18 @@ public:
     void printWholeTree() {
         printTreeFromRoot();
     }
-
+    int findmdistance(Object city) {
+        if (!tointMap.containsKey(city))return 0;
+        int cityvalue = tointMap.getValue(city);
+        int thisvalue = nodes[0];
+        int mdis = 0;
+        for (int i = 0; node[i]!=city; i++) {
+            std::cout << toObjectMap.getValue(nodes[i]) << "->";
+            mdis += nodes[i+1].weight;
+        }
+        std::cout << city << std::endl;
+        return mdis;
+    }
     int getcount() {
         return n;
     }
@@ -111,4 +124,5 @@ public:
     void clear() {
         n = 0;
     }
+    
 };

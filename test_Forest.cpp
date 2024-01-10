@@ -1,27 +1,25 @@
 #include "catch.hpp"
 #include "Forest.hpp" // 包含你的 WQUPCUFSet 类定义
 
-TEST_CASE("Insert multiple trees in Forest", "[Forest]") {
-    Forest<std::string> forest;
+TEST_CASE("Forest functionality tests", "[Forest]") {
+    Forest<std::string, int> forest;
 
-    // 插入第一棵树的节点
-    REQUIRE(forest.insert("Root1"));
-    REQUIRE(forest.insert("Child1", "Root1"));
-    REQUIRE(forest.insert("Child2", "Root1"));
-    REQUIRE(forest.insert("Child3", "Child2"));
-    // 插入第二棵树的节点
-    REQUIRE(forest.insert("Root2"));
-    REQUIRE(forest.insert("ChildA", "Root2"));
-    REQUIRE(forest.insert("ChildB", "Root2"));
-    REQUIRE(forest.insert("ChildC", "ChildA"));
-    // 插入第三棵树的节点
-    REQUIRE(forest.insert("Root3"));
-    REQUIRE(forest.insert("ChildQ", "Root3"));
-    REQUIRE(forest.insert("ChildW", "Root3"));
-    REQUIRE(forest.insert("ChildE", "ChildW"));
-    REQUIRE(forest.insert("ChildR", "ChildQ"));
-    // 检查是否正确插入了所有节点
-    REQUIRE(forest.getCount() == 13);
+   
+        REQUIRE(forest.insert("Root") == true);
+        REQUIRE(forest.insert("Child1", "Root", 1) == true);
+        REQUIRE(forest.insert("Child2", "Root", 2) == true);
 
+        // Testing exception for inserting existing node
+        //REQUIRE_THROWS_AS(forest.insert("Root"), std::runtime_error);
+
+        // Testing exception for inserting with non-existent parent
+        //REQUIRE_THROWS_AS(forest.insert("Child3", "NonExistent", 3), std::runtime_error);
+    
+
+   
+        REQUIRE(forest.getCount() == 3);
+    
     forest.printWholeForest();
+    
 }
+    

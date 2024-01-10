@@ -38,6 +38,23 @@ TEST_CASE("Test MinHeap functionality", "[MinHeap]") {
         minHeap.MakeEmpty();
         REQUIRE(minHeap.IsEmpty() == true);
     }
-
+    SECTION("1") {
+        MinHeap<int> heap; int mov;
+        heap.Insert(0);
+        heap.RemoveMin(mov);
+        std::cout << mov << std::endl;
+        heap.Insert(10);
+        heap.Insert(20);
+        heap.RemoveMin(mov);
+        std::cout << mov << std::endl;
+        heap.Insert(15);
+        heap.Insert(15);
+        heap.RemoveMin(mov);
+        std::cout << mov << std::endl;
+        heap.RemoveMin(mov);
+        std::cout << mov << std::endl;
+        heap.RemoveMin(mov);
+        std::cout << mov << std::endl;
+    }
     
 }
