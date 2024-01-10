@@ -4,13 +4,15 @@
 #include"Neighbors.hpp"
 #include"HashMap.hpp"
 #include"Forest.hpp"
+#include"Tree.hpp"
 #include"WQUPCUFSet.hpp"
 #include"MinHeap.hpp"
 #include<string>
 #include<iostream>
+#include<stack>
 #include"MinIndexHeap.hpp"
 #include"MinHeap.hpp"
-
+#include"MaxIndexHeap.h"
 template<typename Object,typename Weight>
 class WUSGraphClient {
 public:
@@ -149,6 +151,54 @@ public:
 		delete obj;
 		obj = nullptr;
 	}
+	void LongestPath(WUSGraph<Object, Weight>& g, Object& s, Tree<Object,Weight>& lpt) {
+		int vertexCount = g.vertexCount();
+		Object* obj = g.getVertices();
+		MaxIndexHeap<DObject> heap(vertexCount);
+		HashMap<Object, Weight> Distances;
+		HashMap<Object, int> ObjToInt;
+		for (int i = 0; i < vertexCount; i++)
+		{
+			if (i == 0)
+			{
+				heap.Insert(DObject(obj[i], 0));
+				Distances.Insert(std::make_pair(obj[i], 0));
+			}
+			else
+			{
+				heap.Insert(DObject(obj[i]));
+				Distances.Insert(std::make_pair(obj[i], std::numeric_limits<Weight>::max()));
+			}
+			ObjToInt.Insert(std::make_pair(obj[i], i));
+
+		}
+		while (vertexCount--)
+		{
+			DObject cur;
+			heap.removeMin(cur);
+			Distances.Remove(cur.object);
+			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
+			std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			for (int i = 0; i < nei.size; i++)
+			{
+				if (Distances.containsKey(nei.object[i]))
+				{
+					Weight pre_weight = Distances.getValue(nei.object[i]);
+					Weight cur_weight = nei.weight[i];
+					if (cur_weight > pre_weight)
+					{
+						Distances.Remove(nei.object[i]);
+						Distances.Insert(std::make_pair(nei.object[i], cur_weight));
+						//heap.Insert(DObject(nei.object[i], cur_weight, cur.object));
+						heap.Modify(ObjToInt.getValue(nei.object[i]), DObject(nei.object[i], cur_weight, cur.object));
+						//std::cout << "¶¥µã£º" << nei.object[i] << " ¾àÀë£º" << cur_weight << std::endl;
+					}
+				}
+			}
+		}
+		delete obj;
+		obj = nullptr;
+	}
 	int MaxDegree(const WUSGraph<Object, Weight>& g) {
 		Object* vertexs = g.getVertices();
 		int maxdegree = Degree(vertexs[0]);
@@ -261,6 +311,13 @@ public:
 		}
 
 		delete[] vertices;
+	}
+	bool Eula(WUSGraph<Object, Weight>& g) {
+		Object* vertexs = g.addVertex();
+		for (auto u : vertexs) {
+			if (g.Degree(u) % 2 != 0)return false;
+		}
+		return true;
 	}
 };
 
