@@ -95,8 +95,13 @@ public:
         int sparseness = (degreesum / vertexnum)--vertexnum;
         if (sparseness >= 0 && sparseness <= 1)return sparseness;
    }
-   void countConnectedhelper() {
-
+   void countConnectedhelper(Object city,HashMap<Object,bool>visited, WUSGraph<Object, Weight>& g) {
+       visited.Remove(city); visited.Insert(std::make_pair(city, true);
+       for (auto n : g.getNeighbors(city).object) {
+           if (!visited.getValue(city)) {
+               countConnectedhelper(n, visited, g);
+           }
+       }
    }
     int countConnected(WUSGraph<Object, Weight>& g) {
         int componentCount = 0;
@@ -106,7 +111,7 @@ public:
 
         for (int i = 0; i < n; i++) {
             if (!toVisitMap[vertices[i]]) {
-                DFS(g, nullptr, vertices[i]); 
+                countConnectedhelper(vertices[i], toVisitMap,g);
                 componentCount++;
             }
         }
