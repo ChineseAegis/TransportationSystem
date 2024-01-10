@@ -160,6 +160,27 @@ public:
 			}
 		}
 	}
+	void DFS(WUSGraph<Object, Weight>& g, void(*visit), const Object& s) {
+		Object* vertexs = g.getVertices();
+		int n = g.vertexCount();
+		for (int i = 0; i < n; i++)tovisitMap.Insert(std::make_pair(vertexs[i], 0));
+
+		std::stack<Object> vertexstack;
+		vertexstack.push(s);
+		while (!vertexstack.empty()) {
+			Object vertex = vertexstack.top();
+			tovisitMap.Insert(std::make_pair(vertex, 1));
+			visit(vertex);
+			vertexstack.pop();
+			Object* U = g.getNeighbors(vertex).object;
+			for (Object v : U)
+			{
+				if (tovisitMap.getValue(vertex) == 0) {
+					vertexstack.push(v);
+				}
+			}
+		}
+	}
 	void BFS(WUSGraph<Object, Weight>& g, void(*visit), const Object& s) {
 		Object* vertexs = g.getVertices();
 		int n = g.vertexCount();
