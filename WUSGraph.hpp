@@ -204,7 +204,15 @@ public:
 		}
 		if (!toVertexMap.containsKey(object1)||!toVertexMap.containsKey(object2))
 		{
-			throw std::runtime_error("不存在的点");
+			if (!toVertexMap.containsKey(object1))
+			{
+				addVertex(object1);
+			}
+			if (!toVertexMap.containsKey(object2))
+			{
+				addVertex(object2);
+			}
+			//throw std::runtime_error("不存在的点");
 		}
 		DbListNode<Vertex>* node1 = toVertexMap.getValue(object1);
 		DbListNode<Vertex>* node2 = toVertexMap.getValue(object2);
