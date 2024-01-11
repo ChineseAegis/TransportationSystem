@@ -110,13 +110,13 @@ public:
             }
         }
         int num = i;
-        for (int j = 0; j < i; j++) {
+        while(nodes[num].parent!=-1) {
 
-            std::cout << toObjectMap.getValue(nodes[num].key) << "->";
+            std::cout << toObjectMap.getValue(nodes[num].key) << "<-";
             mdis += nodes[num].weight;
             num = nodes[num].parent;
         }
-        std::cout << city << std::endl;
+        std::cout << toObjectMap.getValue(nodes[num].key) << std::endl;
         return mdis;
     }
     Object getparent(Object city) {

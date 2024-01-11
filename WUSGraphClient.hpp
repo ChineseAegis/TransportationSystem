@@ -319,9 +319,10 @@ public:
 
 		DbLinkedList<Object> vertexstack;
 		vertexstack.push_back(s);
+		tovisitMap.Insert(std::make_pair(s, 1));
 		while (!vertexstack.isEmpty()) {
 			Object vertex = vertexstack.top();
-			tovisitMap.Insert(std::make_pair(vertex, 1));
+			
 			visit(vertex);
 			vertexstack.pop_back();
 			Neighbors<Object, Weight> nei = g.getNeighbors(vertex);
@@ -331,6 +332,7 @@ public:
 			{
 				if (tovisitMap.getValue(U[i]) == 0) {
 					vertexstack.push_back(U[i]);
+					tovisitMap.Insert(std::make_pair(U[i], 1));
 				}
 			}
 		}

@@ -239,13 +239,13 @@ public:
        Object goal = vertexs[0];
        int n = g.vertexCount();
 
-       for (int i = 0; i < n; i++) {
-           if (g.Degree(vertexs[i])< g.Degree(vertexs[i + 1])) {
+       for (int i = 0; i < n-1; i++) {
+           if (g.Degree(goal)< g.Degree(vertexs[i + 1])) {
                goal = vertexs[i + 1];
            }
        }
        std::cout << goal << std::endl;
-       delete[]vertexs;
+       delete[] vertexs;
    }
    static void visit(Object x) {
        std::cout << x << " ";
@@ -273,7 +273,7 @@ public:
        Tree<Object, Weight>msf; 
        this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
-       int count = g.vertexCount();
+       int count = msf.getcount();
        Weight dis=0, total=0;
        for (int i = 1; i < count; i++) {
 
