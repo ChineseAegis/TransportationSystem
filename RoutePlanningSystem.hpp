@@ -34,9 +34,10 @@ public:
     }
 
     void updataCity( Object city,Object newcity) {
-        Object*neighbors = g.getNeighbors(city).object;
-        Weight* weight = g.getNeighbors(city).weight;
-        int size = g.getNeighbors(city).size;
+        Neighbors<Object, Weight> nei = g.getNeighbors(city);
+        Object*neighbors = nei.object;
+        Weight* weight = nei.weight;
+        int size = nei.size;
         if (!g.isVertex(city)) {
             return;
         }
@@ -46,8 +47,6 @@ public:
         for (int i = 0; i < size;i++) {
             g.addEdge(newcity, neighbors[i], weight[i]);
         }
-        delete[]neighbors;
-        delete[]weight;
     }
     void addedge( Object city1, Object city2, Weight weight) {
         if (!g.isEdge(city1, city2))
@@ -70,7 +69,7 @@ public:
     
     // 从文件读数据建立城市交通库
     void createFromfile(const std::string& filepath) {
-        this->CreateGraphFromFile(filepath, g);
+        this->CreateGraphFromFile2(filepath, g);
     }
     //城市数
     void printcitynum() {
@@ -88,38 +87,41 @@ public:
     }
     //相邻城市间的道路数（不重复）
     void getRouteCount() {
-        std::cout << "相邻城市间的道路数为" << g.edgeCount() / 2 << std::endl;
+        std::cout << "相邻城市间的道路数为" << g.edgeCount() << std::endl;
     }
     //输出所有道路
     void printedge() {
-        DbLinkedList<Object>* visited=new DbLinkedList<Object>();
+        DbLinkedList<Object>* visited = new DbLinkedList< Object>();
         Object* vertexs = g.getVertices();
         int size = g.vertexCount();
-        for (int i = 0; i < size;i++) {
-            std::cout << vertexs[i] << "-> ";
-            Object* neighbors = g.getNeighbors(vertexs[i]).object;
-            int neighbors_size = g.getNeighbors(vertexs[i]).size;
-            for (int j = 0; j < neighbors_size;j++) {
+        for (int i = 0; i < size; i++) {
+            
+            Neighbors<Object, Weight>nei = g.getNeighbors(vertexs[i]);
+            Object* neighbors = nei.object;
+            int neighbors_size = nei.size;
+            for (int j = 0; j < neighbors_size; j++) {
                 if (visited->Search(neighbors[j]) == nullptr) {
-                    std::cout << neighbors[j] <<" ";
-                    visited->Insert(neighbors[j]);
+                    std::cout << vertexs[i] << "-> ";
+                    std::cout << neighbors[j] << " ";
+
                 }
             }
+            visited->Insert(vertexs[i]);
             std::cout << std::endl;
-            delete[]neighbors;
+
         }
-        delete[]visited;
-        delete[]vertexs;
+        delete visited;
+        delete[] vertexs;
     }
     //稀疏程度
    void Sparseness() {
         Object* vertexs = g.getVertices();
-        int vertexnum = g.vertexCount();
-        int edgesum = g.edgeCount();
+        double vertexnum = g.vertexCount();
+        double edgesum = g.edgeCount();
         //for (auto u : vertexs) {
         //    degreesum += g.Degree(u);
         //}
-        int sparseness = (2*edgesum / vertexnum)/(--vertexnum);
+        double sparseness = (2*edgesum / vertexnum)/(vertexnum-1);
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
         delete[]vertexs;
    }
@@ -133,7 +135,7 @@ public:
                countConnectedhelper(neighbors[i], visited);
            }
        }
-       delete[]neighbors;
+       
    }
 
    //连通分量个数
@@ -175,7 +177,7 @@ public:
         // 当前节点处理完毕后，从路径中移除
         currentPath.Remove(current);
         hasvisited.Remove(current);
-        delete[]neighbors;
+     
     }
 
     void printCycle(DbLinkedList<int>& cycle, int trg) {
@@ -222,13 +224,14 @@ public:
    }
    //输出某城市的所有邻接城市
    void printneighbors(Object city) {
-       Object* neighbors = g.getNeighbors(city).object;
-       int neighbors_size = g.getNeighbors(city).size;
+       Neighbors<Object, Weight> nei = g.getNeighbors(city);
+       Object* neighbors = nei.object;
+       int neighbors_size = nei.size;
        for (int i = 0; i < neighbors_size;i++) {
            std::cout << neighbors[i] << " ";
        }
        std::cout << std::endl;
-       delete[]neighbors;
+       
    }
    //相邻的城市数最多的城市
    void Maxneighborcity() {
@@ -352,7 +355,6 @@ public:
                    }
                }
            }
-           delete[] neighbors;
        }
        Forest<Object, Weight>msf;
        this->Kruskal(G, msf);
@@ -487,7 +489,8 @@ public:
                << "20. 判断是否有给定道路" << endl
                << "21. 输出某城市相邻的城市数" << endl
                << "22. 求某条道路的距离值" << endl
-               << "23. 退出" << endl
+               << "23. 加载文件" << endl
+               << "24. 退出" << endl
                << "_____________________________" << endl;
            cout << "您的选择:";
            cin >> choose;
@@ -586,7 +589,12 @@ public:
                citysdistance( city1, city2);
                break;
            }
-           case 23:exit(1); break;
+           case 23: {
+               this->createFromfile("usa_small.txt");
+               std::cout << "加载成功" << std::endl;
+               break;
+           }
+           case 24:exit(1); break;
            default:
                cout << "Error Input" << endl;
                break;
