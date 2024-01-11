@@ -14,7 +14,7 @@ template<class Object,class Weight>
 class RoutePlanningSystem : public WUSGraphClient<Object, Weight> {
 private:
     HashMap<Object, bool> toVisitMap;
-    WUSGraph<Object, Weight>& g;
+    WUSGraph<Object, Weight> g;
     HashMap<int, Object>toObjectMap;
     HashMap<Object, int>tointMap;
 public:
@@ -34,16 +34,19 @@ public:
     }
 
     void updataCity( Object city,Object newcity) {
-        Neighbors<Object, Weight>neighbors = g.getNeighbors(city).object;
-        int* weight = g.getNeighbors(city).weight;
+        Object*neighbors = g.getNeighbors(city).object;
+        Weight* weight = g.getNeighbors(city).weight;
+        int size = g.getNeighbors(city).size;
         if (!g.isVertex(city)) {
             return;
         }
         g.removeVertex(city);
         g.addVertex(newcity); int i = 0;
-        for (auto u : neighbors) {
-            g.addEdge(newcity, u, weight[i]);
+
+        for (int i = 0; i < size;i++) {
+            g.addEdge(newcity, neighbors[i], weight[i]);
         }
+        delete[]neighbors;
         delete[]weight;
     }
     void addedge( Object city1, Object city2, Weight weight) {
@@ -76,8 +79,9 @@ public:
     //输出所有城市
     void printcity() {
         Object* vertexs = g.getVertices();
-        for (auto u : vertexs) {
-            std::cout << u;
+        int size = g.vertexCount();
+        for (int i = 0; i < size;i++) {
+            std::cout << vertexs[i]<<" ";
         }
         std::cout << std::endl;
         delete[]vertexs;
@@ -88,7 +92,7 @@ public:
     }
     //输出所有道路
     void printedge() {
-        DbLinkedList<Object>* visited;
+        DbLinkedList<Object>* visited=new DbLinkedList<Object>();
         Object* vertexs = g.getVertices();
         int size = g.vertexCount();
         for (int i = 0; i < size;i++) {
@@ -96,7 +100,7 @@ public:
             Object* neighbors = g.getNeighbors(vertexs[i]).object;
             int neighbors_size = g.getNeighbors(vertexs[i]).size;
             for (int j = 0; j < neighbors_size;j++) {
-                if (visited->Search(neighbors[j]) = nullptr) {
+                if (visited->Search(neighbors[j]) == nullptr) {
                     std::cout << neighbors[j] <<" ";
                     visited->Insert(neighbors[j]);
                 }
@@ -140,7 +144,7 @@ public:
         for (int i = 0; i < n; i++)toVisitMap.Insert(std::make_pair(vertexs[i], false));
 
         for (int i = 0; i < n; i++) {
-            if (!toVisitMap[vertexs[i]]) {
+            if (!toVisitMap.getValue(vertexs[i])) {
                 countConnectedhelper(vertexs[i], toVisitMap);
                 componentCount++;
             }
@@ -153,8 +157,8 @@ public:
         visited.Insert(current);
         currentPath.Insert(current);
         hasvisited.Insert(current);
-        Object* neighbors = g.getNeighbors(current).object;
-        int neighbor_size = g.getNeighbors(current).size;
+        Object* neighbors = g.getNeighbors(toObjectMap.getValue( current)).object;
+        int neighbor_size = g.getNeighbors(toObjectMap.getValue(current)).size;
         for (int i = 0; i < neighbor_size; i++) {
             int toint = tointMap.getValue(neighbors[i]);
             if (visited.Search(toint) == nullptr) {
@@ -176,8 +180,8 @@ public:
 
     void printCycle(DbLinkedList<int>& cycle, int trg) {
         std::cout << "has cycle:";
-        for (int i = cycle.head->rlink; i != cycle.head->llink; ) {
-            Object cur = toObjectMap.getValue(i);
+        for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head->llink; ) {
+            Object cur = toObjectMap.getValue(i->data);
             cout << cur << " ";
             i = i->rlink;
         }
@@ -195,7 +199,7 @@ public:
             tointMap.Insert(std::make_pair(vertexs[i], i));
         }
         for (int j = 0; j < vertex_size; j++) {
-            if (visited.Search(vertex) == nullptr) {
+            if (visited.Search(j) == nullptr) {
                 // 对于每个未被访问的节点，进行深度优先搜索，并检查是否存在回路
                 hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited);
             }
@@ -249,14 +253,14 @@ public:
    }
    //任意两城市最短路径
    void getmsf( Object city1, Object city2) {
-       Tree<Object, Weight>msf; Weight mdis;
+       Tree<Object, Weight>msf; Weight mdis=0;
        this->Dijkstra(g, city1, msf);
        mdis=msf.findmdistance(city2);
        std::cout << "最短距离为" << mdis << std::endl;
    }
    //任意两城市最长路径
    void getlpt(Object city1, Object city2) {
-       Tree<Object, Weight>lpt; Weight mdis;
+       Tree<Object, Weight>lpt; Weight mdis=0;
        this->LongestPath(g, city1, lpt);
        mdis = lpt.findmdistance(city2);
        std::cout << "最长距离为" << mdis << std::endl;
@@ -267,7 +271,7 @@ public:
        this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
-       Weight dis, total;
+       Weight dis=0, total=0;
        for (int i = 1; i < count; i++) {
 
            dis = g.getWeight(msf[i - 1], msf[i]);
@@ -282,7 +286,7 @@ public:
        Forest<Object, Weight>msf;
        this->Prim(g, msf);
        int count = g.vertexCount();
-       Weight dis, total;
+       Weight dis=0, total=0;
        for (int i = 1; i < count; i++) {
    
            dis = g.getWeight(msf[i - 1], msf[i]);
@@ -297,7 +301,7 @@ public:
        Forest<Object, Weight>msf;
        this->Kruskal(g, msf);
        int count = g.vertexCount();
-       Weight dis, total;
+       Weight dis=0, total=0;
        for (int i = 1; i < count; i++) {
            
            dis = g.getWeight(msf[i - 1], msf[i]);
@@ -313,12 +317,12 @@ public:
        this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
-       Weight dis; int total=0;
+       Weight dis=0; int total=0;
        for (int i = 0; i < count; i++) {
             
            Weight dis = this->Dijkstra(g, city, msf[i]);
            if (dis <= R) {
-               msf.findmdistance(msf[i]);
+               std::cout<<msf[i]<<" ";
            }
            total++;
        }
@@ -352,7 +356,7 @@ public:
        }
        Forest<Object, Weight>msf;
        this->Kruskal(G, msf);
-       Weight dis, total;
+       Weight dis=0, total=0;
        for (int i = 1; i < n; i++) {
            
            dis = g.getWeight(msf[i - 1], msf[i]);
