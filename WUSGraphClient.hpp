@@ -381,7 +381,7 @@ public:
 		int n = g.vertexCount();
 		if (n <= 0) return;
 		Object* vertices = g.getVertices();
-		HashMap<std::string, int>toVertexMap;
+		HashMap<Object, int>toVertexMap;
 		for (int i = 0; i < n; i++) {
 			toVertexMap.Insert(std::make_pair(vertices[i], i));
 		}
@@ -421,7 +421,7 @@ public:
 				count++;
 			}
 		}
-
+		
 		delete[] vertices;
 	}
 	bool Eula(WUSGraph<Object, Weight>& g) {

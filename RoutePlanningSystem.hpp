@@ -302,15 +302,10 @@ public:
    //最短的道路为优先
    void edgefirst() {
        Forest<Object, Weight>msf;
-       this->Kruskal(g, msf);
-       int count = g.vertexCount();
-       Weight dis=0, total=0;
-       for (int i = 1; i < count; i++) {
-           
-           dis = g.getWeight(msf[i - 1], msf[i]);
-           total += dis;
-          
-       }
+       this->Prim(g, msf);
+       int count = msf.getCount();
+       Weight  total=0;
+       total = msf.findmdistance();
        msf.printWholeForest();
        std::cout << "总距离：" << total << std::endl;
    }

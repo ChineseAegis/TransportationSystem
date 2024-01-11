@@ -16,6 +16,7 @@ struct ForestNode {
     bool operator>( const ForestNode& y) {
         return this->weight > y.weight;
     }
+
 };
 template<class Object,class Weight>
 class Forest {
@@ -30,7 +31,7 @@ public:
     Forest(int Size = 1000) : n(0), maxSize(Size), nodes(Size) {}
 
     bool insert(Object value, Object parent, Weight weight) {
-        if (n >= maxSize) return false;
+        //if (n >= maxSize) return false;
      /*   if (!tointMap.containsKey(parent)) {
             throw std::runtime_error("父结点不存在");
         }*/
@@ -42,7 +43,7 @@ public:
             parenttoint = tointMap.getValue(parent);
             num = n; n++;
         }
-        else if(!tointMap.containsKey(parent)&& !tointMap.containsKey(value)) {
+        else if(!tointMap.containsKey(parent)) {
             parenttoint = n;
             num = n + 1; n ++;
         }
@@ -58,9 +59,9 @@ public:
 
     bool insert(Object value) {
         if (n >= maxSize) return false;
-        if (tointMap.containsKey(value)) {
+        /*if (tointMap.containsKey(value)) {
             throw std::runtime_error("结点已存在");
-        }
+        }*/
         int num = n;
         nodes.add(ForestNode<Weight>(num, -1, std::numeric_limits<Weight>::max())); // -1 表示这是一个树根
         tointMap.Insert(std::make_pair(value, num));
@@ -80,9 +81,9 @@ public:
             Weight weight = nodes[nodeIndex].weight;
             std::cout << parentValue << "->" << value << "(" << weight << ")" << std::endl;
         }
-        /*else {
+        else {
             std::cout << value << " (Root)" << std::endl;
-        }*/
+        }
 
         for (int i = 0; i < n; ++i) {
             if (nodes[i].parent == nodeIndex) {
@@ -98,12 +99,22 @@ public:
             }
         }
     }
+    Weight findmdistance() {
+        Weight mdis=0;
+        for (int i = 0; i < n; i++) {
+            if (nodes[i].parent != -1)mdis+= nodes[i].weight;
+        }
+        return mdis;
+    }
     Object getparent(Object city) {
         Object node = nodes[tointMap.getValue(city)];
         return nodes[node.parent];
     }
     Weight getweight(Object city) {
         return nodes[tointMap.getValue(city)].weight;
+    }
+    ExpandableArrayList<ForestNode<Weight>> getnodes() {
+        return nodes;
     }
     int getCount() {
         return n;
