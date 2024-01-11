@@ -44,7 +44,7 @@ public:
         for (auto u : neighbors) {
             g.addEdge(newcity, u, weight[i]);
         }
-        
+        delete[]weight;
     }
     void addedge( Object city1, Object city2, Weight weight) {
         if (!g.isEdge(city1, city2))
@@ -80,6 +80,7 @@ public:
             std::cout << u;
         }
         std::cout << std::endl;
+        delete[]vertexs;
     }
     //相邻城市间的道路数（不重复）
     void getRouteCount() {
@@ -89,17 +90,22 @@ public:
     void printedge() {
         DbLinkedList<Object>* visited;
         Object* vertexs = g.getVertices();
-        for (auto u : vertexs) {
-            std::cout << u << "-> ";
-            Object* neighbors = g.getNeighbors(u);
-            for (auto n : neighbors) {
-                if (visited->Search(n) = nullptr) {
-                    std::cout << n<<" ";
-                    visited->Insert(n);
+        int size = g.vertexCount();
+        for (int i = 0; i < size;i++) {
+            std::cout << vertexs[i] << "-> ";
+            Object* neighbors = g.getNeighbors(vertexs[i]).object;
+            int neighbors_size = g.getNeighbors(vertexs[i]).size;
+            for (int j = 0; j < neighbors_size;j++) {
+                if (visited->Search(neighbors[j]) = nullptr) {
+                    std::cout << neighbors[j] <<" ";
+                    visited->Insert(neighbors[j]);
                 }
             }
             std::cout << std::endl;
+            delete[]neighbors;
         }
+        delete[]visited;
+        delete[]vertexs;
     }
     //稀疏程度
    void Sparseness() {
@@ -111,15 +117,19 @@ public:
         //}
         int sparseness = (2*edgesum / vertexnum)/(--vertexnum);
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
+        delete[]vertexs;
    }
    void countConnectedhelper(Object city, HashMap<Object, bool> visited) {
        visited.Remove(city);
        visited.Insert(std::make_pair(city, true));
-       for (auto n : g.getNeighbors(city).object) {
-           if (!visited.getValue(n)) {
-               countConnectedhelper(n, visited, g);
+       Object* neighbors = g.getNeighbors(city).object;
+       int neighbors_size = g.getNeighbors(city).size;
+       for (int i = 0; i < neighbors_size;i++) {
+           if (!visited.getValue(neighbors[i])) {
+               countConnectedhelper(neighbors[i], visited);
            }
        }
+       delete[]neighbors;
    }
 
    //连通分量个数
@@ -131,11 +141,12 @@ public:
 
         for (int i = 0; i < n; i++) {
             if (!toVisitMap[vertexs[i]]) {
-                countConnectedhelper(vertexs[i], toVisitMap,g);
+                countConnectedhelper(vertexs[i], toVisitMap);
                 componentCount++;
             }
         }
         std::cout<<componentCount<<std::endl;
+        delete[]vertexs;
     }
     //每一个连通分量是否有环且输出环路
     void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited) {
@@ -160,6 +171,7 @@ public:
         // 当前节点处理完毕后，从路径中移除
         currentPath.Remove(current);
         hasvisited.Remove(current);
+        delete[]neighbors;
     }
 
     void printCycle(DbLinkedList<int>& cycle, int trg) {
@@ -188,6 +200,7 @@ public:
                 hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited);
             }
         }
+        delete[]vertexs;
     }
    bool isCity( Object city) {
        return g.isVertex(city);
@@ -211,6 +224,7 @@ public:
            std::cout << neighbors[i] << " ";
        }
        std::cout << std::endl;
+       delete[]neighbors;
    }
    //相邻的城市数最多的城市
    void Maxneighborcity() {
@@ -224,24 +238,25 @@ public:
            }
        }
        std::cout << goal << std::endl;
+       delete[]vertexs;
    }
    static void visit(Object x) {
        std::cout << x << " ";
    }
    //输出从给定顶点出发可以到达的所有顶点
    void getcitys(Object city) {
-       this->DFS(g, &RoutePlanningSystem::visit, city);
+       this->DFS(g,&RoutePlanningSystem::visit, city);
    }
    //任意两城市最短路径
    void getmsf( Object city1, Object city2) {
-       Tree<Object, Weight>msf; int mdis;
+       Tree<Object, Weight>msf; Weight mdis;
        this->Dijkstra(g, city1, msf);
        mdis=msf.findmdistance(city2);
        std::cout << "最短距离为" << mdis << std::endl;
    }
    //任意两城市最长路径
    void getlpt(Object city1, Object city2) {
-       Tree<Object, Weight>lpt; int mdis;
+       Tree<Object, Weight>lpt; Weight mdis;
        this->LongestPath(g, city1, lpt);
        mdis = lpt.findmdistance(city2);
        std::cout << "最长距离为" << mdis << std::endl;
@@ -252,7 +267,7 @@ public:
        this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
-       int dis, total;
+       Weight dis, total;
        for (int i = 1; i < count; i++) {
 
            dis = g.getWeight(msf[i - 1], msf[i]);
@@ -267,7 +282,7 @@ public:
        Forest<Object, Weight>msf;
        this->Prim(g, msf);
        int count = g.vertexCount();
-         int dis, total;
+       Weight dis, total;
        for (int i = 1; i < count; i++) {
    
            dis = g.getWeight(msf[i - 1], msf[i]);
@@ -282,7 +297,7 @@ public:
        Forest<Object, Weight>msf;
        this->Kruskal(g, msf);
        int count = g.vertexCount();
-       int dis, total;
+       Weight dis, total;
        for (int i = 1; i < count; i++) {
            
            dis = g.getWeight(msf[i - 1], msf[i]);
@@ -298,10 +313,13 @@ public:
        this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
-       int dis; int total=0;
-       for (int i = 1; i < count; i++) {
-           dis = msf.findmdistance(city);
-           if (dis <= R)std::cout << msf[i] << " ";
+       Weight dis; int total=0;
+       for (int i = 0; i < count; i++) {
+            
+           Weight dis = this->Dijkstra(g, city, msf[i]);
+           if (dis <= R) {
+               msf.findmdistance(msf[i]);
+           }
            total++;
        }
        std::cout << "R内城市数：" << total << std::endl;
@@ -334,7 +352,7 @@ public:
        }
        Forest<Object, Weight>msf;
        this->Kruskal(G, msf);
-       int dis, total;
+       Weight dis, total;
        for (int i = 1; i < n; i++) {
            
            dis = g.getWeight(msf[i - 1], msf[i]);

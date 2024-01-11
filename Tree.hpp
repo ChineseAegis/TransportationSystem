@@ -98,11 +98,11 @@ public:
     void printWholeTree() {
         printTreeFromRoot();
     }
-    int findmdistance(Object city) {
+    Weight findmdistance(Object city) {
         if (!tointMap.containsKey(city))return 0;
         int cityvalue = tointMap.getValue(city);
         //int thisvalue = nodes[0].key;
-        int mdis = 0; int i = 0;
+        Weight mdis; int i = 0;
         for (i = 0; i < n; i++) {
             if (nodes[i].key == cityvalue)
             {
@@ -146,6 +146,6 @@ public:
         if (i < 0 || i >= n) {
             throw std::out_of_range("Index out of range");
         }
-        return toObjectMap.getValue( nodes[i]);
+        return toObjectMap.getValue( nodes[i].key);
     }
 };

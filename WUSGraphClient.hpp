@@ -240,7 +240,7 @@ public:
 				}
 			}
 		}
-		delete obj;
+		delete[] obj;
 		obj = nullptr;
 	}
 	void LongestPath(WUSGraph<Object, Weight>& g, Object& s, Tree<Object,Weight>& lpt) {
@@ -296,7 +296,7 @@ public:
 				}
 			}
 		}
-		delete obj;
+		delete[] obj;
 		obj = nullptr;
 	}
 	int MaxDegree(const WUSGraph<Object, Weight>& g) {
@@ -309,6 +309,7 @@ public:
 				maxdegree = Degree(vertexs[i + 1]);
 			}
 		}
+		delete[]vertexs;
 	}
 	void DFS(WUSGraph<Object, Weight>& g, void(*visit)(Object), const Object& s) {
 		Object* vertexs = g.getVertices();
@@ -323,13 +324,15 @@ public:
 			visit(vertex);
 			vertexstack.pop_back();
 			Object* U = g.getNeighbors(vertex).object;
-			for (Object v : U)
+			int size = g.getNeighbors(vertex).size;
+			for (int i=0;i<size;i++)
 			{
 				if (tovisitMap.getValue(vertex) == 0) {
-					vertexstack.push_back(v);
+					vertexstack.push_back(U[i]);
 				}
 			}
 		}
+		delete[]vertexs;
 	}
 	void BFS(WUSGraph<Object, Weight>& g, void(*visit)(Object), const Object& s) {
 		Object* vertexs = g.getVertices();
@@ -344,13 +347,16 @@ public:
 			visit(vertex);
 			vertexdeque.pop();
 			Object* U = g.getNeighbors(vertex).object;
-			for (Object v : U)
+			int size = g.getNeighbors(vertex).size;
+			for (int i = 0; i < size; i++)
 			{
 				if (tovisitMap.getValue(vertex) == 0) {
-					vertexdeque.pushback(v);
+					vertexdeque.pushback(U[i]);
 				}
 			}
+			delete[]U;
 		}
+		delete[]vertexs;
 	}
 	void Print(const WUSGraph<Object, Weight>& g) {
 		Object* vertexs = g.getVertices();
@@ -364,7 +370,7 @@ public:
 			}
 			std::cout << std::endl;
 		}
-
+		delete[]vertexs;
 	}
 
 	void Kruskal(WUSGraph<Object, Weight>& g, Forest<Object, Weight>& msf) {
@@ -415,10 +421,12 @@ public:
 	}
 	bool Eula(WUSGraph<Object, Weight>& g) {
 		Object* vertexs = g.addVertex();
-		for (auto u : vertexs) {
-			if (g.Degree(u) % 2 != 0)return false;
+		int size = g.vertexCount();
+		for (int i = 0; i < size;i++) {
+			if (g.Degree(vertexs[i]) % 2 != 0)return false;
 		}
 		return true;
+		delete[]vertexs;
 	}
 	void CreateGraphFromFile(std::string filepath, WUSGraph<Object, Weight>& g)
 	{
