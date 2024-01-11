@@ -8,7 +8,7 @@ struct TreeNode {
 	int parent;      // 父节点的索引，如果是根节点则为 -1 或自身的索引
     Weight weight;
     Weight distance;
-    TreeNode(int key, int parent,Weight weight,Weight Diatance=0) : key(key), parent(parent),weight(weight) ,distance(Distance) {}
+    TreeNode(int key, int parent,Weight weight,Weight Distance=0) : key(key), parent(parent),weight(weight) ,distance(Distance) {}
     TreeNode() : key(int()), parent(-1),weight(std::numeric_limits<Weight>::max()),distance(0) {}
 };
 

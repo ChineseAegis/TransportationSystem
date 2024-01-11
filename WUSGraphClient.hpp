@@ -28,13 +28,15 @@ public:
 		Object object;
 		Weight distance;
 		Object pre_object;
+		bool is_pre_object;
 		DObject()
 		{
 
 		}
-		DObject(Object object, Weight distance = std::numeric_limits<Weight>::max()) :object(object), distance(distance) {
+		DObject(Object object, Weight distance = std::numeric_limits<Weight>::max()) :object(object), distance(distance),is_pre_object(0) {
 		}
 		DObject(Object object, Weight distance, Object pre_object) :object(object), distance(distance), pre_object(pre_object) {
+			is_pre_object = true;
 		}
 		bool operator<(const DObject& other)
 		{
