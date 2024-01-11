@@ -410,7 +410,7 @@ public:
        }
    }
 
-   void MainMenu(WUSGraph<Object, Weight>& g)
+   void MainMenu()
    {
        while (1)
        {
