@@ -281,7 +281,14 @@ public:
 		{
 			throw std::runtime_error("有不存在的顶点");
 		}
-		DbListNode<Edge>* node = toEdgeMap.getValue(std::make_pair(object1, object2));
-		return node->data.weight;
+		if (toEdgeMap.containsKey(std::make_pair(object1, object2)))
+		{
+			DbListNode<Edge>* node = toEdgeMap.getValue(std::make_pair(object1, object2));
+			return node->data.weight;
+		}
+		else
+		{
+			return std::numeric_limits<Weight>::max();
+		}
 	}
 };

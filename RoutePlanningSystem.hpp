@@ -288,7 +288,7 @@ public:
    void fromSToSet(Object city) {
        Forest<Object, Weight>msf;
        this->Prim(g, msf);
-       int count = g.vertexCount();
+       int count = msf.getCount();
        Weight dis=0, total=0;
        for (int i = 1; i < count; i++) {
    
@@ -318,19 +318,19 @@ public:
    void cityfromR( Object city,int R) {
        Tree<Object, Weight>msf;
        this->Dijkstra(g, city, msf);
-       Object* vertexs = g.getVertices();
-       int count = g.vertexCount();
+       //Object* vertexs = g.getVertices();
+       int count = msf.getcount();
        Weight dis=0; int total=0;
        for (int i = 0; i < count; i++) {
             
-           Weight dis = this->Dijkstra(g, city, msf[i]);
+           Weight dis = msf.get_index_distance(i);
            if (dis <= R) {
                std::cout<<msf[i]<<" ";
            }
            total++;
        }
        std::cout << "R内城市数：" << total << std::endl;
-       delete[]vertexs;
+       //delete[]vertexs;
    }
    //连接用户感兴趣的一组无重复的城市
    void interestedcity() {

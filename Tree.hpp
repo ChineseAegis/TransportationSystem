@@ -126,6 +126,14 @@ public:
     Weight getweight(Object city) {
         return nodes[tointMap.getValue(city)].weight;
     }
+    Weight getdistance(Object city)
+    {
+        return nodes[tointMap.getValue(city)].distance;
+    }
+    Weight get_index_distance(int i)
+    {
+        return nodes[i].distance;
+    }
     int getcount() {
         return n;
     }
