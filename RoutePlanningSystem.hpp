@@ -234,14 +234,15 @@ public:
        this->Dijkstra(g, city1, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
-       std::cout << city << "->";
+       
        int dis; int total;
        for (int i = 1; i < count; i++) {
-           std::cout << msf[i];
+           
            dis = msf.findmdistance(msf[i]);
            total += dis;
-           std::cout << "(" << dis << ")->";
+           
        }
+       msf.printWholeTree();
        std::cout << "总距离：" << total << std::endl;
        delete[]vertexs;
    }
@@ -250,13 +251,13 @@ public:
        Forest<Object, Weight>msf;
        this->Prim(g, msf);
        int count = g.vertexCount();
-       std::cout << msf[0]; int dis, total;
+         int dis, total;
        for (int i = 1; i < count; i++) {
-           std::cout << msf[i];
+   
            dis = g.getWeight(msf[i - 1], msf[i]);
            total += dis;
-           std::cout << "(" << dis << ")->";
        }
+       msf.printWholeForest();
        std::cout << "总距离：" << total << std::endl;
    }
    
@@ -265,13 +266,14 @@ public:
        Forest<Object, Weight>msf;
        this->Kruskal(g, msf);
        int count = g.vertexCount();
-       std::cout << msf[0]; int dis, total;
+       int dis, total;
        for (int i = 1; i < count; i++) {
-           std::cout << msf[i];
+           
            dis = g.getWeight(msf[i - 1], msf[i]);
            total += dis;
-           std::cout<< "(" << dis << ")->";
+          
        }
+       msf.printWholeForest();
        std::cout << "总距离：" << total << std::endl;
    }
    //用户一键知晓周围所有城市
@@ -315,13 +317,14 @@ public:
        }
        Forest<Object, Weight>msf;
        this->Kruskal(G, msf);
-       std::cout << msf[0]; int dis, total;
+       int dis, total;
        for (int i = 1; i < n; i++) {
-           std::cout << msf[i];
+           
            dis = g.getWeight(msf[i - 1], msf[i]);
            total += dis;
-           std::cout << "(" << dis << ")->";
+           
        }
+       msf.printWholeForest();
        std::cout << "总距离：" << total << std::endl;
 
    }
