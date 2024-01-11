@@ -108,6 +108,13 @@ public:
         std::cout << city << std::endl;
         return mdis;
     }
+    Object getparent(Object city) {
+        Object node= nodes[tointMap.getValue(city)];
+        return nodes[node.parent];
+    }
+    Weight getweight(Object city) {
+        return nodes[tointMap.getValue(city)].weight;
+    }
     int getcount() {
         return n;
     }

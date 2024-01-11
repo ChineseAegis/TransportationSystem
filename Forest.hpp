@@ -100,7 +100,13 @@ public:
             }
         }
     }
-
+    Object getparent(Object city) {
+        Object node = nodes[tointMap.getValue(city)];
+        return nodes[node.parent];
+    }
+    Weight getweight(Object city) {
+        return nodes[tointMap.getValue(city)].weight;
+    }
     int getCount() {
         return n;
     }

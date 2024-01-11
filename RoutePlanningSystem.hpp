@@ -13,23 +13,24 @@ template<class Object,class Weight>
 class RoutePlanningSystem : public WUSGraphClient<Object, Weight> {
 private:
     HashMap<Object, bool> toVisitMap;
+    WUSGraph<Object, Weight>& g;
 public:
     RoutePlanningSystem() : WUSGraphClient<Object, Weight>() {}
 
-    void addCity(WUSGraph<Object, Weight>& g,Object city) {
+    void addCity(Object city) {
         if (!g.isVertex(city))
         {
             g.addVertex(city);
         }
     }
 
-    void removeCity(WUSGraph<Object, Weight>& g,Object city) {
+    void removeCity(Object city) {
         if (g.isVertex(city)) {
             g.removeVertex(city);
         }
     }
 
-    void updataCity(WUSGraph<Object, Weight>& g, Object city,Object newcity) {
+    void updataCity( Object city,Object newcity) {
         Neighbors<Object, Weight>neighbors = g.getNeighbors(city).object;
         int* weight = g.getNeighbors(city).weight;
         if (g.isVertex(city)) {
@@ -40,19 +41,19 @@ public:
             g.addEdge(newcity, u, weight[i]);
         }
     }
-    void addedge(WUSGraph<Object, Weight>& g, Object city1, Object city2, Weight weight) {
+    void addedge( Object city1, Object city2, Weight weight) {
         if (!g.isEdge(city1, city2))
         {
             g.addEdge(city1, city2, weight);
         }
     }
 
-    void removeedge(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
+    void removeedge(Object city1, Object city2) {
         if (g.isEdge(city1, city2)) {
             g.removeEdge(city1, city2);
         }
     }
-    void updataefge(WUSGraph<Object, Weight>& g, Object city1, Object city2, Object newcity1, Object newcity2, Weight weight) {
+    void updataefge( Object city1, Object city2, Object newcity1, Object newcity2, Weight weight) {
         if (g.isEdge(city1, city2)) {
             g.removeEdge(city1, city2);
             g.addEdge(newcity1, newcity2, weight);
@@ -60,15 +61,15 @@ public:
     }
     
     // 从文件读数据建立城市交通库
-    void createFromfile(const string& filepath, WUSGraph<Object, Weight>& g) {
+    void createFromfile(const string& filepath) {
         this->CreateGraphFromFile(filepath, g);
     }
     //城市数
-    void printcitynum(WUSGraph<Object, Weight>& g) {
+    void printcitynum() {
         std::cout << g.vertexCount() << std::endl;
     }
     //输出所有城市
-    void printcity(WUSGraph<Object, Weight>& g) {
+    void printcity() {
         Object* vertexs = g.getVertices();
         for (auto u : vertexs) {
             std::cout << u;
@@ -76,11 +77,11 @@ public:
         std::cout << std::endl;
     }
     //相邻城市间的道路数（不重复）
-    void getRouteCount(WUSGraph<Object, Weight>& g) {
+    void getRouteCount() {
         std::cout << "相邻城市间的道路数为" << g.edgeCount() / 2 << std::endl;
     }
     //输出所有道路
-    void printedge(WUSGraph<Object, Weight>& g) {
+    void printedge() {
         DbLinkedList<Object>* visited;
         Object* vertexs = g.getVertices();
         for (auto u : vertexs) {
@@ -96,7 +97,7 @@ public:
         }
     }
     //稀疏程度
-   void Sparseness(WUSGraph<Object, Weight>& g) {
+   void Sparseness() {
         Object* vertexs = g.getVertices();
         int degreesum, vertexnum = g.vertexCount();
         for (auto u : vertexs) {
@@ -105,7 +106,7 @@ public:
         int sparseness = (degreesum / vertexnum)--vertexnum;
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
    }
-   void countConnectedhelper(Object city,HashMap<Object,bool>visited, WUSGraph<Object, Weight>& g) {
+   void countConnectedhelper(Object city,HashMap<Object,bool>visited) {
        visited.Remove(city); visited.Insert(std::make_pair(city, true);
        for (auto n : g.getNeighbors(city).object) {
            if (!visited.getValue(city)) {
@@ -114,7 +115,7 @@ public:
        }
    }
    //连通分量个数
-    void countConnected(WUSGraph<Object, Weight>& g) {
+    void countConnected() {
         int componentCount = 0;
         Object* vertices = g.getVertices();
         int n = g.vertexCount();
@@ -129,7 +130,7 @@ public:
         std::cout<<componentCount<<std::endl;
     }
     //每一个连通分量是否有环且输出环路
-    void hasCycleInConnectedComponent(WUSGraph<Object, Weight>& g, int current, int parent, DbLinkedList<Object>& visited, DbLinkedList<Object>& currentPath, DbLinkedList<Object>& hasvisited) {
+    void hasCycleInConnectedComponent( int current, int parent, DbLinkedList<Object>& visited, DbLinkedList<Object>& currentPath, DbLinkedList<Object>& hasvisited) {
         visited.Insert(current);
         currentPath.Insert(current);
         hasvisited.Insert(current);
@@ -160,7 +161,7 @@ public:
         std::cout << std::endl;
     }
 
-    void findAndPrintCycles(WUSGraph<Object, Weight>& g) {
+    void findAndPrintCycles() {
         DbLinkedList<Object> visited;
         DbLinkedList<Object> currentPath;
         DbLinkedList<Object> curvisited;
@@ -171,22 +172,22 @@ public:
             }
         }
     }
-   bool isCity(WUSGraph<Object, Weight>& g, Object city) {
+   bool isCity( Object city) {
        return g.isVertex(city);
    }
-   bool isEdge(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
+   bool isEdge( Object city1, Object city2) {
        return g.isEdge(city1, city2);
    }
    ///输出某城市相邻 的城市数
-   void neighbornum(WUSGraph<Object, Weight>& g,Object city){
+   void neighbornum(Object city){
        std::cout <<"该城市相邻城市数："<< g.Degree(city) << std::endl;
    }
    //求某条道路的距离值
-   void citysdistance(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
+   void citysdistance(Object city1, Object city2) {
        std::cout << "该道路距离值："<<g.getWeight(city1, city2) << std::endl;
    }
    //输出某城市的所有邻接城市
-   void printneighbors(WUSGraph<Object, Weight>& g, Object city) {
+   void printneighbors(Object city) {
        Object* neighbors = g.getNeighbors(city).object;
        for (auto u : neighbors) {
            std::cout << u << " ";
@@ -194,7 +195,7 @@ public:
        std::cout << std::endl;
    }
    //相邻的城市数最多的城市
-   void Maxneighborcity(WUSGraph<Object, Weight>& g) {
+   void Maxneighborcity() {
        Object* vertexs = g.getVertices();
        Object goal = vertexs[0];
        int n = g.vertexCount();
@@ -210,25 +211,25 @@ public:
        std::cout << x << " ";
    }
    //输出从给定顶点出发可以到达的所有顶点
-   void getcitys(WUSGraph<Object, Weight>& g,Object city) {
+   void getcitys(Object city) {
        this->DFS(g, visit, city);
    }
    //任意两城市最短路径
-   void getmsf(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
+   void getmsf( Object city1, Object city2) {
        Tree<Object, Weight>msf; int mdis;
        this->Dijkstra(g, city1, msf);
        mdis=msf.findmdistance(city2);
        std::cout << "最短距离为" << mdis << std::endl;
    }
    //任意两城市最长路径
-   void getlpt(WUSGraph<Object, Weight>& g, Object city1, Object city2) {
+   void getlpt(Object city1, Object city2) {
        Tree<Object, Weight>lpt; int mdis;
        this->LongestPath(g, city1, msf);
        mdis = lpt.findmdistance(city2);
        std::cout << "最长距离为" << mdis << std::endl;
    }
    //从给定城市 s 出发， 以与 s 的距离最小的城市为优先
-   void disfirst(WUSGraph<Object, Weight>& g, Object city) {
+   void disfirst( Object city) {
        Tree<Object, Weight>msf; 
        this->Dijkstra(g, city1, msf);
        Object* vertexs = g.getVertices();
@@ -244,7 +245,7 @@ public:
        std::cout << "总距离：" << total << std::endl;
    }
    //给定城市 s 出发，以与所选择的城市集合的距离最小的城市为优先
-   void fromSToSet(WUSGraph<Object, Weight>& g, Object city) {
+   void fromSToSet(Object city) {
        Forest<Object, Weight>msf;
        this->Prim(g, msf);
        int count = g.vertexCount();
@@ -259,7 +260,7 @@ public:
    }
    
    //最短的道路为优先
-   void edgefirst(WUSGraph<Object, Weight>& g) {
+   void edgefirst() {
        Forest<Object, Weight>msf;
        this->Kruskal(g, msf);
        int count = g.vertexCount();
@@ -273,7 +274,7 @@ public:
        std::cout << "总距离：" << total << std::endl;
    }
    //用户一键知晓周围所有城市
-   void cityfromR(WUSGraph<Object, Weight>& g, Object city,int R) {
+   void cityfromR( Object city,int R) {
        Tree<Object, Weight>msf;
        this->Dijkstra(g, city1, msf);
        Object* vertexs = g.getVertices();
@@ -287,7 +288,7 @@ public:
        std::cout << "R内城市数：" << total << std::endl;
    }
    //连接用户感兴趣的一组无重复的城市
-   void interestedcity(WUSGraph<Object, Weight>& g) {
+   void interestedcity() {
        std::cout << "请输入城市数：" << std::endl;
        int n; std::cin >> n;
        ExpandableArrayList<Object>citys(n);
@@ -322,7 +323,7 @@ public:
        std::cout << "总距离：" << total << std::endl;
 
    }
-   void ManageMenu(WUSGraph<Object, Weight>& g)
+   void ManageMenu()
    {
        int tag = 1;
        while (tag)
@@ -347,7 +348,7 @@ public:
                Object city;
                std::cout << "请输入城市名" << endl;
                cin >> city;
-               addCity(g,city);
+               addCity(city);
                break; 
            }
            case 2: {
@@ -356,14 +357,14 @@ public:
                cin >> city;
                std::cout << "请输入新城市名" << endl;
                cin >> newcity;
-               updataCity(g, city, newcity);
+               updataCity(city, newcity);
                break;
            }
            case 3: {
                Object city;
                std::cout << "请输入城市名" << endl;
                cin >> city;
-               removeCity(g, city);
+               removeCity( city);
                break;
            }
            case 4: {
@@ -374,7 +375,7 @@ public:
                cin >> city2;
                std::cout << "请输入道路权值" << endl;
                cin >> weight;
-               addedge(g, city1, city2, weight);
+               addedge(city1, city2, weight);
                break;
            }
            case 5: {
@@ -390,7 +391,7 @@ public:
                cin >> newcity2;
                std::cout << "请输入新道路权值" << endl;
                cin >> weight;
-               updataefge(g, city1, city2, newcity1, newcity2, weight);
+               updataefge(city1, city2, newcity1, newcity2, weight);
                break;
            }
            case 6: {
@@ -399,7 +400,7 @@ public:
                cin >> city1;
                std::cout << "请输入城市2名" << endl;
                cin >> city2;
-               removeedge(g, city1, city2);
+               removeedge(city1, city2);
                break;
            }
            case 7: tag = 0; break;
@@ -448,23 +449,23 @@ public:
            cin >> choose;
            switch (choose)
            {
-           case 1: printcity(g); break;
-           case 2: printcitynum(g); break;
-           case 3: getRouteCount(g); break;
-           case 4: printedge(g); break;
-           case 5: Sparseness(g); break;
-           case 6: ManageMenu(g); break;
+           case 1: printcity(); break;
+           case 2: printcitynum(); break;
+           case 3: getRouteCount(); break;
+           case 4: printedge(); break;
+           case 5: Sparseness(); break;
+           case 6: ManageMenu(); break;
            case 7: {
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               printneighbors(g,city); break;
+               printneighbors(city); break;
            }
            case 8: {
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               getcitys(g, city); break;
+               getcitys( city); break;
            }
            case 9:  Maxneighborcity(g); break;
            case 10: {
@@ -473,45 +474,45 @@ public:
                cin >> city1;
                std::cout << "请输入城市2名" << endl;
                cin >> city2;
-               getmsf(g, city1, city2); break;
+               getmsf( city1, city2); break;
            }
            case 11: {
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               disfirst(g, city); break;
+               disfirst( city); break;
            }
            case 12: {
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               fromSToSet(g, city); break;
+               fromSToSet( city); break;
            }
-           case 13: edgefirst(g); break;
+           case 13: edgefirst(); break;
            case 14: {
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
                std::cout << "请输入范围R" << std::endl;
                int R; cin >> R;
-               cityfromR(g, city, R); break;
+               cityfromR( city, R); break;
            }
-           case 15: interestedcity(g); break;
+           case 15: interestedcity(); break;
            case 16: {
                Object city1, city2;
                std::cout << "请输入城市1名" << endl;
                cin >> city1;
                std::cout << "请输入城市2名" << endl;
                cin >> city2;
-               getlpt(g, city1, city2); break;
+               getlpt(city1, city2); break;
            }
-           case 17:countConnected(g); break;
-           case 18:findAndPrintCycles(g); break;
+           case 17:countConnected(); break;
+           case 18:findAndPrintCycles(); break;
            case 19: {
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               if (!isCity(g, city)) { std::cout << "该城市不存在" << std::endl; }
+               if (!isCity( city)) { std::cout << "该城市不存在" << std::endl; }
                else{ std::cout << "该城市存在" << std::endl; }
                break;
            }
@@ -521,7 +522,7 @@ public:
                cin >> city1;
                std::cout << "请输入城市2名" << endl;
                cin >> city2;
-               if (!isEdge(g, city1,city2)) { std::cout << "该道路不存在" << std::endl; }
+               if (!isEdge( city1,city2)) { std::cout << "该道路不存在" << std::endl; }
                else { std::cout << "该道路存在" << std::endl; }
                break;
            }
@@ -529,7 +530,7 @@ public:
                Object city;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               neighbornum(g, city);
+               neighbornum( city);
                break;
            }
            case 22: {
@@ -538,7 +539,7 @@ public:
                cin >> city1;
                std::cout << "请输入城市2名" << endl;
                cin >> city2;
-               citysdistance(g, city1, city2);
+               citysdistance( city1, city2);
                break;
            }
            case 23:exit(1); break;
