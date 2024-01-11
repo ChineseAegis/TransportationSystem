@@ -76,20 +76,21 @@ public:
         n++;
         return true;
     }
-    void printTreeFromRoot(int nodeIndex = 0, int level = 0)  {
+    void printTreeFromRoot(int nodeIndex = 0)  {
         if (nodeIndex < 0 || nodeIndex >= n) {
             return;
         }
-
-        for (int i = 0; i < level; ++i) {
-            std::cout << "  ";  // 缩进表示层级
+        if (nodeIndex != 0)
+        {
+            Object value = toObjectMap.getValue(nodes[nodeIndex].key);
+            std::cout << value <<"("<< nodes[nodeIndex].weight<<")" << std::endl;
         }
-        Object value = toObjectMap.getValue(nodes[nodeIndex].key);
-        std::cout << value << std::endl;
 
         for (int i = 0; i < n; ++i) {
             if (nodes[i].parent == nodeIndex) {
-                printTreeFromRoot(i, level + 1);
+                Object value = toObjectMap.getValue(nodes[i].parent);
+                std::cout << value<<"->";
+                printTreeFromRoot(i);
             }
         }
     }
