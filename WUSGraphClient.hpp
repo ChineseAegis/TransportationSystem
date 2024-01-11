@@ -22,7 +22,10 @@ public:
 	HashMap<std::string, int> tovisitMap;
 	HashMap<std::string, int>toVertexMap;
 	
-	
+	WUSGraphClient()
+	{
+
+	}
 	struct DObject
 	{
 		Object object;
@@ -56,7 +59,7 @@ public:
 		}
 	};
 
-	void Dijkstra(WUSGraph<Object, Weight>& g, Object& s,Tree<Object,Weight> &tree)
+	int Dijkstra(WUSGraph<Object, Weight>& g, Object& s,Tree<Object,Weight> &tree)
 	{
 		
 		int vertexCount = g.vertexCount();
@@ -102,7 +105,7 @@ public:
 					Weight pre_weight = Distances.getValue(nei.object[i]);
 					Weight self_weight = cur.distance;
 					Weight cur_weight = self_weight + nei.weight[i];
-					if (cur_weight < pre_weight)
+					if (cur_weight < pre_weight&&cur_weight >= 0)
 					{
 						Distances.Remove(nei.object[i]);
 						Distances.Insert(std::make_pair(nei.object[i], cur_weight));
@@ -113,8 +116,75 @@ public:
 				}
 			}
 		}
-		delete obj;
+		delete[] obj;
 		obj = nullptr;
+		return 1;
+	}
+	int Dijkstra(WUSGraph<Object, Weight>& g, Object s,Object s1)
+	{
+
+		int vertexCount = g.vertexCount();
+		Object* obj = g.getVertices();
+		MinIndexHeap<DObject> heap(vertexCount);
+		HashMap<Object, Weight> Distances;
+		HashMap<Object, int> ObjToInt;
+		for (int i = 0; i < vertexCount; i++)
+		{
+			if (obj[i] == s)
+			{
+				heap.Insert(DObject(obj[i], 0));
+				Distances.Insert(std::make_pair(obj[i], 0));
+			}
+			else
+			{
+				heap.Insert(DObject(obj[i]));
+				Distances.Insert(std::make_pair(obj[i], std::numeric_limits<Weight>::max()));
+			}
+			ObjToInt.Insert(std::make_pair(obj[i], i));
+
+		}
+		while (vertexCount--)
+		{
+			DObject cur;
+			heap.removeMin(cur);
+			Distances.Remove(cur.object);
+			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
+			//std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			/*if (!cur.is_pre_object)
+			{
+				tree.insert(cur.object);
+			}
+			else
+			{
+				tree.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object), cur.distance);
+			}*/
+			if (cur.object == s1)
+			{
+				delete[] obj;
+				obj = nullptr;
+				return cur.distance;
+			}
+			for (int i = 0; i < nei.size; i++)
+			{
+				if (Distances.containsKey(nei.object[i]))
+				{
+					Weight pre_weight = Distances.getValue(nei.object[i]);
+					Weight self_weight = cur.distance;
+					Weight cur_weight = self_weight + nei.weight[i];
+					if (cur_weight < pre_weight&&cur_weight>=0)
+					{
+						Distances.Remove(nei.object[i]);
+						Distances.Insert(std::make_pair(nei.object[i], cur_weight));
+						//heap.Insert(DObject(nei.object[i], cur_weight, cur.object));
+						heap.Modify(ObjToInt.getValue(nei.object[i]), DObject(nei.object[i], cur_weight, cur.object));
+						//std::cout << "¶¥µã£º" << nei.object[i] << " ¾àÀë£º" << cur_weight << std::endl;
+					}
+				}
+			}
+		}
+		delete[] obj;
+		obj = nullptr;
+		return INT_MAX;
 	}
 	void Prim(WUSGraph<Object, Weight>& g,Forest<Object,Weight>& f)
 	{
@@ -240,7 +310,7 @@ public:
 			}
 		}
 	}
-	void DFS(WUSGraph<Object, Weight>& g, void(*visit), const Object& s) {
+	void DFS(WUSGraph<Object, Weight>& g, void(*visit)(Object), const Object& s) {
 		Object* vertexs = g.getVertices();
 		int n = g.vertexCount();
 		for (int i = 0; i < n; i++)tovisitMap.Insert(std::make_pair(vertexs[i], 0));
@@ -261,7 +331,7 @@ public:
 			}
 		}
 	}
-	void BFS(WUSGraph<Object, Weight>& g, void(*visit), const Object& s) {
+	void BFS(WUSGraph<Object, Weight>& g, void(*visit)(Object), const Object& s) {
 		Object* vertexs = g.getVertices();
 		int n = g.vertexCount();
 		for (int i = 0; i < n; i++)tovisitMap.Insert(std::make_pair(vertexs[i], 0));

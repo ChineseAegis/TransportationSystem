@@ -9,11 +9,12 @@
 #include"ExpandableArrayList.hpp"
 #include <string>
 #include<iostream>
+using namespace std;
 template<class Object,class Weight>
 class RoutePlanningSystem : public WUSGraphClient<Object, Weight> {
 private:
     HashMap<Object, bool> toVisitMap;
-    WUSGraph<Object, Weight>& g;
+    WUSGraph<Object, Weight> g;
 public:
     RoutePlanningSystem() : WUSGraphClient<Object, Weight>() {}
 
@@ -33,9 +34,10 @@ public:
     void updataCity( Object city,Object newcity) {
         Neighbors<Object, Weight>neighbors = g.getNeighbors(city).object;
         int* weight = g.getNeighbors(city).weight;
-        if (g.isVertex(city)) {
-            g.removeVertex(city);
+        if (!g.isVertex(city)) {
+            return;
         }
+        g.removeVertex(city);
         g.addVertex(newcity); int i = 0;
         for (auto u : neighbors) {
             g.addEdge(newcity, u, weight[i]);
@@ -61,7 +63,7 @@ public:
     }
     
     // 从文件读数据建立城市交通库
-    void createFromfile(const string& filepath) {
+    void createFromfile(const std::string& filepath) {
         this->CreateGraphFromFile(filepath, g);
     }
     //城市数
@@ -99,50 +101,56 @@ public:
     //稀疏程度
    void Sparseness() {
         Object* vertexs = g.getVertices();
-        int degreesum, vertexnum = g.vertexCount();
-        for (auto u : vertexs) {
-            degreesum += g.Degree(u);
-        }
-        int sparseness = (degreesum / vertexnum)--vertexnum;
+        int vertexnum = g.vertexCount();
+        int edgesum = g.edgeCount();
+        //for (auto u : vertexs) {
+        //    degreesum += g.Degree(u);
+        //}
+        int sparseness = (2*edgesum / vertexnum)/(--vertexnum);
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
    }
-   void countConnectedhelper(Object city,HashMap<Object,bool>visited) {
-       visited.Remove(city); visited.Insert(std::make_pair(city, true);
+   void countConnectedhelper(Object city, HashMap<Object, bool> visited) {
+       visited.Remove(city);
+       visited.Insert(std::make_pair(city, true));
        for (auto n : g.getNeighbors(city).object) {
-           if (!visited.getValue(city)) {
+           if (!visited.getValue(n)) {
                countConnectedhelper(n, visited, g);
            }
        }
    }
+
    //连通分量个数
     void countConnected() {
         int componentCount = 0;
-        Object* vertices = g.getVertices();
+        Object* vertexs = g.getVertices();
         int n = g.vertexCount();
         for (int i = 0; i < n; i++)toVisitMap.Insert(std::make_pair(vertexs[i], false));
 
         for (int i = 0; i < n; i++) {
-            if (!toVisitMap[vertices[i]]) {
-                countConnectedhelper(vertices[i], toVisitMap,g);
+            if (!toVisitMap[vertexs[i]]) {
+                countConnectedhelper(vertexs[i], toVisitMap,g);
                 componentCount++;
             }
         }
         std::cout<<componentCount<<std::endl;
     }
     //每一个连通分量是否有环且输出环路
-    void hasCycleInConnectedComponent( int current, int parent, DbLinkedList<Object>& visited, DbLinkedList<Object>& currentPath, DbLinkedList<Object>& hasvisited) {
+    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited) {
         visited.Insert(current);
         currentPath.Insert(current);
         hasvisited.Insert(current);
-        for (int neighbor : g.getNeighbors(current).objects) {
-            if (visited.Search(neighbor) == nullptr) {
+        Object* neighbors = g.getNeighbors(current).object;
+        int neighbor_size = g.getNeighbors(current).size;
+        for (int i = 0; i < neighbor_size; i++) {
+            int toint = tointMap.getValue(neighbors[i]);
+            if (visited.Search(toint) == nullptr) {
                 // 如果邻居未被访问，递归检查邻居是否形成回路
-                hasCycleInConnectedComponent(g, neighbor, current, visited, currentPath, hasvisited);
+                hasCycleInConnectedComponent(toint, current, visited, currentPath, hasvisited);
             }
-            else if (neighbor != parent && hasvisited.Search(neighbor) != nullptr) {
+            else if (toint != parent && hasvisited.Search(toint) != nullptr) {
                 // 如果邻居已被访问，并且不是当前节点的父节点，说明存在回路
                 // 输出回路
-                printCycle(currentPath, neighbor);
+                printCycle(currentPath, toint);
             }
         }
 
@@ -151,10 +159,10 @@ public:
         hasvisited.Remove(current);
     }
 
-    void printCycle(DbLinkedList<Object>& cycle, Object trg) {
+    void printCycle(DbLinkedList<int>& cycle, int trg) {
         std::cout << "has cycle:";
-        for (Object i = cycle.head->rlink; i != cycle.head->llink; ) {
-            Object cur = i;
+        for (int i = cycle.head->rlink; i != cycle.head->llink; ) {
+            Object cur = toObjectMap.getValue(i);
             cout << cur << " ";
             i = i->rlink;
         }
@@ -162,13 +170,19 @@ public:
     }
 
     void findAndPrintCycles() {
-        DbLinkedList<Object> visited;
-        DbLinkedList<Object> currentPath;
-        DbLinkedList<Object> curvisited;
-        for (const auto& vertex : g.getVertices()) {
-            if (visited.Search(vertex)==nullptr) {
+        DbLinkedList<int> visited;
+        DbLinkedList<int> currentPath;
+        DbLinkedList<int> curvisited;
+        Object* vertexs = g.getVertices();
+        int vertex_size = g.vertexCount();
+        for (int i = 0; i < vertex_size; i++) {
+            toObjectMap.Insert(std::make_pair(i, vertexs[i]));
+            tointMap.Insert(std::make_pair(vertexs[i], i));
+        }
+        for (int j = 0; j < vertex_size; j++) {
+            if (visited.Search(vertex) == nullptr) {
                 // 对于每个未被访问的节点，进行深度优先搜索，并检查是否存在回路
-                hasCycleInConnectedComponent(g, vertex, -1, visited, currentPath, curvisited);
+                hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited);
             }
         }
     }
@@ -189,8 +203,9 @@ public:
    //输出某城市的所有邻接城市
    void printneighbors(Object city) {
        Object* neighbors = g.getNeighbors(city).object;
-       for (auto u : neighbors) {
-           std::cout << u << " ";
+       int neighbors_size = g.getNeighbors(city).size;
+       for (int i = 0; i < neighbors_size;i++) {
+           std::cout << neighbors[i] << " ";
        }
        std::cout << std::endl;
    }
@@ -201,18 +216,18 @@ public:
        int n = g.vertexCount();
 
        for (int i = 0; i < n; i++) {
-           if (g.Degree[vertexs[i]]< g.Degree(vertexs[i + 1])) {
+           if (g.Degree(vertexs[i])< g.Degree(vertexs[i + 1])) {
                goal = vertexs[i + 1];
            }
        }
        std::cout << goal << std::endl;
    }
-   void* visit(Object x) {
+   static void visit(Object x) {
        std::cout << x << " ";
    }
    //输出从给定顶点出发可以到达的所有顶点
    void getcitys(Object city) {
-       this->DFS(g, visit, city);
+       this->DFS(g, &RoutePlanningSystem::visit, city);
    }
    //任意两城市最短路径
    void getmsf( Object city1, Object city2) {
@@ -224,23 +239,22 @@ public:
    //任意两城市最长路径
    void getlpt(Object city1, Object city2) {
        Tree<Object, Weight>lpt; int mdis;
-       this->LongestPath(g, city1, msf);
+       this->LongestPath(g, city1, lpt);
        mdis = lpt.findmdistance(city2);
        std::cout << "最长距离为" << mdis << std::endl;
    }
    //从给定城市 s 出发， 以与 s 的距离最小的城市为优先
    void disfirst( Object city) {
        Tree<Object, Weight>msf; 
-       this->Dijkstra(g, city1, msf);
+       this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
        
        int dis; int total;
        for (int i = 1; i < count; i++) {
-           
-           dis = msf.findmdistance(msf[i]);
+
+           dis = g.getWeight(msf[i - 1], msf[i]);
            total += dis;
-           
        }
        msf.printWholeTree();
        std::cout << "总距离：" << total << std::endl;
@@ -279,7 +293,7 @@ public:
    //用户一键知晓周围所有城市
    void cityfromR( Object city,int R) {
        Tree<Object, Weight>msf;
-       this->Dijkstra(g, city1, msf);
+       this->Dijkstra(g, city, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
        int dis; int total=0;
@@ -305,15 +319,16 @@ public:
            i++;
        }
        for (i = 0; i < n; i++) {
-           Neighbors<Object, Weight>neighbors = g.getNeighbors(citys[i]).object;
-           
+           Object* neighbors = g.getNeighbors(citys[i]).object;
+           int neighbors_size = g.getNeighbors(citys[i]).size;
            for (int j = i+1; j < n; j++) {
-               for (auto u : neighbors) {
-                   if (citys[j] == u) {
+               for (int m = 0;i<neighbors_size;m++) {
+                   if (citys[j] == neighbors[m]) {
                        G.addEdge(citys[i], citys[j], g.getWeight(citys[i], citys[j]));
                    }
                }
            }
+           delete[] neighbors;
        }
        Forest<Object, Weight>msf;
        this->Kruskal(G, msf);
@@ -326,7 +341,7 @@ public:
        }
        msf.printWholeForest();
        std::cout << "总距离：" << total << std::endl;
-
+       
    }
    void ManageMenu()
    {
@@ -472,7 +487,7 @@ public:
                cin >> city;
                getcitys( city); break;
            }
-           case 9:  Maxneighborcity(g); break;
+           case 9:  Maxneighborcity(); break;
            case 10: {
                Object city1, city2;
                std::cout << "请输入城市1名" << endl;

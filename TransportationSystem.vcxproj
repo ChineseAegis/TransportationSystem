@@ -143,7 +143,13 @@
     <ClInclude Include="MinSpanForest.hpp" />
     <ClInclude Include="Neighbors.hpp" />
     <ClInclude Include="RoutePlanningSystem.hpp" />
+    <ClInclude Include="TrafficAdvisory.h" />
+    <ClInclude Include="TrafficAdvisoryCheck.h" />
     <ClInclude Include="Tree.hpp" />
+    <ClInclude Include="UtilitiesRandom.h" />
+    <ClInclude Include="UtilitiesSpeedTest.h" />
+    <ClInclude Include="UtilitiesString.h" />
+    <ClInclude Include="UtilitiesTime.h" />
     <ClInclude Include="WQUPCUFSet.hpp" />
     <ClInclude Include="WUSGraph.hpp" />
     <ClInclude Include="WUSGraphClient.hpp" />
@@ -152,6 +158,7 @@
     <None Include=".runsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="1tests_TrafficAdvisory_given.cpp" />
     <ClCompile Include="catchmain.cpp" />
     <ClCompile Include="HashMap.hpp" />
     <ClCompile Include="teat_WQUPCUFSet.cpp" />

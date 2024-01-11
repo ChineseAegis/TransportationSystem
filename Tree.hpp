@@ -101,11 +101,20 @@ public:
     int findmdistance(Object city) {
         if (!tointMap.containsKey(city))return 0;
         int cityvalue = tointMap.getValue(city);
-        int thisvalue = nodes[0];
-        int mdis = 0;
-        for (int i = 0; nodes[i]!=city; i++) {
-            std::cout << toObjectMap.getValue(nodes[i]) << "->";
-            mdis += nodes[i+1].weight;
+        //int thisvalue = nodes[0].key;
+        int mdis = 0; int i = 0;
+        for (i = 0; i < n; i++) {
+            if (nodes[i].key == cityvalue)
+            {
+                break;
+            }
+        }
+        int num = i;
+        for (int j = 0; j < i; j++) {
+
+            std::cout << toObjectMap.getValue(nodes[num].key) << "->";
+            mdis += nodes[num].weight;
+            num = nodes[num].parent;
         }
         std::cout << city << std::endl;
         return mdis;

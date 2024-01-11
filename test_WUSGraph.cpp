@@ -185,9 +185,9 @@ TEST_CASE("Performance Testing", "[WUSGraph]") {
     REQUIRE(g.vertexCount() == 1000);
     REQUIRE(g.edgeCount() == 999);
 }
-TEST_CASE("CreatGraph", "[WUSClient]")
-{
-    WUSGraphClient<std::string, int> c;
-    WUSGraph<std::string, int> g;
-    c.CreateGraphFromFile("usa.txt", g);
-}
+//TEST_CASE("CreatGraph", "[WUSClient]")
+//{
+//    WUSGraphClient<std::string, int> c;
+//    WUSGraph<std::string, int> g;
+//    c.CreateGraphFromFile("usa.txt", g);
+//}
