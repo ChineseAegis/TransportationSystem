@@ -86,7 +86,15 @@ public:
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
 			std::cout << cur.object << " from " << cur.pre_object <<" distance"<<": "<<cur.distance<<std::endl;
-			tree.insert(cur.object, cur.pre_object,g.getWeight(cur.object,cur.pre_object),cur.distance);
+			if (!cur.is_pre_object)
+			{
+				tree.insert(cur.object);
+			}
+			else
+			{
+				tree.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object), cur.distance);
+			}
+
 			for (int i = 0; i < nei.size; i++)
 			{
 				if (Distances.containsKey(nei.object[i]))
@@ -108,7 +116,7 @@ public:
 		delete obj;
 		obj = nullptr;
 	}
-	void Prim(WUSGraph<Object, Weight>& g)
+	void Prim(WUSGraph<Object, Weight>& g,Forest<Object,Weight>& f)
 	{
 		int vertexCount = g.vertexCount();
 		Object* obj = g.getVertices();
@@ -137,6 +145,14 @@ public:
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
 			std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			if (!cur.is_pre_object)
+			{
+				f.insert(cur.object);
+			}
+			else
+			{
+				f.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object));
+			}
 			for (int i = 0; i < nei.size; i++)
 			{
 				if (Distances.containsKey(nei.object[i]))
@@ -311,8 +327,8 @@ public:
 			int v = uf.find(edgeNode.parent);
 			if (u != v) {
 				uf.Union(u, v);
-				//msf.insert(vertices[edgeNode.key], vertices[edgeNode.parent], edgeNode.weight);
-				std::cout << vertices[edgeNode.parent] << vertices[edgeNode.key] << edgeNode.weight << std::endl;
+				msf.insert(vertices[edgeNode.key], vertices[edgeNode.parent], edgeNode.weight);
+				//std::cout << vertices[edgeNode.parent] << vertices[edgeNode.key] << edgeNode.weight << std::endl;
 				count++;
 			}
 		}

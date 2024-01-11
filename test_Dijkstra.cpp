@@ -1,6 +1,8 @@
 #include "catch.hpp"
 #include"WUSGraphClient.hpp"
 #include"WUSGraph.hpp"
+#include"Tree.hpp"
+#include"Forest.hpp"
 TEST_CASE("Dijkstra", "[Dijkstra]")
 {
 	WUSGraph<int, int> graph;
@@ -54,8 +56,11 @@ TEST_CASE("Dijkstra and Prim - Complex Graph", "[Graph Algorithms]") {
 
     // 运行算法
     int start_vertex = 1;
-    //c.Dijkstra(graph, start_vertex);
-    c.Prim(graph);
-
+    Tree<int, int> t;
+    Forest<int,int> f;
+    c.Prim(graph,f);
+    f.printWholeForest();
+    c.Dijkstra(graph, start_vertex, t);
+    t.printWholeTree();
     // 可以添加一些 REQUIRE 语句来验证算法的正确性
 }
