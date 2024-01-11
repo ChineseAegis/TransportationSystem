@@ -8,7 +8,7 @@ struct TreeNode {
 	int parent;      // 父节点的索引，如果是根节点则为 -1 或自身的索引
     Weight weight;
     Weight distance;
-    TreeNode(int key, int parent,Weight weight,Weight Diatance=0) : key(key), parent(parent),weight(weight) ,distance(Distance) {}
+    TreeNode(int key, int parent,Weight weight,Weight Distance=0) : key(key), parent(parent),weight(weight) ,distance(Distance) {}
     TreeNode() : key(int()), parent(-1),weight(std::numeric_limits<Weight>::max()),distance(0) {}
 };
 
@@ -76,20 +76,21 @@ public:
         n++;
         return true;
     }
-    void printTreeFromRoot(int nodeIndex = 0, int level = 0)  {
+    void printTreeFromRoot(int nodeIndex = 0)  {
         if (nodeIndex < 0 || nodeIndex >= n) {
             return;
         }
-
-        for (int i = 0; i < level; ++i) {
-            std::cout << "  ";  // 缩进表示层级
+        if (nodeIndex != 0)
+        {
+            Object value = toObjectMap.getValue(nodes[nodeIndex].key);
+            std::cout << value <<"("<< nodes[nodeIndex].weight<<")" << std::endl;
         }
-        Object value = toObjectMap.getValue(nodes[nodeIndex].key);
-        std::cout << value << std::endl;
 
         for (int i = 0; i < n; ++i) {
             if (nodes[i].parent == nodeIndex) {
-                printTreeFromRoot(i, level + 1);
+                Object value = toObjectMap.getValue(nodes[i].parent);
+                std::cout << value<<"->";
+                printTreeFromRoot(i);
             }
         }
     }

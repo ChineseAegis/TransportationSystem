@@ -243,6 +243,7 @@ public:
            std::cout << "(" << dis << ")->";
        }
        std::cout << "总距离：" << total << std::endl;
+       delete[]vertexs;
    }
    //给定城市 s 出发，以与所选择的城市集合的距离最小的城市为优先
    void fromSToSet(Object city) {
@@ -286,6 +287,7 @@ public:
            total++;
        }
        std::cout << "R内城市数：" << total << std::endl;
+       delete[]vertexs;
    }
    //连接用户感兴趣的一组无重复的城市
    void interestedcity() {

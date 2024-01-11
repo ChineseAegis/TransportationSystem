@@ -8,7 +8,9 @@ TEST_CASE("Forest functionality tests", "[Forest]") {
         REQUIRE(forest.insert("Root") == true);
         REQUIRE(forest.insert("Child1", "Root", 1) == true);
         REQUIRE(forest.insert("Child2", "Root", 2) == true);
-
+        REQUIRE(forest.insert("Root2") == true);
+        REQUIRE(forest.insert("Child3", "Root2", 3) == true);
+        REQUIRE(forest.insert("Child4", "Root2", 4) == true);
         // Testing exception for inserting existing node
         //REQUIRE_THROWS_AS(forest.insert("Root"), std::runtime_error);
 
@@ -17,7 +19,7 @@ TEST_CASE("Forest functionality tests", "[Forest]") {
     
 
    
-        REQUIRE(forest.getCount() == 3);
+        REQUIRE(forest.getCount() == 6);
     
     forest.printWholeForest();
     

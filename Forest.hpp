@@ -69,33 +69,31 @@ public:
         return true;
     }
 
-    void printTreeFromRoot(int nodeIndex = 0, int level = 0) {
+    void printTreeFromRoot(int nodeIndex = 0) {
         if (nodeIndex < 0 || nodeIndex >= n) {
             return;
         }
-        for (int i = 0; i < level; ++i) {
-            std::cout << "  ";
-        }
+        
         Object value = toObjectMap.getValue(nodes[nodeIndex].key);
         if (nodes[nodeIndex].parent >= 0) {
             Object parentValue = toObjectMap.getValue(nodes[nodeIndex].parent);
             Weight weight = nodes[nodeIndex].weight;
-            std::cout << value << " (Parent: " << parentValue << ", Weight: " << weight << ")" << std::endl;
+            std::cout << parentValue << "->" << value << "(" << weight << ")" << std::endl;
         }
-        else {
+        /*else {
             std::cout << value << " (Root)" << std::endl;
-        }
+        }*/
 
         for (int i = 0; i < n; ++i) {
             if (nodes[i].parent == nodeIndex) {
-                printTreeFromRoot(i, level + 1);
+                printTreeFromRoot(i);
             }
         }
     }
 
     void printWholeForest() {
         for (int i = 0; i < n; ++i) {
-            if (nodes[i].parent == -1) {  // 打印每棵树的根节点
+            if (nodes[i].parent == -1) {  // 打印每棵树
                 printTreeFromRoot(i);
             }
         }
