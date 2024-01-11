@@ -44,7 +44,7 @@ public:
         }
         else if(!tointMap.containsKey(parent)&& !tointMap.containsKey(value)) {
             parenttoint = n;
-            num = n + 1; n += 2;
+            num = n + 1; n ++;
         }
         
         nodes.add(ForestNode<Weight>(num, parenttoint,weight));
