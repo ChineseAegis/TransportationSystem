@@ -14,6 +14,8 @@ class RoutePlanningSystem : public WUSGraphClient<Object, Weight> {
 private:
     HashMap<Object, bool> toVisitMap;
     WUSGraph<Object, Weight>& g;
+    HashMap<int, Object>toObjectMap;
+    HashMap<Object, int>tointMap;
 public:
     RoutePlanningSystem() : WUSGraphClient<Object, Weight>() {}
 
@@ -40,6 +42,7 @@ public:
         for (auto u : neighbors) {
             g.addEdge(newcity, u, weight[i]);
         }
+        
     }
     void addedge( Object city1, Object city2, Weight weight) {
         if (!g.isEdge(city1, city2))
@@ -103,7 +106,7 @@ public:
         for (auto u : vertexs) {
             degreesum += g.Degree(u);
         }
-        int sparseness = (degreesum / vertexnum)--vertexnum;
+        int sparseness = (degreesum / vertexnum)/--vertexnum;
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
    }
    void countConnectedhelper(Object city,HashMap<Object,bool>visited) {
@@ -130,19 +133,22 @@ public:
         std::cout<<componentCount<<std::endl;
     }
     //每一个连通分量是否有环且输出环路
-    void hasCycleInConnectedComponent( int current, int parent, DbLinkedList<Object>& visited, DbLinkedList<Object>& currentPath, DbLinkedList<Object>& hasvisited) {
+    void hasCycleInConnectedComponent( int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited) {
         visited.Insert(current);
         currentPath.Insert(current);
         hasvisited.Insert(current);
-        for (int neighbor : g.getNeighbors(current).objects) {
-            if (visited.Search(neighbor) == nullptr) {
+        Object* neighbors = g.getNeighbors(current).object;
+        int neighbor_size = g.getNeighbors(current).size;
+        for (int i = 0; i < neighbor_size;i++) {
+            int toint = tointMap.getValue(neighbors[i]);
+            if (visited.Search(toint) == nullptr) {
                 // 如果邻居未被访问，递归检查邻居是否形成回路
-                hasCycleInConnectedComponent(g, neighbor, current, visited, currentPath, hasvisited);
+                hasCycleInConnectedComponent(toint, current, visited, currentPath, hasvisited);
             }
-            else if (neighbor != parent && hasvisited.Search(neighbor) != nullptr) {
+            else if (toint != parent && hasvisited.Search(toint) != nullptr) {
                 // 如果邻居已被访问，并且不是当前节点的父节点，说明存在回路
                 // 输出回路
-                printCycle(currentPath, neighbor);
+                printCycle(currentPath, toint);
             }
         }
 
@@ -151,10 +157,10 @@ public:
         hasvisited.Remove(current);
     }
 
-    void printCycle(DbLinkedList<Object>& cycle, Object trg) {
+    void printCycle(DbLinkedList<int>& cycle, int trg) {
         std::cout << "has cycle:";
-        for (Object i = cycle.head->rlink; i != cycle.head->llink; ) {
-            Object cur = i;
+        for (int i = cycle.head->rlink; i != cycle.head->llink; ) {
+            Object cur = toObjectMap.getValue(i);
             cout << cur << " ";
             i = i->rlink;
         }
@@ -162,13 +168,19 @@ public:
     }
 
     void findAndPrintCycles() {
-        DbLinkedList<Object> visited;
-        DbLinkedList<Object> currentPath;
-        DbLinkedList<Object> curvisited;
-        for (const auto& vertex : g.getVertices()) {
+        DbLinkedList<int> visited;
+        DbLinkedList<int> currentPath;
+        DbLinkedList<int> curvisited;
+        Object* vertexs = g.getVertices();
+        int vertex_size = g.vertexCount();
+        for (int i = 0; i < vertex_size; i++) { 
+            toObjectMap.Insert(std::make_pair(i, vertexs[i])); 
+            tointMap.Insert(std::make_pair(vertexs[i], i));
+        }
+        for (int j = 0; j < vertex_size;j++) {
             if (visited.Search(vertex)==nullptr) {
                 // 对于每个未被访问的节点，进行深度优先搜索，并检查是否存在回路
-                hasCycleInConnectedComponent(g, vertex, -1, visited, currentPath, curvisited);
+                hasCycleInConnectedComponent( j, -1, visited, currentPath, curvisited);
             }
         }
     }
@@ -234,15 +246,13 @@ public:
        this->Dijkstra(g, city1, msf);
        Object* vertexs = g.getVertices();
        int count = g.vertexCount();
-       
-       int dis; int total;
+       int dis, total;
        for (int i = 1; i < count; i++) {
-           
-           dis = msf.findmdistance(msf[i]);
+
+           dis = g.getWeight(msf[i - 1], msf[i]);
            total += dis;
-           
        }
-       msf.printWholeTree();
+        msf.printWholeTree();
        std::cout << "总距离：" << total << std::endl;
        delete[]vertexs;
    }
