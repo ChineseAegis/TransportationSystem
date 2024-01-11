@@ -246,6 +246,7 @@ public:
 		while (!vertexdeque.isEmpty()) {
 			Object vertex = vertexdeque.front();
 			tovisitMap.Insert(std::make_pair(vertex, 1));
+			visit(vertex);
 			vertexdeque.pop();
 			Object* U = g.getNeighbors(vertex).object;
 			for (Object v : U)

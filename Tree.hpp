@@ -7,8 +7,9 @@ struct TreeNode {
 	int key;           // 节点的值
 	int parent;      // 父节点的索引，如果是根节点则为 -1 或自身的索引
     Weight weight;
-    TreeNode(int key, int parent,Weight weight) : key(key), parent(parent),weight(weight) {}
-    TreeNode() : key(int()), parent(-1),weight(std::numeric_limits<Weight>::max()) {}
+    Weight distance;
+    TreeNode(int key, int parent,Weight weight,Weight Diatance=0) : key(key), parent(parent),weight(weight) ,distance(Distance) {}
+    TreeNode() : key(int()), parent(-1),weight(std::numeric_limits<Weight>::max()),distance(0) {}
 };
 
 template<class Object,class Weight>
@@ -26,7 +27,7 @@ public:
         //for (int i = 0; i < sz; i++)index.add(-1);
     }
 
-    bool insert( Object value, Object parent, Weight weight) {
+    bool insert( Object value, Object parent, Weight weight,Weight distance=0) {
         if (n >= maxSize) return false;
         if (!tointMap.containsKey(parent)) {
             throw std::runtime_error("父结点不存在");
@@ -46,7 +47,7 @@ public:
             num = intQueue.front();
             intQueue.pop();
         }*/
-        nodes.add(TreeNode<Weight>(num, parenttoint,weight));
+        nodes.add(TreeNode<Weight>(num, parenttoint,weight,distance));
         //index.add(n);
         tointMap.Insert(std::make_pair(value, num));
         toObjectMap.Insert(std::make_pair(num, value));
@@ -68,7 +69,7 @@ public:
             num = intQueue.front();
             intQueue.pop();
         }*/
-        nodes.add(TreeNode<Weight>(num, -1, std::numeric_limits<Weight>::max()));
+        nodes.add(TreeNode<Weight>(num, -1, std::numeric_limits<Weight>::max(),0));
        // index.add(n);
         tointMap.Insert(std::make_pair(value, num));
         toObjectMap.Insert(std::make_pair(num, value));
@@ -107,6 +108,13 @@ public:
         }
         std::cout << city << std::endl;
         return mdis;
+    }
+    Object getparent(Object city) {
+        Object node= nodes[tointMap.getValue(city)];
+        return nodes[node.parent];
+    }
+    Weight getweight(Object city) {
+        return nodes[tointMap.getValue(city)].weight;
     }
     int getcount() {
         return n;

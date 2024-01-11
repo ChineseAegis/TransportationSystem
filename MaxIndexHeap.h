@@ -18,7 +18,7 @@ private:
     }
     void shiftUp(int k) {
         while (k > 0 && data[indexes[(k - 1) / 2]] < data[indexes[k]]) {
-            std::swap(indexes[(k - 1) / 2], indexes[k]);
+            swap(indexes[(k - 1) / 2], indexes[k]);
             reverse[indexes[(k - 1) / 2]] = (k - 1) / 2;
             reverse[indexes[k]] = k;
             k = (k - 1) / 2;
@@ -32,7 +32,7 @@ private:
                 j++; // 有右子节点且右子节点更小
             }
             if (data[indexes[k]] >= data[indexes[j]]) break;
-            std::swap(indexes[k], indexes[j]);
+            swap(indexes[k], indexes[j]);
             reverse[indexes[k]] = k;
             reverse[indexes[j]] = j;
             k = j;
