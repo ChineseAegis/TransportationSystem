@@ -244,22 +244,56 @@ public:
 		obj = nullptr;
 	}
 	void LongestPath(WUSGraph<Object, Weight>& g, Object& s, Tree<Object,Weight>& lpt) {
+		struct DObject
+		{
+			Object object;
+			Weight distance;
+			Object pre_object;
+			bool is_pre_object;
+			DObject()
+			{
+
+			}
+			DObject(Object object, Weight distance = -1) :object(object), distance(distance), is_pre_object(0) {
+			}
+			DObject(Object object, Weight distance, Object pre_object) :object(object), distance(distance), pre_object(pre_object) {
+				is_pre_object = true;
+			}
+			bool operator<(const DObject& other)
+			{
+				return distance > other.distance;
+			}
+			bool operator<=(const DObject& other)
+			{
+				return distance >= other.distance;
+			}
+			bool operator>(const DObject& other)
+			{
+				return distance < other.distance;
+			}
+			bool operator>=(const DObject& other)
+			{
+				return distance <= other.distance;
+			}
+		};
+
+
 		int vertexCount = g.vertexCount();
 		Object* obj = g.getVertices();
-		MaxIndexHeap<DObject> heap(vertexCount);
+		MinIndexHeap<DObject> heap(vertexCount);
 		HashMap<Object, Weight> Distances;
 		HashMap<Object, int> ObjToInt;
 		for (int i = 0; i < vertexCount; i++)
 		{
-			if (i == 0)
+			if (obj[i] == s)
 			{
 				heap.Insert(DObject(obj[i], 0));
 				Distances.Insert(std::make_pair(obj[i], 0));
 			}
 			else
 			{
-				heap.Insert(DObject(obj[i]));
-				Distances.Insert(std::make_pair(obj[i], std::numeric_limits<Weight>::max()));
+				heap.Insert(DObject(obj[i],-1));
+				Distances.Insert(std::make_pair(obj[i], -1));
 			}
 			ObjToInt.Insert(std::make_pair(obj[i], i));
 
@@ -277,15 +311,17 @@ public:
 			}
 			else
 			{
-				lpt.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object));
+				lpt.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object), cur.distance);
 			}
+
 			for (int i = 0; i < nei.size; i++)
 			{
 				if (Distances.containsKey(nei.object[i]))
 				{
 					Weight pre_weight = Distances.getValue(nei.object[i]);
-					Weight cur_weight = nei.weight[i];
-					if (cur_weight > pre_weight)
+					Weight self_weight = cur.distance;
+					Weight cur_weight = self_weight + nei.weight[i];
+					if (cur_weight > pre_weight && cur_weight >= 0)
 					{
 						Distances.Remove(nei.object[i]);
 						Distances.Insert(std::make_pair(nei.object[i], cur_weight));
