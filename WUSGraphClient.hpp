@@ -108,7 +108,7 @@ public:
 						Distances.Insert(std::make_pair(nei.object[i], cur_weight));
 						//heap.Insert(DObject(nei.object[i], cur_weight, cur.object));
 						heap.Modify(ObjToInt.getValue(nei.object[i]), DObject(nei.object[i], cur_weight, cur.object));
-						std::cout << "¶¥µã£º" << nei.object[i] << " ¾àÀë£º" << cur_weight << std::endl;
+						//std::cout << "¶¥µã£º" << nei.object[i] << " ¾àÀë£º" << cur_weight << std::endl;
 					}
 				}
 			}
@@ -201,6 +201,14 @@ public:
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
 			std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			if (!cur.is_pre_object)
+			{
+				lpt.insert(cur.object);
+			}
+			else
+			{
+				lpt.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object));
+			}
 			for (int i = 0; i < nei.size; i++)
 			{
 				if (Distances.containsKey(nei.object[i]))
