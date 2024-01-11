@@ -2,6 +2,7 @@
 #include "catch.hpp"
 #include"WUSGraph.hpp"
 #include"Neighbors.hpp"
+#include"WUSGraphClient.hpp"
 using TestGraph = WUSGraph<int, int>; 
 
 TEST_CASE("WUSGraph functionality", "[WUSGraph]") {
@@ -183,4 +184,10 @@ TEST_CASE("Performance Testing", "[WUSGraph]") {
     // 验证顶点和边的数量
     REQUIRE(g.vertexCount() == 1000);
     REQUIRE(g.edgeCount() == 999);
+}
+TEST_CASE("CreatGraph", "[WUSClient]")
+{
+    WUSGraphClient<std::string, int> c;
+    WUSGraph<std::string, int> g;
+    c.CreateGraphFromFile("usa.txt", g);
 }
