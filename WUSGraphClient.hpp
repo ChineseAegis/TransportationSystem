@@ -55,7 +55,7 @@ public:
 		}
 	};
 
-	void Dijkstra(WUSGraph<Object, Weight>& g, Object& s)
+	void Dijkstra(WUSGraph<Object, Weight>& g, Object& s,Tree<Object,Weight> &tree)
 	{
 		
 		int vertexCount = g.vertexCount();
@@ -85,6 +85,7 @@ public:
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
 			std::cout << cur.object << " from " << cur.pre_object <<" distance"<<": "<<cur.distance<<std::endl;
+			tree.insert(cur.object, cur.pre_object,g.getWeight(cur.object,cur.pre_object),cur.distance);
 			for (int i = 0; i < nei.size; i++)
 			{
 				if (Distances.containsKey(nei.object[i]))

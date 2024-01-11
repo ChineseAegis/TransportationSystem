@@ -165,6 +165,7 @@
     <ClCompile Include="test_MinHeap.cpp" />
     <ClCompile Include="test_MinindexHeap.cpp" />
     <ClCompile Include="test_performance_HashMap.cpp" />
+    <ClCompile Include="test_RoutePlanningSystem.cpp" />
     <ClCompile Include="test_tree.cpp" />
     <ClCompile Include="test_WUSGraph.cpp" />
     <ClCompile Include="test_WUSGraph2.cpp" />

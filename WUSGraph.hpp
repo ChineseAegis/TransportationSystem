@@ -197,8 +197,9 @@ public:
 	{
 		if (toEdgeMap.containsKey(std::make_pair(object1, object2)))
 		{
-			std::cout << "重复的边" + object1<< std::endl;
-			std::cout << "重复的边" + object2 << std::endl;
+			//std::cout << "重复的边" + object1<< std::endl;
+			//std::cout << "重复的边" + object2 << std::endl;
+			return;
 			throw std::runtime_error("重复的边");
 		}
 		if (!toVertexMap.containsKey(object1)||!toVertexMap.containsKey(object2))

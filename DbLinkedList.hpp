@@ -111,6 +111,18 @@ public:
 	{
 		return head->llink;
 	}
+	void push_back(const V&x)
+	{
+		Inserthelper(x);
+	}
+	void pop_back()
+	{
+		Remove(head->llink);
+	}
+	V top()
+	{
+		return head->llink->data;
+	}
 	~DbLinkedList() {
 		Clear();
 		delete head;
