@@ -217,6 +217,7 @@ public:
 			std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
 			if (!cur.is_pre_object)
 			{
+				cur.distance = 0;
 				f.insert(cur.object);
 			}
 			else
