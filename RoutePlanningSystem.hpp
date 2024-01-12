@@ -219,7 +219,7 @@ public:
      
     }
 
-    void printCycle(DbLinkedList<int>& cycle, int trg,HashMap<int, Object>toObjectMap) {
+    void printCycle(DbLinkedList<int>& cycle, int trg,HashMap<int, Object>&toObjectMap) {
         std::cout << "has cycle:";
         bool startPrinting = false;//确保两个有公共点的环重复输出
         for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; i = i->rlink) {
