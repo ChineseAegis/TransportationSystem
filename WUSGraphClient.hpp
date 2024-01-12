@@ -390,9 +390,10 @@ public:
 
 		ADeque<Object> vertexdeque;
 		vertexdeque.pushback(s);
+		tovisitMap.Insert(std::make_pair(s, 1));
 		while (!vertexdeque.isEmpty()) {
 			Object vertex = vertexdeque.front();
-			tovisitMap.Insert(std::make_pair(vertex, 1));
+			
 			visit(vertex);
 			vertexdeque.pop();
 			Object* U = g.getNeighbors(vertex).object;
@@ -401,6 +402,7 @@ public:
 			{
 				if (tovisitMap.getValue(U[i]) == 0) {
 					vertexdeque.pushback(U[i]);
+				    tovisitMap.Insert(std::make_pair(U[i], 1));
 				}
 			}
 		}
@@ -412,9 +414,10 @@ public:
 		for (int i = 0; i < n; i++) {
 			std::cout << vertexs[i] << " ->";
 			Neighbors<Object, Weight> neighbors = g.getNeighbors(vertexs[i]);
+			Object* neighbor = neighbors.object;
 			int degree = g.Degree(vertexs[i]);
 			for (int j = 0; j < degree; j++) {
-				std::cout << neighbors->object[j];
+				std::cout << neighbor[j]<<" ";
 			}
 			std::cout << std::endl;
 		}
