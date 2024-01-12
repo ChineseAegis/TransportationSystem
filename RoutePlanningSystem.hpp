@@ -173,6 +173,7 @@ public:
                 // 如果邻居已被访问，并且不是当前节点的父节点，说明存在回路
                 // 输出回路
                 printCycle(currentPath, toint);
+                
             }
         }
 
@@ -184,12 +185,18 @@ public:
 
     void printCycle(DbLinkedList<int>& cycle, int trg) {
         std::cout << "has cycle:";
-        for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; ) {
-            Object cur = toObjectMap.getValue(i->data);
-            cout << cur << " ";
-            i = i->rlink;
+        bool startPrinting = false;//确保两个有公共点的环重复输出
+        for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; i = i->rlink) {
+            if (i->data == trg) {//遍历打印路径直到找到环起始点
+                startPrinting = true;
+            }
+            if (startPrinting) {
+                Object cur = toObjectMap.getValue(i->data);
+                std::cout << cur << " ";
+            }
         }
         std::cout << std::endl;
+
     }
 
     void findAndPrintCycles() {
@@ -345,9 +352,9 @@ public:
        this->Dijkstra(g, city, msf);
        //Object* vertexs = g.getVertices();
        int count = msf.getcount();
-       Weight dis=0; int total=0;
+        int total=0;
        for (int i = 0; i < count; i++) {
-            
+           if (msf[i] == city)continue;
            Weight dis = msf.get_index_distance(i);
            if (dis <= R) {
                std::cout<<msf[i]<<" ";
@@ -496,7 +503,6 @@ public:
                << "3. 相邻城市间道路数" << endl
                << "4. 所有道路" << endl
                << "5. 交通图稀疏程度" << endl
-               << "6. 城市信息管理" << endl
                << "6. 城市信息管理" << endl
                << "7. 输出某城市所有邻接城市" << endl
                << "8. 输出从给定城市出发可以到达的所有城市" << endl

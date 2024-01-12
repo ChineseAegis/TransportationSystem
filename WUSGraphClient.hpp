@@ -392,7 +392,7 @@ public:
 			int size = g.getNeighbors(vertex).size;
 			for (int i = 0; i < size; i++)
 			{
-				if (tovisitMap.getValue(vertex) == 0) {
+				if (tovisitMap.getValue(U[i]) == 0) {
 					vertexdeque.pushback(U[i]);
 				}
 			}

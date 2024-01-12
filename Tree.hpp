@@ -102,14 +102,14 @@ public:
         if (!tointMap.containsKey(city))return 0;
         int cityvalue = tointMap.getValue(city);
         //int thisvalue = nodes[0].key;
-        Weight mdis=0; int i = 0;
-        for (i = 0; i < n; i++) {
+        Weight mdis=0; //int i = 0;
+      /*  for (i = 0; i < n; i++) {
             if (nodes[i].key == cityvalue)
             {
                 break;
             }
-        }
-        int num = i;
+        }*/
+        int num = tointMap.getValue(city);
         while(nodes[num].parent!=-1) {
 
             std::cout << toObjectMap.getValue(nodes[num].key) << "<-";
