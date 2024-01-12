@@ -69,6 +69,24 @@
     <ClInclude Include="MaxIndexHeap.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TrafficAdvisory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TrafficAdvisoryCheck.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilitiesRandom.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilitiesSpeedTest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilitiesString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilitiesTime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".runsettings">
@@ -122,6 +140,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test_Dijkstra.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="1tests_TrafficAdvisory_given.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test_RoutePlanningSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
