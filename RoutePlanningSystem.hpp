@@ -529,7 +529,8 @@ public:
 
    void MainMenu()
    {
-       while (1)
+       int trg = 1;
+       while (trg)
        {
            system("cls");
            
@@ -688,7 +689,7 @@ public:
                std::cout << "¼ÓÔØ³É¹¦" << std::endl;
                break;
            }
-           case 24:exit(1); break;
+           case 24:trg = 0; break;
            default:
                cout << "Error Input" << endl;
                break;
