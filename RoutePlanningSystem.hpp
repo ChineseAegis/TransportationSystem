@@ -361,10 +361,12 @@ public:
            this->Prim(subg, msf);
            int count = msf.getCount();
            Weight dis = 0, total = 0;
-           for (int i = 1; i < count; i++) {
-
-               dis = g.getWeight(msf[i - 1], msf[i]);
-               total += dis;
+           for (int i = 0; i < count; i++) {
+               if (g.isVertex(msf.getparent(msf[i])))
+               {
+                   dis = g.getWeight(msf[i], msf.getparent(msf[i]));
+                   total += dis;
+               }
            }
 
            msf.printWholeForest();
