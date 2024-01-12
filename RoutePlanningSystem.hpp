@@ -115,11 +115,11 @@ public:
                 if (visited->Search(neighbors[j]) == nullptr) {
                     std::cout << vertexs[i] << "-> ";
                     std::cout << neighbors[j] << " ";
-
+                    std::cout << std::endl;
                 }
             }
             visited->Insert(vertexs[i]);
-            std::cout << std::endl;
+            
 
         }
         delete visited;
