@@ -107,8 +107,9 @@ public:
         return mdis;
     }
     Object getparent(Object city) {
-        Object node = nodes[tointMap.getValue(city)];
-        return nodes[node.parent];
+        int node = tointMap.getValue(city);
+        int parentnode = nodes[node].parent;
+        return toObjectMap.getValue(parentnode);
     }
     Weight getweight(Object city) {
         return nodes[tointMap.getValue(city)].weight;
