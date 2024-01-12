@@ -461,6 +461,11 @@ public:
 		
 		delete[] vertices;
 	}
+	void Steiner(WUSGraph<Object, Weight>& g, ExpandableArrayList<Object>& objectlist, Forest<Object, Weight>& msf) {
+		WUSGraph<Object, Weight> G;
+		CreateSubgraph(g, objectlist, G);
+		Prim(G, msf);
+	}
 	bool Eula(WUSGraph<Object, Weight>& g) {
 		Object* vertexs = g.addVertex();
 		int size = g.vertexCount();

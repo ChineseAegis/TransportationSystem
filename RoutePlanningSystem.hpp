@@ -368,35 +368,18 @@ public:
    void interestedcity() {
        std::cout << "请输入城市数：" << std::endl;
        int n; std::cin >> n;
-       ExpandableArrayList<Object>citys(n);
-       int i = 0;
+       ExpandableArrayList<Object>citys;
        std::cout << "请输入城市：" << std::endl;
-       WUSGraph<Object, Weight>G;
+       Object city;
        while (n--) {
-           std::cin >> citys[i];
-           G.addVertex(citys[i]);
-           i++;
-       }
-       for (i = 0; i < n; i++) {
-           Object* neighbors = g.getNeighbors(citys[i]).object;
-           int neighbors_size = g.getNeighbors(citys[i]).size;
-           for (int j = i+1; j < n; j++) {
-               for (int m = 0;i<neighbors_size;m++) {
-                   if (citys[j] == neighbors[m]) {
-                       G.addEdge(citys[i], citys[j], g.getWeight(citys[i], citys[j]));
-                   }
-               }
-           }
+           std::cin >> city;
+           citys.add(city);
+           
        }
        Forest<Object, Weight>msf;
-       this->Kruskal(G, msf);
-       Weight dis=0, total=0;
-       for (int i = 1; i < n; i++) {
-           
-           dis = g.getWeight(msf[i - 1], msf[i]);
-           total += dis;
-           
-       }
+       this->Steiner(g, citys, msf);
+       Weight total=0;
+       total = msf.findmdistance();
        msf.printWholeForest();
        std::cout << "总距离：" << total << std::endl;
        
