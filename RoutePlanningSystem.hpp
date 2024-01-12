@@ -192,7 +192,7 @@ public:
         delete[]vertexs;
     }
     //每一个连通分量是否有环且输出环路
-    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited) {
+    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited, HashMap<int, Object>&toObjectMap,HashMap<Object, int>&tointMap) {
         visited.Insert(current);
         currentPath.Insert(current);
         hasvisited.Insert(current);
@@ -203,12 +203,12 @@ public:
             int toint = tointMap.getValue(neighbors[i]);
             if (visited.Search(toint) == nullptr) {
                 // 如果邻居未被访问，递归检查邻居是否形成回路
-                hasCycleInConnectedComponent(toint, current, visited, currentPath, hasvisited);
+                hasCycleInConnectedComponent(toint, current, visited, currentPath, hasvisited,toObjectMap,tointMap);
             }
             else if (toint != parent && hasvisited.Search(toint) != nullptr) {
                 // 如果邻居已被访问，并且不是当前节点的父节点，说明存在回路
                 // 输出回路
-                printCycle(currentPath, toint);
+                printCycle(currentPath, toint,toObjectMap);
                 
             }
         }
@@ -219,7 +219,7 @@ public:
      
     }
 
-    void printCycle(DbLinkedList<int>& cycle, int trg) {
+    void printCycle(DbLinkedList<int>& cycle, int trg,HashMap<int, Object>toObjectMap) {
         std::cout << "has cycle:";
         bool startPrinting = false;//确保两个有公共点的环重复输出
         for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; i = i->rlink) {
@@ -250,7 +250,7 @@ public:
         for (int j = 0; j < vertex_size; j++) {
             if (visited.Search(j) == nullptr) {
                 // 对于每个未被访问的节点，进行深度优先搜索，并检查是否存在回路
-                hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited);
+                hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited,toObjectMap,tointMap);
             }
         }
         delete[]vertexs;
