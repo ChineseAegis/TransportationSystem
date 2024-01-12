@@ -54,7 +54,7 @@ public:
         n++;
         return true;
     }
-    bool insert(Object value) {
+    bool insert(Object value,int distance=0) {
         if (n >= maxSize) return false;
         if (tointMap.containsKey(value)) {
             throw std::runtime_error("结点已存在");
@@ -69,7 +69,7 @@ public:
             num = intQueue.front();
             intQueue.pop();
         }*/
-        nodes.add(TreeNode<Weight>(num, -1, std::numeric_limits<Weight>::max(),0));
+        nodes.add(TreeNode<Weight>(num, -1, std::numeric_limits<Weight>::max(),distance));
        // index.add(n);
         tointMap.Insert(std::make_pair(value, num));
         toObjectMap.Insert(std::make_pair(num, value));

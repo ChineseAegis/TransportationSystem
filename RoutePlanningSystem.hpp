@@ -81,7 +81,7 @@ public:
     
     // 从文件读数据建立城市交通库
     void createFromfile(const std::string& filepath) {
-        this->CreateGraphFromFile(filepath, g);
+        this->CreateGraphFromFile2(filepath, g);
     }
     //城市数
     void printcitynum() {
@@ -394,8 +394,9 @@ public:
            Weight dis = msf.get_index_distance(i);
            if (dis <= R) {
                std::cout<<msf[i]<<" ";
+               total++;
            }
-           total++;
+           
        }
        std::cout << "R内城市数：" << total << std::endl;
        //delete[]vertexs;
@@ -683,7 +684,7 @@ public:
                break;
            }
            case 23: {
-               this->createFromfile("usa.txt");
+               this->createFromfile("usa_small.txt");
                std::cout << "加载成功" << std::endl;
                break;
            }
