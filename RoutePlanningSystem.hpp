@@ -126,16 +126,17 @@ public:
         delete[]vertexs;
    }
    void countConnectedhelper(Object city, HashMap<Object, bool> visited) {
-       visited.Remove(city);
+       //visited.Remove(city);
        visited.Insert(std::make_pair(city, true));
-       Object* neighbors = g.getNeighbors(city).object;
-       int neighbors_size = g.getNeighbors(city).size;
+       Neighbors<Object, Weight>nei = g.getNeighbors(city);
+       Object* neighbors = nei.object;
+       int neighbors_size = nei.size;
        for (int i = 0; i < neighbors_size;i++) {
            if (!visited.getValue(neighbors[i])) {
                countConnectedhelper(neighbors[i], visited);
            }
        }
-       
+       delete[]neighbors;
    }
 
    //连通分量个数
