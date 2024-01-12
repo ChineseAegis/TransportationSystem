@@ -59,6 +59,18 @@ public:
 		}
 		return V();
 	}
+	std::pair<K,V> getFront()
+	{
+		DbListNode<std::pair<K, V>>* node = table->get_front();
+		if (node != nullptr)
+		{
+			return std::make_pair<K,V>(node->data.first,node->data.second);
+		}
+		else
+		{
+			return std::make_pair<K, V>(K(), V());
+		}
+	}
 	//std::set<K> keySet()
 	//{
 	//	

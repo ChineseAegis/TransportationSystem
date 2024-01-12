@@ -245,43 +245,43 @@ public:
 		obj = nullptr;
 	}
 	void LongestPath(WUSGraph<Object, Weight>& g, Object& s, Tree<Object,Weight>& lpt) {
-		struct DObject
-		{
-			Object object;
-			Weight distance;
-			Object pre_object;
-			bool is_pre_object;
-			DObject()
-			{
+		//struct DObject
+		//{
+		//	Object object;
+		//	Weight distance;
+		//	Object pre_object;
+		//	bool is_pre_object;
+		//	DObject()
+		//	{
 
-			}
-			DObject(Object object, Weight distance = -1) :object(object), distance(distance), is_pre_object(0) {
-			}
-			DObject(Object object, Weight distance, Object pre_object) :object(object), distance(distance), pre_object(pre_object) {
-				is_pre_object = true;
-			}
-			bool operator<(const DObject& other)
-			{
-				return distance > other.distance;
-			}
-			bool operator<=(const DObject& other)
-			{
-				return distance >= other.distance;
-			}
-			bool operator>(const DObject& other)
-			{
-				return distance < other.distance;
-			}
-			bool operator>=(const DObject& other)
-			{
-				return distance <= other.distance;
-			}
-		};
+		//	}
+		//	DObject(Object object, Weight distance = -1) :object(object), distance(distance), is_pre_object(0) {
+		//	}
+		//	DObject(Object object, Weight distance, Object pre_object) :object(object), distance(distance), pre_object(pre_object) {
+		//		is_pre_object = true;
+		//	}
+		//	bool operator<(const DObject& other)
+		//	{
+		//		return distance > other.distance;
+		//	}
+		//	bool operator<=(const DObject& other)
+		//	{
+		//		return distance >= other.distance;
+		//	}
+		//	bool operator>(const DObject& other)
+		//	{
+		//		return distance < other.distance;
+		//	}
+		//	bool operator>=(const DObject& other)
+		//	{
+		//		return distance <= other.distance;
+		//	}
+		//};
 
 
 		int vertexCount = g.vertexCount();
 		Object* obj = g.getVertices();
-		MinIndexHeap<DObject> heap(vertexCount);
+		MaxIndexHeap<DObject> heap(vertexCount);
 		HashMap<Object, Weight> Distances;
 		HashMap<Object, int> ObjToInt;
 		for (int i = 0; i < vertexCount; i++)

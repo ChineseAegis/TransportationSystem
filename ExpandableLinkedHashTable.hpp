@@ -121,6 +121,20 @@ public:
         
     }
 
+    DbListNode<Object>* get_front()
+    {
+        for(int i=0;i< _bucket_size;i++)
+        {
+        DbLinkedList<Object>& bucketList = _buckets[i];
+        DbListNode<Object>* n = bucketList.head->rlink;
+        if(n!=bucketList.head)
+        {
+             return n;
+        }
+        }
+        return nullptr;
+    }
+
     bool Search(const K&key) const {
         int bucket;
         return findPos(key, bucket) != nullptr;
