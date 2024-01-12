@@ -53,23 +53,35 @@ public:
         {
             g.addEdge(city1, city2, weight);
         }
+        else
+        {
+            std::cout << "道路已存在" << std::endl;
+        }
     }
 
     void removeedge(Object city1, Object city2) {
         if (g.isEdge(city1, city2)) {
             g.removeEdge(city1, city2);
         }
+        else
+        {
+            std::cout << "道路不存在" << std::endl;
+        }
     }
-    void updataefge( Object city1, Object city2, Object newcity1, Object newcity2, Weight weight) {
+    void updataefge( Object city1, Object city2,Weight weight) {
         if (g.isEdge(city1, city2)) {
             g.removeEdge(city1, city2);
-            g.addEdge(newcity1, newcity2, weight);
+            g.addEdge(city1, city2, weight);
+        }
+        else
+        {
+            std::cout << "道路不存在" << std::endl;
         }
     }
     
     // 从文件读数据建立城市交通库
     void createFromfile(const std::string& filepath) {
-        this->CreateGraphFromFile2(filepath, g);
+        this->CreateGraphFromFile(filepath, g);
     }
     //城市数
     void printcitynum() {
@@ -417,42 +429,65 @@ public:
 
            int choose;
            cout << "_____________________________" << endl
-               << "1. 添加城市" << endl
-               << "2. 更新城市信息" << endl
-               << "3. 删除城市" << endl
-               << "4. 添加道路" << endl
-               << "5. 更新道路信息" << endl
-               << "6. 删除道路" << endl
-               << "7. 返回菜单" << endl
+               << "1. 所有城市" << endl
+               << "2. 所有道路" << endl
+               << "3. 添加城市" << endl
+               << "4. 更改城市名" << endl
+               << "5. 删除城市" << endl
+               << "6. 添加道路" << endl
+               << "7. 更改道路权值" << endl
+               << "8. 删除道路" << endl
+               << "9. 返回菜单" << endl
                << "_____________________________" << endl;
            cout << "您的选择:";
            cin >> choose;
            switch (choose)
            {
-           case 1: { 
+           case 1: printcity(); break;
+           case 2: printedge(); break;
+           case 3: { 
                Object city;
                std::cout << "请输入城市名" << endl;
                cin >> city;
+               if (g.isVertex(city))
+               {
+                   std::cout << "城市已存在" << std::endl;
+                   break;
+               }
                addCity(city);
                break; 
            }
-           case 2: {
+           case 4: {
                Object city,newcity;
                std::cout << "请输入旧城市名" << endl;
                cin >> city;
+               while (!g.isVertex(city))
+               {
+                   std::cout << "城市不存在，请重新输入" << std::endl;
+                   cin >> city;
+               }
                std::cout << "请输入新城市名" << endl;
                cin >> newcity;
+               while (g.isVertex(newcity))
+               {
+                   std::cout << "城市名已存在，请重新输入" << std::endl;
+                   cin >> newcity;
+               }
                updataCity(city, newcity);
                break;
            }
-           case 3: {
+           case 5: {
                Object city;
                std::cout << "请输入城市名" << endl;
                cin >> city;
+               if (!g.isVertex(city))
+               {
+                   std::cout << "城市不存在" << std::endl;
+               }
                removeCity( city);
                break;
            }
-           case 4: {
+           case 6: {
                Object city1, city2; Weight weight;
                std::cout << "请输入城市1名" << endl;
                cin >> city1;
@@ -463,23 +498,19 @@ public:
                addedge(city1, city2, weight);
                break;
            }
-           case 5: {
+           case 7: {
                Object city1, city2;
-               std::cout << "请输入旧城市1名" << endl;
+               std::cout << "请输入城市1名" << endl;
                cin >> city1;
-               std::cout << "请输入旧城市2名" << endl;
+               std::cout << "请输入城市2名" << endl;
                cin >> city2;
-               Object newcity1, newcity2; Weight weight;
-               std::cout << "请输入新城市1名" << endl;
-               cin >> newcity1;
-               std::cout << "请输入新城市2名" << endl;
-               cin >> newcity2;
-               std::cout << "请输入新道路权值" << endl;
+               Weight weight;
+               std::cout << "请输入道路新权值" << endl;
                cin >> weight;
-               updataefge(city1, city2, newcity1, newcity2, weight);
+               updataefge(city1, city2,weight);
                break;
            }
-           case 6: {
+           case 8: {
                Object city1, city2; 
                std::cout << "请输入城市1名" << endl;
                cin >> city1;
@@ -488,7 +519,7 @@ public:
                removeedge(city1, city2);
                break;
            }
-           case 7: tag = 0; break;
+           case 9: tag = 0; break;
            default:cout << "Error Input" << endl; break;
            }
            system("pause");
@@ -652,7 +683,7 @@ public:
                break;
            }
            case 23: {
-               this->createFromfile("usa_small.txt");
+               this->createFromfile("usa.txt");
                std::cout << "加载成功" << std::endl;
                break;
            }
