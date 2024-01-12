@@ -91,7 +91,14 @@ public:
 			std::cout << cur.object << " from " << cur.pre_object <<" distance"<<": "<<cur.distance<<std::endl;
 			if (!cur.is_pre_object)
 			{
-				tree.insert(cur.object);
+				if (cur.distance == 0)
+				{
+					tree.insert(cur.object);
+				}
+				else
+				{
+					tree.insert(cur.object, std::numeric_limits<Weight>::max());
+				}
 			}
 			else
 			{
