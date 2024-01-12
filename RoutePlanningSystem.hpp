@@ -125,7 +125,7 @@ public:
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
         delete[]vertexs;
    }
-   void countConnectedhelper(Object city, HashMap<Object, bool> visited) {
+   void countConnectedhelper(Object city, HashMap<Object, bool> &visited) {
        //visited.Remove(city);
        visited.Insert(std::make_pair(city, true));
        Neighbors<Object, Weight>nei = g.getNeighbors(city);
@@ -136,7 +136,7 @@ public:
                countConnectedhelper(neighbors[i], visited);
            }
        }
-       delete[]neighbors;
+       
    }
 
    //连通分量个数
@@ -160,8 +160,9 @@ public:
         visited.Insert(current);
         currentPath.Insert(current);
         hasvisited.Insert(current);
-        Object* neighbors = g.getNeighbors(toObjectMap.getValue( current)).object;
-        int neighbor_size = g.getNeighbors(toObjectMap.getValue(current)).size;
+        Neighbors<Object, Weight>nei = g.getNeighbors(toObjectMap.getValue(current));
+        Object* neighbors = nei.object;
+        int neighbor_size = nei.size;
         for (int i = 0; i < neighbor_size; i++) {
             int toint = tointMap.getValue(neighbors[i]);
             if (visited.Search(toint) == nullptr) {
@@ -183,7 +184,7 @@ public:
 
     void printCycle(DbLinkedList<int>& cycle, int trg) {
         std::cout << "has cycle:";
-        for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head->llink; ) {
+        for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; ) {
             Object cur = toObjectMap.getValue(i->data);
             cout << cur << " ";
             i = i->rlink;
