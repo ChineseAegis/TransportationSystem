@@ -613,20 +613,23 @@ public:
 	}
 	void CreateSubgraph(WUSGraph<Object, Weight>& g, ExpandableArrayList<Object>& objectArray, WUSGraph<Object, Weight>& subg)
 	{
-		HashMap<int, Object>& objectMap;
+		HashMap<Object,int> objectMap;
 		for (int i = 0; i < objectArray.size(); i++)
 		{
-			objectMap.Insert(std::make_pair(i, objectArray[i]));
+			objectMap.Insert(std::make_pair(objectArray[i], i+1));
 		}
 		for(int i = 0; i < objectArray.size(); i++)
 		{
-			subg.addVertex(objectArray[i]);
+			if (!objectMap.containsKey(objectArray[i]))
+			{
+				subg.addVertex(objectArray[i]);
+			}
 			Neighbors<Object, Weight> nei = g.getNeighbors(objectArray[i]);
 			for (int j = 0; j < nei.size; j++)
 			{
 				if (objectMap.containsKey(nei.object[j]))
 				{
-					subg.addEdge(objectArray[i], nei.object[i], nei.weight[i]);
+					subg.addEdge(objectArray[i], nei.object[j], nei.weight[j]);
 				}
 			}
 		}

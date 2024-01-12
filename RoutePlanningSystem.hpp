@@ -287,18 +287,46 @@ public:
        delete[]vertexs;
    }
    //给定城市 s 出发，以与所选择的城市集合的距离最小的城市为优先
-   void fromSToSet(Object city) {
-       Forest<Object, Weight>msf;
-       this->Prim(g, msf);
-       int count = msf.getCount();
-       Weight dis=0, total=0;
-       for (int i = 1; i < count; i++) {
-   
-           dis = g.getWeight(msf[i - 1], msf[i]);
-           total += dis;
+   void fromSToSet(Object city,ExpandableArrayList<Object>& cityArray) {
+       HashMap<Object,int> cityMap;
+       for (int i = 0; i < cityArray.size(); i++)
+       {
+           cityMap.Insert(std::make_pair(cityArray[i],i+1));
        }
-       msf.printWholeForest();
-       std::cout << "总距离：" << total << std::endl;
+       Forest<Object, Weight> msf;
+       Tree<Object, Weight> tree;
+
+       WUSGraph<Object, Weight> subg;
+       this->Dijkstra(g, city, tree);
+       Weight minDistance= std::numeric_limits<Weight>::max();
+       Object targetCity;
+       for (int i = 0; i < tree.getcount(); i++)
+       {
+           if (cityMap.containsKey(tree[i]))
+           {
+               if (tree.get_index_distance(i) < minDistance)
+               {
+                   minDistance = tree.get_index_distance(i);
+                   targetCity = tree[i];
+               }
+           }
+       }
+       if (cityMap.containsKey(targetCity))
+       {
+           Weight distance1=tree.findmdistance(targetCity);
+           this->CreateSubgraph(g, cityArray, subg);
+           this->Prim(subg, msf);
+           int count = msf.getCount();
+           Weight dis = 0, total = 0;
+           for (int i = 1; i < count; i++) {
+
+               dis = g.getWeight(msf[i - 1], msf[i]);
+               total += dis;
+           }
+
+           msf.printWholeForest();
+           std::cout << "总距离：" << total+distance1 << std::endl;
+       }
    }
    
    //最短的道路为优先
@@ -528,9 +556,33 @@ public:
            }
            case 12: {
                Object city;
+               ExpandableArrayList<Object> subArray;
                std::cout << "请输入指定城市" << std::endl;
                cin >> city;
-               fromSToSet( city); break;
+               int size=0;
+               std::cout << "请输入城市集合的元素数量" << std::endl;
+               std::cin >> size;
+               while (size > g.vertexCount())
+               {
+                   std::cout << "请输入城市集合的元素数量" << std::endl;
+                   std::cin >> size;
+               }
+               std::cout << "请输入城市" << std::endl;
+               Object obj;
+               while (size--)
+               {
+                   std::cin >> obj;
+                   if (g.isVertex(obj))
+                   {
+                       subArray.add(obj);
+                   }
+                   else
+                   {
+                       std::cout << "城市不存在" << std::endl;
+                       size++;
+                   }
+               }
+               fromSToSet(city,subArray); break;
            }
            case 13: edgefirst(); break;
            case 14: {
