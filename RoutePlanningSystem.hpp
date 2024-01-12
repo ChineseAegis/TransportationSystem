@@ -13,10 +13,9 @@ using namespace std;
 template<class Object,class Weight>
 class RoutePlanningSystem : public WUSGraphClient<Object, Weight> {
 private:
-    HashMap<Object, bool> toVisitMap;
+   
     WUSGraph<Object, Weight> g;
-    HashMap<int, Object>toObjectMap;
-    HashMap<Object, int>tointMap;
+    
 public:
     RoutePlanningSystem() : WUSGraphClient<Object, Weight>() {}
 
@@ -177,6 +176,7 @@ public:
 
    //连通分量个数
     void countConnected() {
+        HashMap<Object, bool> toVisitMap;
         int componentCount = 0;
         Object* vertexs = g.getVertices();
         int n = g.vertexCount();
@@ -236,6 +236,8 @@ public:
     }
 
     void findAndPrintCycles() {
+        HashMap<int, Object>toObjectMap;
+        HashMap<Object, int>tointMap;
         DbLinkedList<int> visited;
         DbLinkedList<int> currentPath;
         DbLinkedList<int> curvisited;
