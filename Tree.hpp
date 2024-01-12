@@ -99,7 +99,7 @@ public:
         printTreeFromRoot();
     }
     Weight findmdistance(Object city) {
-        if (!tointMap.containsKey(city))return 0;
+        if (!tointMap.containsKey(city))return std::numeric_limits<Weight>::max();
         int cityvalue = tointMap.getValue(city);
         //int thisvalue = nodes[0].key;
         Weight mdis=0; //int i = 0;
@@ -120,8 +120,6 @@ public:
         return mdis;
     }
     Object getparent(Object city) {
-        Object node= nodes[tointMap.getValue(city)];
-        return nodes[node.parent];
         int node = tointMap.getValue(city);
         int parentnode = nodes[node].parent;
         return toObjectMap.getValue(parentnode);

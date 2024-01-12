@@ -97,7 +97,7 @@ public:
 				}
 				else
 				{
-					tree.insert(cur.object, std::numeric_limits<Weight>::max());
+					//tree.insert(cur.object, std::numeric_limits<Weight>::max());
 				}
 			}
 			else

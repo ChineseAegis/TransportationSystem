@@ -317,17 +317,17 @@ public:
    void disfirst( Object city) {
        Tree<Object, Weight>msf; 
        this->Dijkstra(g, city, msf);
-       Object* vertexs = g.getVertices();
        int count = msf.getcount();
        Weight dis=0, total=0;
-       for (int i = 1; i < count; i++) {
-
-           dis = g.getWeight(msf[i - 1], msf[i]);
-           total += dis;
+       for (int i = 0; i < count; i++) {
+           if (g.isVertex(msf.getparent(msf[i])))
+           {
+               dis = g.getWeight(msf[i], msf.getparent(msf[i]));
+               total += dis;
+           }
        }
         msf.printWholeTree();
        std::cout << "总距离：" << total << std::endl;
-       delete[]vertexs;
    }
    //给定城市 s 出发，以与所选择的城市集合的距离最小的城市为优先
    void fromSToSet(Object city,ExpandableArrayList<Object>& cityArray) {
@@ -592,6 +592,11 @@ public:
                cin >> city1;
                std::cout << "请输入城市2名" << endl;
                cin >> city2;
+               if (!g.isVertex(city1) || !g.isVertex(city2))
+               {
+                   std::cout << "城市不存在" << std::endl;
+                   break;
+               }
                getmsf( city1, city2); break;
            }
            case 11: {
