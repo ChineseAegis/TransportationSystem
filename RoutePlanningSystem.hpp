@@ -137,19 +137,43 @@ public:
         if (sparseness >= 0 && sparseness <= 1)std::cout<< sparseness<<std::endl;
         delete[]vertexs;
    }
-   void countConnectedhelper(Object city, HashMap<Object, bool> &visited) {
-       //visited.Remove(city);
-       visited.Insert(std::make_pair(city, true));
-       Neighbors<Object, Weight>nei = g.getNeighbors(city);
-       Object* neighbors = nei.object;
-       int neighbors_size = nei.size;
-       for (int i = 0; i < neighbors_size;i++) {
-           if (!visited.getValue(neighbors[i])) {
-               countConnectedhelper(neighbors[i], visited);
+   //void countConnectedhelper(Object city, HashMap<Object, bool> &visited) {
+   //    //visited.Remove(city);
+   //    visited.Insert(std::make_pair(city, true));
+   //    Neighbors<Object, Weight>nei = g.getNeighbors(city);
+   //    Object* neighbors = nei.object;
+   //    int neighbors_size = nei.size;
+   //    for (int i = 0; i < neighbors_size;i++) {
+   //        if (!visited.getValue(neighbors[i])) {
+   //            countConnectedhelper(neighbors[i], visited);
+   //        }
+   //    }
+   //    
+   //}
+   void countConnectedhelper(Object city, HashMap<Object, bool>& visited) {
+       DbLinkedList<Object> stack;
+       stack.push_back(city);
+
+       while (!stack.isEmpty()) {
+           Object currentCity = stack.top();
+           stack.pop_back();
+
+           if (!visited.getValue(currentCity)) {
+               visited.Insert(std::make_pair(currentCity, true));
+
+               Neighbors<Object, Weight> nei = g.getNeighbors(currentCity);
+               Object* neighbors = nei.object;
+               int neighbors_size = nei.size;
+
+               for (int i = 0; i < neighbors_size; i++) {
+                   if (!visited.getValue(neighbors[i])) {
+                       stack.push_back(neighbors[i]);
+                   }
+               }
            }
        }
-       
    }
+
 
    //连通分量个数
     void countConnected() {
