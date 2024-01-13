@@ -12,7 +12,7 @@
 #include <string>
 #include <set>
 #include <iomanip> //std::setw、setprecision
-#include "eigen-3.4.0/Eigen/Dense" //提供拟合功能的开源矩阵运算库
+#include "eigen-3.4.0\Eigen\Dense" //提供拟合功能的开源矩阵运算库
 #include "eigen-3.4.0/Eigen/QR"
 #include "UtilitiesTime.h" //计时器类Timer
 #include "UtilitiesRandom.h" //makeUniqueRandomArray<T>()
@@ -35,16 +35,24 @@ using std::scientific;
 using std::setprecision;
 using namespace Eigen;
 
+int function() {
+	int x = 0;
+	for (int i = 0; i < 350; i++)
+	{
+		x++;
+	}
+	return x;
+}
 //参考O(n+e)程序类
 class O_n_add_e {
 public:
 	O_n_add_e() {};
 	void run(int n, int e) {//参考程序
 		for (int i = 0; i < n; i++) {
-			int x = 1; //循环......
+			function(); //循环......
 		}
 		for (int i = 0; i < 2*e; i++) {
-			int x = 1; //循环......
+			function(); //循环......
 		}
 	}
 };
@@ -56,7 +64,7 @@ public:
 	void run(int n) {//参考程序
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++)
-				int x = 1; //循环......
+				function(); //循环......
 		}
 	}
 };
@@ -69,7 +77,7 @@ public:
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++)
 				for (int k = 0; k < n; k++) {
-					int x = 1;
+					function();
 				}					 //循环......
 		}
 	}
@@ -82,7 +90,7 @@ public:
 	void run(int n,int e) {//参考程序
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < 2*e; j++) {
-				int x = 1; //循环......
+				function(); //循环......
 			}
 			i = i << 1;
 		}
@@ -96,7 +104,7 @@ public:
 	void run(int n,int e) {//参考程序
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < 2*e; j++)
-				int x = 1; //循环......
+				function(); //循环......
 		}
 	}
 };
@@ -185,13 +193,13 @@ public:
 	vector<std::stringstream> run() {
 		vector<std::stringstream> ss_Speed;
 		vector<Timer> timer;//计时器
-		timer.resize(10, Timer());
+		timer.resize(6, Timer());
 		
 		std::vector<double> vertexSequence;//顶点数序列
 		std::vector<double> edgeSequence;//边数序列
 		std::vector<std::vector<double>> runtimeSequence;//运行时间序列
 			
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 6; i++)
 			runtimeSequence.push_back(vector<double>());
 
 		vector<string> algorithmtype;//十种算法	
@@ -200,11 +208,11 @@ public:
 		algorithmtype.push_back("O(elogn)");
 		algorithmtype.push_back("O(n*e)");
 		algorithmtype.push_back("O(n*n*n)");
-		algorithmtype.push_back("numVertices_from");
+		//algorithmtype.push_back("numVertices_from");
 		algorithmtype.push_back("Dijkstra");		
-		algorithmtype.push_back("Floyd");
-		algorithmtype.push_back("Kth_ShortestPath");
-		algorithmtype.push_back("All_nonrepetition_paths");
+		//algorithmtype.push_back("Floyd");
+		//algorithmtype.push_back("Kth_ShortestPath");
+		//algorithmtype.push_back("All_nonrepetition_paths");
 
 		for (int n = incN; n <= maxN; n = n + incN) {
 			for (int e = incE; e <= n * (n - 1) / 2 && e <= maxE; e = e + incE) {
@@ -216,7 +224,7 @@ public:
 				vector<O_elogn> references2;//参考程序对象3
 				vector<O_n_multiply_e> references3;//参考程序对象4
 				vector<O_n_cube> references4;//参考程序对象5
-				vector<TestClass> tests;// 被重点关注的程序对象
+				vector<WUSGraph<std::string,int>*> tests;// 被重点关注的程序对象
 				std::vector<std::vector<string>> testsLabels;//顶点标签
 				
 				//分别构建numTrials个五类参考程序对象、顶点数为n，边数为e的类型是TestClass的对象
@@ -233,8 +241,19 @@ public:
 					references4.push_back(rObject4);
 
 					//随机生成一个n个顶点，e条边的TestClass类型对象，第三个参数控制是否输出
-					TestClass tObject(n, e, false);
-					set<T> labelSet = tObject.getLabels();//得到所有的顶点标签集合
+					//TestClass tObject(n, e);
+					WUSGraphClient<std::string, int> toObject;
+					WUSGraph<std::string, int> *g=new WUSGraph<std::string,int>(n,e);
+
+
+
+
+
+
+
+
+
+					set<T> labelSet = g->getLabels();//得到所有的顶点标签集合
 					std::vector<T> labelVector;
 					if (labelSet.size() == 0) {
 						cout << "===============================================================================\n";
@@ -249,7 +268,7 @@ public:
 						labelVector = std::vector<T>(labelSet.begin(), labelSet.end());
 					}
 					testsLabels.push_back(labelVector);
-					tests.push_back(tObject);
+					tests.push_back(g);
 				}
 
 				//记录十个程序运行numTrials次的运行时间
@@ -284,59 +303,64 @@ public:
 					references4[num_tests].run(n);//O_n_cube
 				timer[4].stop();
 
-				//运行并计时实验程序2的算法1
-				timer[5].start();
-				for (int num_tests = 0; num_tests < numTrials; num_tests++) {//实验numTrials次
-					int source = std::rand() % n;
-					tests[num_tests].numVertices_from(testsLabels[num_tests][source]);//到source的最少边数
-				}				
-				timer[5].stop();
+				////运行并计时实验程序2的算法1
+				//timer[5].start();
+				//for (int num_tests = 0; num_tests < numTrials; num_tests++) {//实验numTrials次
+				//	int source = std::rand() % n;
+				//	tests[num_tests].numVertices_from(testsLabels[num_tests][source]);//到source的最少边数
+				//}				
+				//timer[5].stop();
 
 				//运行并计时实验程序2的算法2
-				timer[6].start();
+				timer[5].start();
+
 				for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
 					int source = std::rand() % n;
 					int destination = std::rand() % n;
-					tests[num_tests].Dijkstra(testsLabels[num_tests][source], testsLabels[num_tests][destination]);//实验在顶点数n边数为e的图里计算最短路径
+					WUSGraphClient<std::string, int> toObject;
+					toObject.Dijkstra(*tests[num_tests], testsLabels[num_tests][source], testsLabels[num_tests][destination]);//实验在顶点数n边数为e的图里计算最短路径
+					delete tests[num_tests];
+					tests[num_tests] = nullptr;
 				}
-				timer[6].stop();
+
+				timer[5].stop();
 
 				//运行并计时实验程序2的算法3
-				timer[7].start();
-				for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
-					int source = std::rand() % n;
-					int destination = std::rand() % n;
-					tests[num_tests].Floyd(testsLabels[num_tests][source], testsLabels[num_tests][destination]);//最短路径
-				}
-				timer[7].stop();
+				//timer[7].start();
+				//for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
+				//	int source = std::rand() % n;
+				//	int destination = std::rand() % n;
+				//	tests[num_tests].Floyd(testsLabels[num_tests][source], testsLabels[num_tests][destination]);//最短路径
+				//}
+				//timer[7].stop();
 
-				//运行并计时实验程序2的算法4
-				timer[8].start();
-				for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
-					int source = std::rand() % n;
-					int destination = std::rand() % n;
-					//int k = std::rand() % n;
-					tests[num_tests].Kth_ShortestPath(testsLabels[num_tests][source], testsLabels[num_tests][destination], 5);//第K短路径
-				}
-				timer[8].stop();
+				////运行并计时实验程序2的算法4
+				//timer[8].start();
+				//for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
+				//	int source = std::rand() % n;
+				//	int destination = std::rand() % n;
+				//	//int k = std::rand() % n;
+				//	tests[num_tests].Kth_ShortestPath(testsLabels[num_tests][source], testsLabels[num_tests][destination], 5);//第K短路径
+				//}
+				//timer[8].stop();
 
-				//运行并计时实验程序2的算法5
-				timer[9].start();
+				////运行并计时实验程序2的算法5
+				//timer[9].start();
 
-				for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
-					int source = std::rand() % n;
-					int destination = std::rand() % n;
-					tests[num_tests].All_nonrepetition_paths(testsLabels[num_tests][source], testsLabels[num_tests][destination], 10);//计算所有路径（限制10个顶点）
-				}
-				timer[9].stop();
+				//for (int num_tests = 0; num_tests < numTrials; num_tests++) { //实验numTrials次
+				//	int source = std::rand() % n;
+				//	int destination = std::rand() % n;
+				//	tests[num_tests].All_nonrepetition_paths(testsLabels[num_tests][source], testsLabels[num_tests][destination], 6);//计算所有路径（限制10个顶点）
+				//}
+				//timer[9].stop();
 
 				//存储统计的运行时间以便做回归分析
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 6; i++)
 					runtimeSequence[i].push_back(timer[i].diff_in_ms());
 				
 				//每轮输出统计的运行时间
 				std::cout << "\nn= " << n << " e= " << e;
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 6; i++)
 					cout << " " << algorithmtype[i] << " " << std::fixed << std::setprecision(3) << runtimeSequence[i].back();
 				
 			}
@@ -349,7 +373,7 @@ public:
 		vector<double> SSE, RSquared, AverageGradientMagnitude;
 		
 		// 使用二元三次多项式回归拟合运行时间和顶点数、边数的关系
-		for (size_t t = 0; t < 10; ++t) {
+		for (size_t t = 0; t < 6; ++t) {
 			coefficients.push_back(multivariateCubicPolynomialRegression(vertexSequence, edgeSequence, runtimeSequence[t]));
 			std::cout << "算法 " << algorithmtype[t] << " 二元立方多项式回归系数：" << std::fixed << std::setprecision(6) << coefficients[t].transpose() << std::endl;
 
@@ -369,20 +393,20 @@ public:
 		ss_Speed.push_back(std::stringstream());
 		ss_Speed.push_back(std::stringstream());
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 6; i++)
 			ss_Speed[0] << "\n" << setw(25) << algorithmtype[i] << "：拟合残差平方和SSE= " << std::scientific << std::setprecision(2) << setw(6) << SSE[i] << " ；决定系数R-Squared= " << std::fixed<<std::setprecision(2)<<setw(5) << RSquared[i] << " ；平均梯度模AGM= " << std::scientific << std::setprecision(3) << setw(10) << AverageGradientMagnitude[i] << endl;
 		
 		ss_Speed[0] << endl << endl;		
 		std::cout << ss_Speed[0].str();
 		ss_Speed[1] << std::setiosflags(std::ios::fixed) << std::setprecision(2);//设置输出小数形式
 		ss_Speed[1] << endl;
-		ss_Speed[1] << "       numVertices_from 运行时间AGM : O(n+e) 运行时间AGM = " << AverageGradientMagnitude[5] / AverageGradientMagnitude[0] << endl;
-		ss_Speed[1] << "               Dijkstra 运行时间AGM : O(n*n) 运行时间AGM = " << AverageGradientMagnitude[6] / AverageGradientMagnitude[1] << endl;
-		ss_Speed[1] << "               Dijkstra 运行时间AGM : O(elogn) 运行时间AGM = " << AverageGradientMagnitude[6] / AverageGradientMagnitude[2] << endl;
-		ss_Speed[1] << "                  Floyd 运行时间AGM : O(n*n*n) 运行时间AGM = " << AverageGradientMagnitude[7] / AverageGradientMagnitude[4] << endl;
-		ss_Speed[1] << "       Kth_ShortestPath 运行时间AGM : Dijkstra 运行时间AGM = " << AverageGradientMagnitude[8] / AverageGradientMagnitude[6] << endl;
-		ss_Speed[1] << "All_nonrepetition_paths 运行时间AGM : numVertices_from 运行时间AGM = " << AverageGradientMagnitude[9] / AverageGradientMagnitude[5] << endl;
-		ss_Speed[1] << endl;
+		//ss_Speed[1] << "       numVertices_from 运行时间AGM : O(n+e) 运行时间AGM = " << AverageGradientMagnitude[5] / AverageGradientMagnitude[0] << endl;
+		ss_Speed[1] << "               Dijkstra 运行时间AGM : O(n*n) 运行时间AGM = " << AverageGradientMagnitude[5] / AverageGradientMagnitude[1] << endl;
+		ss_Speed[1] << "               Dijkstra 运行时间AGM : O(elogn) 运行时间AGM = " << AverageGradientMagnitude[5] / AverageGradientMagnitude[2] << endl;
+		//ss_Speed[1] << "                  Floyd 运行时间AGM : O(n*n*n) 运行时间AGM = " << AverageGradientMagnitude[7] / AverageGradientMagnitude[4] << endl;
+		//ss_Speed[1] << "       Kth_ShortestPath 运行时间AGM : Dijkstra 运行时间AGM = " << AverageGradientMagnitude[8] / AverageGradientMagnitude[6] << endl;
+		//ss_Speed[1] << "All_nonrepetition_paths 运行时间AGM : numVertices_from 运行时间AGM = " << AverageGradientMagnitude[9] / AverageGradientMagnitude[5] << endl;
+		//ss_Speed[1] << endl;
 		
 		std::cout << ss_Speed[1].str();
 

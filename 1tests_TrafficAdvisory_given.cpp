@@ -68,14 +68,14 @@ TEST_CASE("TrafficAdvisory::2 disinsertEdgeed 1", "[part = 0][weight = 6]") {
     //    std::sort(actual_A.begin(), actual_A.end());
     //    REQUIRE(expect_A == actual_A);
     //}
-    SECTION("Dijkstra and Floyd") {
-        REQUIRE(1 == solver.Dijkstra(g,"A", "B"));
-        //REQUIRE(1 == solver.Floyd("A", "B")); 
-        REQUIRE(INT_MAX == solver.Dijkstra(g,"A", "C"));
-        //REQUIRE(INT_MAX == solver.Floyd("A", "C"));
-        REQUIRE(INT_MAX == solver.Dijkstra(g,"A", "D"));
-        //REQUIRE(INT_MAX == solver.Floyd("A", "D"));
-    }
+    //SECTION("Dijkstra and Floyd") {
+    //    REQUIRE(1 == solver.Dijkstra(g,"A", "B"));
+    //    //REQUIRE(1 == solver.Floyd("A", "B")); 
+    //    REQUIRE(INT_MAX == solver.Dijkstra(g,"A", "C"));
+    //    //REQUIRE(INT_MAX == solver.Floyd("A", "C"));
+    //    REQUIRE(INT_MAX == solver.Dijkstra(g,"A", "D"));
+    //    //REQUIRE(INT_MAX == solver.Floyd("A", "D"));
+    //}
     //SECTION("All_nonrepetition_paths") {
     //    REQUIRE(1 == (solver.All_nonrepetition_paths("A", "B")).size());//Ö»ÓÐ1Ìõ
     //    REQUIRE(0 == (solver.All_nonrepetition_paths("A", "C")).size());

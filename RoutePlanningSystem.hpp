@@ -192,10 +192,10 @@ public:
         delete[]vertexs;
     }
     //每一个连通分量是否有环且输出环路
-    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited, HashMap<int, Object>&toObjectMap,HashMap<Object, int>&tointMap) {
+    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, HashMap<int, Object>& toObjectMap, HashMap<Object, int>& tointMap) {
         visited.Insert(current);
         currentPath.Insert(current);
-        hasvisited.Insert(current);
+        //hasvisited.Insert(current);
         Neighbors<Object, Weight>nei = g.getNeighbors(toObjectMap.getValue(current));
         Object* neighbors = nei.object;
         int neighbor_size = nei.size;
@@ -203,23 +203,23 @@ public:
             int toint = tointMap.getValue(neighbors[i]);
             if (visited.Search(toint) == nullptr) {
                 // 如果邻居未被访问，递归检查邻居是否形成回路
-                hasCycleInConnectedComponent(toint, current, visited, currentPath, hasvisited,toObjectMap,tointMap);
+                hasCycleInConnectedComponent(toint, current, visited, currentPath, toObjectMap, tointMap);
             }
-            else if (toint != parent && hasvisited.Search(toint) != nullptr) {
+            else if (toint != parent && currentPath.Search(toint) != nullptr) {
                 // 如果邻居已被访问，并且不是当前节点的父节点，说明存在回路
                 // 输出回路
-                printCycle(currentPath, toint,toObjectMap);
-                
+                printCycle(currentPath, toint, toObjectMap);
+
             }
         }
 
         // 当前节点处理完毕后，从路径中移除
         currentPath.Remove(current);
-        hasvisited.Remove(current);
-     
+        //hasvisited.Remove(current);
+        visited.Remove(current);
     }
 
-    void printCycle(DbLinkedList<int>& cycle, int trg,HashMap<int, Object>&toObjectMap) {
+    void printCycle(DbLinkedList<int>& cycle, int trg, HashMap<int, Object>& toObjectMap) {
         std::cout << "has cycle:";
         bool startPrinting = false;//确保两个有公共点的环重复输出
         for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; i = i->rlink) {
@@ -235,12 +235,13 @@ public:
 
     }
 
+
     void findAndPrintCycles() {
         HashMap<int, Object>toObjectMap;
         HashMap<Object, int>tointMap;
         DbLinkedList<int> visited;
         DbLinkedList<int> currentPath;
-        DbLinkedList<int> curvisited;
+        //DbLinkedList<int> curvisited;
         Object* vertexs = g.getVertices();
         int vertex_size = g.vertexCount();
         for (int i = 0; i < vertex_size; i++) {
@@ -249,12 +250,68 @@ public:
         }
         for (int j = 0; j < vertex_size; j++) {
             if (visited.Search(j) == nullptr) {
+                visited.Insert(j);
                 // 对于每个未被访问的节点，进行深度优先搜索，并检查是否存在回路
-                hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited,toObjectMap,tointMap);
+                hasCycleInConnectedComponent(j, -1, visited, currentPath, toObjectMap, tointMap);
             }
         }
         delete[]vertexs;
     }
+    /*void findAndPrintCycles()
+    {
+        DbLinkedList<Object> pathlink;
+        Object* vertexs = g.getVertices();
+        HashMap<Object, int> vertexsMap;
+        for (int i = 0; i < g.vertexCount(); i++)
+        {
+            vertexsMap.Insert(std::make_pair(vertexs[i], i + 1));
+        }
+        while (vertexsMap.getSize() != 0)
+        {
+            std::pair<Object, int> pair = vertexsMap.getFront();
+            vertexsMap.Remove(pair.first);
+            Neighbors<Object, Weight> nei = g.getNeighbors(pair.first);
+            pathlink.push_back(pair.first);
+            for (int j = 0; j < nei.size; j++)
+            {
+                if (vertexsMap.containsKey(nei.object[j]))
+                {
+                    findAndPrintCyclesHelp(nei.object[j], vertexsMap, pathlink);
+                }
+            }
+        }
+        delete[] vertexs;
+    }
+    void findAndPrintCyclesHelp(Object object,HashMap<Object, int>& vertexsMap,DbLinkedList<Object>& pathlink)
+    {
+        Neighbors<Object, Weight> nei = g.getNeighbors(object);
+        pathlink.push_back(object);
+        vertexsMap.Remove(object);
+        for (int j = 0; j < nei.size; j++)
+        {
+            if (!vertexsMap.containsKey(nei.object[j]))
+            {
+                DbListNode<Object>* node = pathlink.end();
+                if (node->llink != nullptr && node->llink->data == nei.object[j])
+                {
+
+                }
+                else
+                {
+                    while (node != pathlink.Head() && node->data != nei.object[j])
+                    {
+                        std::cout << node->data << " ";
+                        node = node->llink;
+                    }
+                    std::cout <<node->data<< endl;
+                }
+            }else
+            {
+                findAndPrintCyclesHelp(nei.object[j], vertexsMap,pathlink);
+            }
+        }
+        pathlink.pop_back();
+    }*/
    bool isCity( Object city) {
        return g.isVertex(city);
    }

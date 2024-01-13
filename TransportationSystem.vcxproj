@@ -70,6 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\19629\Nextcloud\大学学习1\作业\数据结构\数据结构课程设计\Skeleton_TrafficAdvisory\eigen-3.4.0;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -160,6 +163,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="1tests_TrafficAdvisory_given.cpp" />
+    <ClCompile Include="2tests_TrafficAdvisory_YoursJob.cpp" />
+    <ClCompile Include="3SpeedTests_TrafficAdvisory_given.cpp" />
     <ClCompile Include="catchmain.cpp" />
     <ClCompile Include="HashMap.hpp" />
     <ClCompile Include="teat_WQUPCUFSet.cpp" />
