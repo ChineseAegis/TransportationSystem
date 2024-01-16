@@ -15,16 +15,64 @@
 #include<fstream>
 #include <sstream>
 #include <vector>
-
+#include"UtilitiesRandom.h"
 template<typename Object,typename Weight>
 class WUSGraphClient {
 public:
-	
-	
-	
+	WUSGraph<Object, Weight> g;
+	std::set<Object> getLabels()
+	{
+		Object* obj = g.getVertices();
+		std::set<Object> s;
+		for (int i = 0; i < g.vertexCount(); i++)
+		{
+			s.insert(obj[i]);
+		}
+		delete[] obj;
+		return s;
+	}
 	WUSGraphClient()
 	{
 
+	}
+	WUSGraphClient(int n, int e)
+	{
+		using T = string;
+		using E = int;
+
+		//产生随机的字符串数组：图的顶点标签
+		T* arr = makeUniqueRandomArray<T>(n, randomString);//创建一个长度为n的值不重复的随机字符串数组
+
+		//矩阵Matrix记录边，以防止生成重复边。
+		std::vector<std::vector<E>> Matrix;// 初始化矩阵,
+		Matrix.resize(n, std::vector<int>(n, 0));
+
+		for (int i = 0; i < n; ++i)
+			g.isVertex(arr[i]);//插入顶点
+
+		// 设置随机种子
+		std::srand(std::time(0));
+
+		// 添加随机边
+		for (int i = 0; i < e; ++i) {
+			int source = std::rand() % n;
+			int destination = std::rand() % n;
+			E weight = std::rand() % 100; // 随机生成权值，此处范围为0-1010
+
+			// 防止生成自环边和重复边
+			while (source == destination || Matrix[source][destination] != 0) {
+				source = std::rand() % n;
+				destination = std::rand() % n;
+			}
+			Matrix[source][destination] = 1;
+			Matrix[destination][source] = 1;
+
+			// 将边的权值设置为随机整数
+			g.addEdge(arr[source], arr[destination], weight);//插入边
+			g.addEdge(arr[destination], arr[source], weight);//无向图，插入另一条边
+		}
+
+		delete[] arr;
 	}
 	struct DObject
 	{
@@ -127,6 +175,7 @@ public:
 		obj = nullptr;
 		return 1;
 	}
+
 	int Dijkstra(WUSGraph<Object, Weight>& g, Object s,Object s1)
 	{
 
@@ -179,6 +228,72 @@ public:
 					Weight self_weight = cur.distance;
 					Weight cur_weight = self_weight + nei.weight[i];
 					if (cur_weight < pre_weight&&cur_weight>=0)
+					{
+						Distances.Remove(nei.object[i]);
+						Distances.Insert(std::make_pair(nei.object[i], cur_weight));
+						//heap.Insert(DObject(nei.object[i], cur_weight, cur.object));
+						heap.Modify(ObjToInt.getValue(nei.object[i]), DObject(nei.object[i], cur_weight, cur.object));
+						//std::cout << "顶点：" << nei.object[i] << " 距离：" << cur_weight << std::endl;
+					}
+				}
+			}
+		}
+		delete[] obj;
+		obj = nullptr;
+		return INT_MAX;
+	}
+	int Dijkstra1(Object s, Object s1)
+	{
+
+		int vertexCount = g.vertexCount();
+		Object* obj = g.getVertices();
+		MinIndexHeap<DObject> heap(vertexCount);
+		HashMap<Object, Weight> Distances;
+		HashMap<Object, int> ObjToInt;
+		for (int i = 0; i < vertexCount; i++)
+		{
+			if (obj[i] == s)
+			{
+				heap.Insert(DObject(obj[i], 0));
+				Distances.Insert(std::make_pair(obj[i], 0));
+			}
+			else
+			{
+				heap.Insert(DObject(obj[i]));
+				Distances.Insert(std::make_pair(obj[i], std::numeric_limits<Weight>::max()));
+			}
+			ObjToInt.Insert(std::make_pair(obj[i], i));
+
+		}
+		while (vertexCount--)
+		{
+			DObject cur;
+			heap.removeMin(cur);
+			Distances.Remove(cur.object);
+			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
+			//std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			/*if (!cur.is_pre_object)
+			{
+				tree.insert(cur.object);
+			}
+			else
+			{
+				tree.insert(cur.object, cur.pre_object, g.getWeight(cur.object, cur.pre_object), cur.distance);
+			}*/
+			if (cur.object == s1)
+			{
+				delete[] obj;
+				obj = nullptr;
+				return cur.distance;
+			}
+			for (int i = 0; i < nei.size; i++)
+			{
+				if (Distances.containsKey(nei.object[i]))
+				{
+					Weight pre_weight = Distances.getValue(nei.object[i]);
+					Weight self_weight = cur.distance;
+					Weight cur_weight = self_weight + nei.weight[i];
+					if (cur_weight < pre_weight && cur_weight >= 0)
 					{
 						Distances.Remove(nei.object[i]);
 						Distances.Insert(std::make_pair(nei.object[i], cur_weight));

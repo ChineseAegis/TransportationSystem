@@ -8,6 +8,8 @@
 #include<queue>
 #include"Neighbors.hpp"
 #include"Deque.hpp"
+#include<string>
+#include"UtilitiesRandom.h"
 template<typename Object,typename Weight>
 class WUSGraph
 {
@@ -100,6 +102,46 @@ public:
 	{
 		vertexs = new DbLinkedList<Vertex>();
 	}
+	WUSGraph(int n, int e)
+	{
+		vertexs = new DbLinkedList<Vertex>();
+		using T = std::string;
+		using E = int;
+
+		//产生随机的字符串数组：图的顶点标签
+		T* arr = makeUniqueRandomArray<T>(n, randomString);//创建一个长度为n的值不重复的随机字符串数组
+
+		//矩阵Matrix记录边，以防止生成重复边。
+		std::vector<std::vector<E>> Matrix;// 初始化矩阵,
+		Matrix.resize(n, std::vector<int>(n, 0));
+
+		for (int i = 0; i < n; ++i)
+			addVertex(arr[i]);//插入顶点
+
+		// 设置随机种子
+		std::srand(std::time(0));
+
+		// 添加随机边
+		for (int i = 0; i < e; ++i) {
+			int source = std::rand() % n;
+			int destination = std::rand() % n;
+			E weight = std::rand() % 100; // 随机生成权值，此处范围为0-1010
+
+			// 防止生成自环边和重复边
+			while (source == destination || Matrix[source][destination] != 0) {
+				source = std::rand() % n;
+				destination = std::rand() % n;
+			}
+			Matrix[source][destination] = 1;
+			Matrix[destination][source] = 1;
+
+			// 将边的权值设置为随机整数
+			addEdge(arr[source], arr[destination], weight);//插入边
+			addEdge(arr[destination], arr[source], weight);//无向图，插入另一条边
+		}
+
+		delete[] arr;
+	}
 	~WUSGraph()
 	{
 		if (vertexs != nullptr)
@@ -107,6 +149,17 @@ public:
 			delete vertexs;
 		}
 		
+	}
+	std::set<Object> getLabels()
+	{
+		Object* obj = getVertices();
+		std::set<Object> s;
+		for (int i = 0; i < VertexCount; i++)
+		{
+			s.insert(obj[i]);
+		}
+		delete[] obj;
+		return s;
 	}
 	int vertexCount()
 	{
@@ -120,6 +173,7 @@ public:
 	{
 		if (toVertexMap.containsKey(object))
 		{
+			return;
 			throw std::runtime_error("重复的顶点"+object);
 		}
 		std::pair<Object,DbListNode<Vertex>*> mypair;

@@ -236,7 +236,7 @@ public:
         visited.Remove(current);
     }
 
-    void printCycle(DbLinkedList<int>& cycle, int trg,HashMap<int, Object>&toObjectMap) {
+    void printCycle(DbLinkedList<int>& cycle, int trg, HashMap<int, Object>& toObjectMap) {
         std::cout << "has cycle:";
         bool startPrinting = false;//确保两个有公共点的环重复输出
         for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; i = i->rlink) {
@@ -275,6 +275,61 @@ public:
 
         delete[] vertexs;
     }
+    /*void findAndPrintCycles()
+    {
+        DbLinkedList<Object> pathlink;
+        Object* vertexs = g.getVertices();
+        HashMap<Object, int> vertexsMap;
+        for (int i = 0; i < g.vertexCount(); i++)
+        {
+            vertexsMap.Insert(std::make_pair(vertexs[i], i + 1));
+        }
+        while (vertexsMap.getSize() != 0)
+        {
+            std::pair<Object, int> pair = vertexsMap.getFront();
+            vertexsMap.Remove(pair.first);
+            Neighbors<Object, Weight> nei = g.getNeighbors(pair.first);
+            pathlink.push_back(pair.first);
+            for (int j = 0; j < nei.size; j++)
+            {
+                if (vertexsMap.containsKey(nei.object[j]))
+                {
+                    findAndPrintCyclesHelp(nei.object[j], vertexsMap, pathlink);
+                }
+            }
+        }
+        delete[] vertexs;
+    }
+    void findAndPrintCyclesHelp(Object object,HashMap<Object, int>& vertexsMap,DbLinkedList<Object>& pathlink)
+    {
+        Neighbors<Object, Weight> nei = g.getNeighbors(object);
+        pathlink.push_back(object);
+        vertexsMap.Remove(object);
+        for (int j = 0; j < nei.size; j++)
+        {
+            if (!vertexsMap.containsKey(nei.object[j]))
+            {
+                DbListNode<Object>* node = pathlink.end();
+                if (node->llink != nullptr && node->llink->data == nei.object[j])
+                {
+
+                }
+                else
+                {
+                    while (node != pathlink.Head() && node->data != nei.object[j])
+                    {
+                        std::cout << node->data << " ";
+                        node = node->llink;
+                    }
+                    std::cout <<node->data<< endl;
+                }
+            }else
+            {
+                findAndPrintCyclesHelp(nei.object[j], vertexsMap,pathlink);
+            }
+        }
+        pathlink.pop_back();
+    }*/
    bool isCity( Object city) {
        return g.isVertex(city);
    }

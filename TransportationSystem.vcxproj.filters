@@ -148,5 +148,11 @@
     <ClCompile Include="test_RoutePlanningSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="2tests_TrafficAdvisory_YoursJob.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3SpeedTests_TrafficAdvisory_given.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
