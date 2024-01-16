@@ -268,6 +268,7 @@ public:
 
         for (int j = 0; j < g.vertexCount(); ++j) {
             if (visited.Search(j) == nullptr) {
+                visited.Insert(j);
                 hasCycleInConnectedComponent(j, -1, visited, currentPath, toObjectMap, tointMap, seenCycles);
             }
         }
