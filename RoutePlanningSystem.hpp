@@ -9,6 +9,7 @@
 #include"ExpandableArrayList.hpp"
 #include <string>
 #include<iostream>
+#include <sstream>
 using namespace std;
 template<class Object,class Weight>
 class RoutePlanningSystem : public WUSGraphClient<Object, Weight> {
@@ -107,7 +108,7 @@ public:
         int size = g.vertexCount();
         for (int i = 0; i < size; i++) {
             
-            Neighbors<Object, Weight>nei = g.getNeighbors(vertexs[i]);
+            Neighbors<Object, Weight>nei = g.getNeighbors(vertexs[i]); 
             Object* neighbors = nei.object;
             int neighbors_size = nei.size;
             for (int j = 0; j < neighbors_size; j++) {
@@ -192,31 +193,47 @@ public:
         delete[]vertexs;
     }
     //每一个连通分量是否有环且输出环路
-    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, DbLinkedList<int>& hasvisited, HashMap<int, Object>&toObjectMap,HashMap<Object, int>&tointMap) {
-        visited.Insert(current);
-        currentPath.Insert(current);
-        hasvisited.Insert(current);
-        Neighbors<Object, Weight>nei = g.getNeighbors(toObjectMap.getValue(current));
-        Object* neighbors = nei.object;
-        int neighbor_size = nei.size;
-        for (int i = 0; i < neighbor_size; i++) {
-            int toint = tointMap.getValue(neighbors[i]);
-            if (visited.Search(toint) == nullptr) {
-                // 如果邻居未被访问，递归检查邻居是否形成回路
-                hasCycleInConnectedComponent(toint, current, visited, currentPath, hasvisited,toObjectMap,tointMap);
-            }
-            else if (toint != parent && hasvisited.Search(toint) != nullptr) {
-                // 如果邻居已被访问，并且不是当前节点的父节点，说明存在回路
-                // 输出回路
-                printCycle(currentPath, toint,toObjectMap);
-                
+    void generateCycleIdentifier(DbLinkedList<int>& cycle,int trg, std::string& identifier, HashMap<int, Object>& toObjectMap) {
+        
+        
+        std::set<Object> sortedCycleNodes; bool stratstring = false;
+        for (DbListNode<int>* i = cycle.head->rlink; i != cycle.head; i = i->rlink) {
+            if (i->data == trg)stratstring = true;
+            if (stratstring)
+            {
+                sortedCycleNodes.insert(toObjectMap.getValue(i->data));
             }
         }
 
-        // 当前节点处理完毕后，从路径中移除
+        std::stringstream ss;
+        for (const auto& node : sortedCycleNodes) {
+            ss << node << "-";
+        }
+        identifier = ss.str();
+    }
+    
+    void hasCycleInConnectedComponent(int current, int parent, DbLinkedList<int>& visited, DbLinkedList<int>& currentPath, HashMap<int, Object>& toObjectMap, HashMap<Object, int>& tointMap, HashMap<std::string,bool>& seenCycles) {
+        visited.Insert(current);
+        currentPath.Insert(current);
+
+        Neighbors<Object, Weight> nei = g.getNeighbors(toObjectMap.getValue(current));
+        for (int i = 0; i < nei.size; ++i) {
+            int toint = tointMap.getValue(nei.object[i]);
+            if (visited.Search(toint) == nullptr) {
+                hasCycleInConnectedComponent(toint, current, visited, currentPath, toObjectMap, tointMap, seenCycles);
+            }
+            else if (toint != parent && currentPath.Search(toint) != nullptr) {
+                std::string cycleIdentifier;
+                generateCycleIdentifier(currentPath,toint, cycleIdentifier, toObjectMap);
+                if (!seenCycles.getValue(cycleIdentifier)) {
+                    printCycle(currentPath, toint,toObjectMap);
+                    seenCycles.Insert(std::make_pair(cycleIdentifier, true));
+                }
+            }
+        }
+
         currentPath.Remove(current);
-        hasvisited.Remove(current);
-     
+        visited.Remove(current);
     }
 
     void printCycle(DbLinkedList<int>& cycle, int trg,HashMap<int, Object>&toObjectMap) {
@@ -235,25 +252,27 @@ public:
 
     }
 
+   
     void findAndPrintCycles() {
-        HashMap<int, Object>toObjectMap;
-        HashMap<Object, int>tointMap;
+        HashMap<int, Object> toObjectMap;
+        HashMap<Object, int> tointMap;
+        HashMap<std::string,bool>  seenCycles;
         DbLinkedList<int> visited;
         DbLinkedList<int> currentPath;
-        DbLinkedList<int> curvisited;
+
         Object* vertexs = g.getVertices();
-        int vertex_size = g.vertexCount();
-        for (int i = 0; i < vertex_size; i++) {
+        for (int i = 0; i < g.vertexCount(); ++i) {
             toObjectMap.Insert(std::make_pair(i, vertexs[i]));
             tointMap.Insert(std::make_pair(vertexs[i], i));
         }
-        for (int j = 0; j < vertex_size; j++) {
+
+        for (int j = 0; j < g.vertexCount(); ++j) {
             if (visited.Search(j) == nullptr) {
-                // 对于每个未被访问的节点，进行深度优先搜索，并检查是否存在回路
-                hasCycleInConnectedComponent(j, -1, visited, currentPath, curvisited,toObjectMap,tointMap);
+                hasCycleInConnectedComponent(j, -1, visited, currentPath, toObjectMap, tointMap, seenCycles);
             }
         }
-        delete[]vertexs;
+
+        delete[] vertexs;
     }
    bool isCity( Object city) {
        return g.isVertex(city);
