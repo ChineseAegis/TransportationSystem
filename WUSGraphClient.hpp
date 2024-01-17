@@ -136,7 +136,7 @@ public:
 			heap.removeMin(cur);
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
-			std::cout << cur.object << " from " << cur.pre_object <<" distance"<<": "<<cur.distance<<std::endl;
+			//std::cout << cur.object << " from " << cur.pre_object <<" distance"<<": "<<cur.distance<<std::endl;
 			if (!cur.is_pre_object)
 			{
 				if (cur.distance == 0)
@@ -336,7 +336,7 @@ public:
 			heap.removeMin(cur);
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
-			std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			//std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
 			if (!cur.is_pre_object)
 			{
 				cur.distance = 0;
@@ -427,7 +427,7 @@ public:
 			heap.removeMin(cur);
 			Distances.Remove(cur.object);
 			Neighbors<Object, Weight> nei = g.getNeighbors(cur.object);
-			std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
+			//std::cout << cur.object << " from " << cur.pre_object << " distance" << ": " << cur.distance << std::endl;
 			if (!cur.is_pre_object)
 			{
 				lpt.insert(cur.object);
